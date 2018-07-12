@@ -1,0 +1,13 @@
+@include u-keyframes(fadeOutLeft) {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    @include u-transform(translateX($saf-translateX-distance * -1) translateZ(0));
+  }
+}
+
+@mixin fadeOutLeft($duration: 1s, $delay: 0s, $fill-mode: forwards) {
+  @include u-animation(fadeOutLeft $duration $delay $fill-mode);
+}

@@ -1,0 +1,14 @@
+@include u-keyframes(dropOut) {
+  0% {
+    opacity: 1;
+    @include u-transform(translateZ(0));
+  }
+  100% {
+    opacity: 0;
+    @include u-transform(translateY($saf-drop-rise-distance) rotate(-40deg));
+  }
+}
+
+@mixin dropOut($duration: 0.5s, $delay: 0s, $fill-mode: forwards) {
+  @include u-animation(dropOut $duration $delay $fill-mode);
+}

@@ -1,0 +1,74 @@
+<li>
+    <label>Title</label>
+    <input type="text" class="title_field"  ng-change="makeDirty()" placeholder="Attachment Title" ng-model="attachment.title" />
+</li>
+<li>
+    <label>Subtitle</label>
+    <input type="text" ng-change="makeDirty()" placeholder="Attachment Subtitle" ng-model="attachment.subtitle" />
+</li>
+<li>
+    <label>Text</label>
+    <textarea rows="1" placeholder="Attachment Text" ng-change="makeDirty()"  msd-elastic="" ng-model="attachment.text"></textarea>
+</li>
+
+<li>
+    <label>Image</label>
+    <input type="text" ng-change="makeDirty()" placeholder="URL to square image" ng-model="attachment.images[0].url" />
+</li>
+<li>
+    <label>Image Alt</label>
+    <input type="text" ng-change="makeDirty()" placeholder="Alternate description" ng-model="attachment.images[0].alt" />
+</li>
+<li>
+    <label>Buttons</label>
+</li>
+<li>
+    <ul class="sheet">
+        <li class="header" ng-if="attachment.buttons.length">
+          <div class="delete">&nbsp;</div>
+          <div class="cell">Title</div>
+          <div class="cell">Action</div>
+          <div class="cell">Value</div>
+        </li>
+        <li ng-class="{invalid: action.invalid};" ng-repeat="action in attachment.buttons track by $index">
+            <div class="delete">
+                <button class="delete" ng-click="deleteButton(attachment,$index)"></button>
+            </div>
+            <div class="cell">
+                <input type="text" placeholder="Button Text" class="action-text" maxlength="14" ng-model="action.title" ng-change="makeDirty()" />
+            </div>
+            <div class="cell">
+                <select ng-model="action.type" ng-change="makeDirty()">
+                    <option value="imBack">Say</option>
+                    <option value="openUrl">Open Link</option>
+                    <option value="invoke">Trigger Event</option>
+                </select>
+            </div>
+            <div class="cell">
+                <input type="text" placeholder="Button Value" ng-model="action.value"  ng-change="makeDirty()" />
+            </div>
+        </li>
+        <li class="placeholder_button" ng-if="!attachment.buttons || attachment.buttons.length < 6">
+            <button ng-click="addAction(attachment);">Add Button</button>
+        </li>
+    </ul>
+</li>
+<li>
+    <label class="checkbox"><input type="checkbox" ng-checked="attachment.tap" ng-click="toggleTap(attachment);"  id="responseToggle"> Specify tap action</label>
+</li>
+<li ng-if="attachment.tap" ng-class="{invalid: attachment.tap.invalid_title};">
+  <label>Title</label>
+  <input type="text" placeholder="Tap Action Title" ng-model="attachment.tap.title" ng-change="makeDirty()" />
+</li>
+<li ng-if="attachment.tap">
+  <label>Tap Action</label>
+  <select ng-model="attachment.tap.type" ng-change="makeDirty()">
+      <option value="imBack">Say</option>
+      <option value="openUrl">Open Link</option>
+      <option value="invoke">Trigger Event</option>
+  </select>
+</li>
+<li ng-if="attachment.tap" ng-class="{invalid: attachment.tap.invalid_value};">
+  <label>Value</label>
+  <input type="text" placeholder="Tap Action Value" ng-model="attachment.tap.value" ng-change="makeDirty()" />
+</li>

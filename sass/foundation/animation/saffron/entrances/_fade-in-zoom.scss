@@ -1,0 +1,14 @@
+@include u-keyframes(fadeInZoom) {
+  0% {
+    opacity: 0;
+    @include u-transform(scale(0) translateZ(0));
+  }
+  100% {
+    opacity: 1;
+    @include u-transform(scale(1));
+  }
+}
+
+@mixin fadeInZoom($duration: 1s, $delay: 0s, $fill-mode: forwards) {
+  @include u-animation(fadeInZoom $duration $delay $fill-mode);
+}

@@ -1,0 +1,51 @@
+// surface is where base elements get default styles
+
+body {
+  @extend %flex-wrapper;
+  color: $text-color;
+  font-size: $base-font-size;
+  font-family: $body-font;
+  line-height: 1.6;
+}
+
+h1 {
+    margin-bottom: $spacing-unit;
+}
+
+ h2, h3, h4 {
+    margin-bottom: $half-spacing-unit;
+}
+
+h1 {
+    @include h1-style;
+}
+h2 {
+    @include h2-style;
+}
+h3 {
+    @include h3-style;
+}
+h4 {
+    @include h4-style;
+}
+
+pre {
+    padding: 8px 12px;
+    overflow-x: auto;
+    background: $light-gray;
+    border-radius: 3px;
+    box-sizing: border-box;
+    font-size: 14px;
+    @include MQ(S) {
+        font-size: 14px;
+    }
+    > code {
+        border: 0;
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+button {
+    @include action-button($main-blue);
+}

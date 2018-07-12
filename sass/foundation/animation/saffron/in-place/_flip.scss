@@ -1,0 +1,19 @@
+@mixin flip($selector: ".flipped", $duration: 0.5s, $delay: 0s, $fill-mode: both, $count: 1, $timing: ease-in) {
+  position: relative;
+  @include u-prefix(transform-style, preserve-3d, webkit spec);
+  @include u-transition(all $duration $delay $timing);
+  @include u-prefix(backface-visibility, hidden, webkit moz spec);
+  &#{$selector} {
+    @include u-transform(rotateY(180deg)translateZ(0));
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    @include u-prefix(backface-visibility, inherit, webkit moz spec);
+    @include u-transform(rotateY(180deg));
+  }
+}
+

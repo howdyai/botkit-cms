@@ -1,0 +1,14 @@
+@include u-keyframes(explode) {
+  0% {
+    opacity: 1;
+    @include u-transform(translateZ(0));
+  }
+  100% {
+    opacity: 0;
+    @include u-transform(scale(5));
+  }
+}
+
+@mixin explode($duration: 0.5s, $delay: 0s, $fill-mode: forwards) {
+  @include u-animation(explode $duration $delay $fill-mode);
+}

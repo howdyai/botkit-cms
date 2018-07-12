@@ -1,0 +1,12 @@
+@include u-keyframes(spin) {
+  0% {
+    @include u-transform(rotate(0deg) translateZ(0));
+  }
+  100% {
+    @include u-transform(rotate(360deg));
+  }
+}
+
+@mixin spin($duration: 0.5s, $delay: 0s, $fill-mode: none, $count: 1, $timing: ease-in-out) {
+  @include u-animation(spin $count $duration $delay $fill-mode $timing);
+}

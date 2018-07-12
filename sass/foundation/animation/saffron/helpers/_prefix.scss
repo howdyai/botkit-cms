@@ -1,0 +1,39 @@
+@mixin u-prefix($property, $value, $prefixes: $saf-prefixes) {
+  @each $prefix in $prefixes {
+    @if $prefix == "webkit" {
+      -webkit-#{$property}: #{$value};
+    } @else if $prefix == "moz" {
+      -moz-#{$property}: #{$value};
+    } @else if $prefix == "o" {
+      -o-#{$property}: #{$value};
+    } @else if $prefix == "ms" {
+      -ms-#{$property}: #{$value};
+    } @else if $prefix == "spec" {
+      #{$property}: #{$value};
+    } @else  {
+      @warn "Unknown prefix: #{$prefix}";
+    }
+  }
+}
+
+@mixin u-prefix-all($value: true){
+  @if $value {
+    $prefixes: ("webkit", "moz", "o", "ms", "spec");
+  } @else {
+    $prefixes: ("spec");
+  }
+}
+
+@mixin u-prefix-only($only) {
+  @if $only == "webkit" {
+    $prefixes: ("webkit", "spec");
+  } @else if $only == "moz" {
+    $prefixes: ("moz", "spec");
+  } @else if $only == "o" {
+    $prefixes: ("o", "spec");
+  } @else if $only == "ms" {
+    $prefixes: ("ms", "spec");
+  } @else {
+    @warn "Unknown prefix: #{$only}";
+  }
+}

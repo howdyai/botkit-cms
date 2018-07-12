@@ -1,0 +1,25 @@
+<form ng-submit="renameThread(thread,ui.rename_thread)">
+
+<div class="editor_modal_box" ng-if="ui.editbranch">
+
+  <header ng-if="!ui.newbranch">
+    <h1>Modify Thread</h1>
+  </header>
+  <header ng-if="ui.newbranch">
+    <h1>Add Thread</h1>
+  </header>
+  <section>
+    <div class="bigform">
+          <p>
+            <label>Thread Name:</label>
+            <input ng-model="ui.rename_thread" type="text" required />
+          </p>
+    </div>
+  </section>
+  <footer>
+    <button type="submit">Save</button>
+    <button type="button" ng-click="ui.editbranch=false; ui.newbranch=false;">Cancel</button>
+
+  </footer>
+</div>
+</form>

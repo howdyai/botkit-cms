@@ -1,0 +1,14 @@
+@include u-keyframes(newspaper) {
+  0% {
+    opacity: 0;
+    @include u-transform(rotate(720deg) scale(0.33) translateZ(0));
+  }
+  100% {
+    opacity: 1;
+    @include u-transform(rotate(0deg) scale(1));
+  }
+}
+
+@mixin newspaper($duration: 1s, $delay: 0s, $fill-mode: both, $count: 1, $timing: ease-in-out) {
+  @include u-animation(newspaper $count $duration $delay $fill-mode $timing);
+}

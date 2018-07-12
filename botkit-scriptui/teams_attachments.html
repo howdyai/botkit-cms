@@ -1,0 +1,40 @@
+<div class="panel" ng-controller="teamsMode">
+
+      <ul>
+        <li class="label">Attachments</li>
+      </ul>
+      <ul class="ng-class:{invalid: attachment.invalid}; fields" ng-repeat="attachment in ui.outgoing_message.platforms.teams.attachments track by $index">
+          <li class="label">
+              <button class="delete" ng-click="deleteTeamsAttachment(ui.outgoing_message,$index)"></button>
+              <label>{% attachment.type %}</label>
+          </li>
+
+          <div ng-include="'/js/partials/teams_attachments_' + attachment.type + '.html'"></div>
+
+        </ul>
+        <ul class="sheet">
+          <li class="placeholder_button">
+              <button ng-click="addTeamsAttachment(ui.outgoing_message,'hero');">Hero Card</button>
+              <button ng-click="addTeamsAttachment(ui.outgoing_message,'thumbnail');">Thumbnail Card</button>
+              <button ng-click="addTeamsAttachment(ui.outgoing_message,'file');">Image</button>
+          </li>
+      </ul>
+</div>
+
+<div class="panel" ng-if="ui.outgoing_message.platforms.teams.attachments.length > 1">
+
+      <ul>
+        <li>
+          <label>Attachment Layout</label>
+          <select ng-model="ui.outgoing_message.platforms.teams.attachmentLayout">
+            <option value="list">List</option>
+            <option value="carousel">Carousel</option>
+          </select>
+        </li>
+      </ul>
+
+
+</div>
+
+
+<div ng-include="'/js/partials/meta_attachments.html'"></div>

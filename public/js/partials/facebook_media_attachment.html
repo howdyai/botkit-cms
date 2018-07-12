@@ -1,0 +1,19 @@
+<ul>
+    <li class="label">
+        <!-- <button class="row-delete" ng-click="deleteFBAttachment(ui.outgoing_message)"></button> -->
+        <label>Media Attachment</label>
+    </li>
+    <li>
+        <label>Type</label>
+        <select ng-model="ui.outgoing_message.fb_attachment.type" ng-change="makeDirty()">
+            <option value="image">Image</option>
+            <option value="video">Video</option>
+            <option value="file">File</option>
+            <option value="audio">Audio</option>
+        </select>
+    </li>
+    <li>
+        <label>URL</label>
+        <input type="text" ng-model="ui.outgoing_message.fb_attachment.payload.url" ng-change="makeDirty()" />
+    </li>
+</ul>

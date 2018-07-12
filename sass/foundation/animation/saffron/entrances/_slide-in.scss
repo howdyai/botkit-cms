@@ -1,0 +1,35 @@
+@include u-keyframes(slideInLeft) {
+  0% {
+    opacity: 0;
+    @include u-transform(translateX($saf-translateX-distance * -10) translateZ(0));
+  }
+  65% {
+    opacity: 1;
+    @include u-transform(translateX($saf-translateX-distance));
+  }
+  100% {
+    @include u-transform(translateX(0));
+  }
+}
+
+@mixin slideInLeft($duration: 1s, $delay: 0s, $fill-mode: forwards) {
+  @include u-animation(slideInLeft $duration $delay $fill-mode);
+}
+
+@include u-keyframes(slideInRight) {
+  0% {
+    opacity: 0;
+    @include u-transform(translateX($saf-translateX-distance * 10) translateZ(0));
+  }
+  65% {
+    opacity: 1;
+    @include u-transform(translateX($saf-translateX-distance * -1));
+  }
+  100% {
+    @include u-transform(translateX(0));
+  }
+}
+
+@mixin slideInRight($duration: 1s, $delay: 0s, $fill-mode: forwards) {
+  @include u-animation(slideInRight $duration $delay $fill-mode);
+}

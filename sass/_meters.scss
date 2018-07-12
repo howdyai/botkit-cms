@@ -1,0 +1,31 @@
+.meter  {
+  width: 100%;
+  border: 1px solid #666;
+  padding: 0.25rem;
+  background: transparent;
+  display: flex;
+
+  label {
+    display: inline-block;
+    width: 150px;
+    padding: 0.25rem;
+  }
+  .meter-empty {
+    background: #f0F0F0;
+    flex: 1;
+  }
+
+  .meter-bar {
+    background: #00FF00;
+    height: 1.5rem;
+    transition: width 2s ease;
+  }
+
+  &.over {
+    .meter-bar {
+      background: #993333;
+    }
+  }
+
+
+}

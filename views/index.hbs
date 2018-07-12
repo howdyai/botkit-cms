@@ -1,0 +1,103 @@
+<!-- <ul>
+  {{#scripts}}
+    <li>
+        <a href="/edit/{{command}}" class="title">{{command}}</a>
+        {{description}}
+        {{modified}}
+    </li>
+  {{/scripts}}
+</ul> -->
+
+<!--
+
+<script>
+    var bot_id = "{{bot_id}}";
+    var botid = "{{bot_id}}";
+    var user_id = '{{user.id}}';
+</script> -->
+
+<div ng-controller="editBot" class="wrapper">
+    <div class="workspace">
+        <div class="workspace_body" ng-controller="botCommands">
+
+            <div class="toolbar">
+                <div ng-if="!ui.export_mode" class="righthand_tool">
+                    <button class="lockable" ng-click="toggleExportMode()">Export</button>
+                    <button class="lockable" ng-click="toggleImportMode()">Import</button>
+                </div>
+                <div ng-if="ui.export_mode" class="righthand_tool">
+                    <button ng-disabled="ui.export_count==0" ng-click="createExport()" class="primary">
+                      <span ng-if="ui.export_count > 0">Export {% ui.export_count %}</span>
+                      <span ng-if="ui.export_count <= 0">Select scripts to export</span>
+                    </button>
+                    <button ng-click="toggleExportMode()">Cancel</button>
+                </div>
+
+                <div>
+                    <button class="lockable" ng-click="createScriptModal()">New</button>
+                    <input type="search" ng-model="ui.filter" placeholder="Filter Scripts" />
+                    <label><input type="checkbox" ng-model="ui.searchScript" id="searchScript"> search full text</label>
+                </div>
+
+            </div>
+            <table>
+                <tr>
+                    <th class="sortable" ng-click="toggleSort('command')">Script Name<span class="sortorder" ng-if="ui.sortField=='command'">▲</span><span class="sortorder" ng-if="ui.sortField=='-command'">▼</span></th>
+                    <th>Description</th>
+                    <th class="sortable" ng-click="toggleSort('modified')">Modified <span class="sortorder" ng-if="ui.sortField=='-modified'">▼</span><span class="sortorder" ng-if="ui.sortField=='modified'">▲</span></th>
+                    <th ng-if="!ui.export_mode">Actions</th>
+                    <th ng-if="ui.export_mode">Export</th>
+                </tr>
+                <tr ng-repeat="command in commands | orderBy: ui.sortField | filter:filterRow" class="ng-class: {selected: ui.export_mode && !command.exclude_from_export, is_fallback: bot.settings.fallback_action=='run' && (command._id==bot.settings.fallback_script)};">
+                    <td>
+                        <a ng-href="/edit/{% command.command %}">{% command.command %}</a>
+                        <div class="fallback_flag">(Fallback)</div>
+                    </td>
+                    <td>
+                        <div>{% command.description %}</div>
+                        <div ng-if="command.tags && command.tags.length" class="tags">
+                            <a href="#" ng-repeat="t in command.tags" ng-click="filter_by_tag(t, $event)" class="tag"><i class="fa fa-tag" aria-hidden="true"></i> {% t %}</a>
+                        </div>
+                    </td>
+                    <td ng-bind="command.modified | date:'MM/dd/yy'"></td>
+
+                    <td ng-if="ui.export_mode" class="checkbox" ng-click="add_to_export(command)"><input type="checkbox" ng-checked="!command.exclude_from_export"></input>
+                    </td>
+                    <td class="more" ng-if="!ui.export_mode">
+                        <nav>
+                            &hellip;
+                            <ul>
+                                <li><a ng-href="/app/bots/{% bot_id %}/stats#/report/commands/{% command.command %}">Stats</a></li>
+                                <!-- <li><a ng-href="/app/bots/{% bot_id %}/code/{% command._id %}">Code Sample</a></li> -->
+                                <li ng-if="!(bot.settings.fallback_action=='run' && (command._id==bot.settings.fallback_script))"><a ng-click="setAsFallback(command._id)">Use as Fallback</a></li>
+                                <li ng-if="(bot.settings.fallback_action=='run' && (command._id==bot.settings.fallback_script))">Fallback ✔️️</li>
+                                <li class="delete"><a ng-href="#" ng-click="deleteCommand(command)">Delete</li>
+                        </ul>
+                    </nav>
+                </td>
+            </tr>
+        </table>
+
+        <div ng-if="ui.export_mode" class="box">
+            <button ng-disabled="ui.export_count==0" ng-click="createExport()">
+                <span ng-if="ui.export_count > 0">Export {% ui.export_count %}</span>
+                <span ng-if="ui.export_count <= 0">Select scripts to export</span>
+            </button>
+        </div>
+
+
+        <div class="ng-class:{active:ui.modal_create}; editor_modal">
+          {{> importexport/modal_create}}
+        </div>
+
+
+        <div class="ng-class:{active:ui.export_display}; editor_modal">
+          {{> importexport/modal_export}}
+        </div>
+
+        <div class="ng-class:{active:ui.import_mode}; editor_modal">
+          {{> importexport/modal_import}}
+        </div>
+    </div>
+</div>
+</div>

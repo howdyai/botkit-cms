@@ -1,0 +1,51 @@
+<ul>
+    <li class="label">
+        <!-- <button class="delete" ng-click="deleteFBAttachment(ui.outgoing_message)"></button> -->
+        <label>Button Template</label>
+    </li>
+</ul>
+<ul class="sheet">
+  <li class="header">
+    <div class="delete"></div>
+    <div class="cell">Type</div>
+    <div class="cell">Title</div>
+    <div class="cell">Payload Value</div>
+    <div class="medium">Size</div>
+  </li>
+</ul>
+<ul class="ng-class:{invalid_field: button.invalid}; sheet">
+    <li ng-repeat="button in ui.outgoing_message.fb_attachment.buttons track by $index" class="ng-class:{invalid: button.invalid}">
+        <div class="delete">
+          <button class="delete" ng-click="deleteFBButton(ui.outgoing_message,$index)"></button>
+        </div>
+        <div class="cell static">
+          {% button.type %}
+        </div>
+      <div class="cell">
+          <input type="text" ng-model="button.title" placeholder="Button Title" ng-change="makeDirty()">
+      </div>
+      <div class="cell" ng-if="button.type=='postback'">
+          <input type="text" ng-model="button.payload" placeholder="Postback Payload" ng-change="makeDirty()">
+      </div>
+      <div class="cell" ng-if="button.type=='phone_number'">
+          <input type="text" ng-model="button.payload" placeholder="+14155551212" ng-change="makeDirty()">
+      </div>
+      <div class="cell" ng-if="button.type=='web_url'">
+          <input type="text" ng-model="button.url" placeholder="https://mywebsite.com" ng-change="makeDirty()">
+      </div>
+      <div class="medium"  ng-if="button.type=='web_url'">
+          <select ng-model="button.webview_height_ratio" ng-change="makeDirty()">
+              <option value="full">Full</option>
+              <option value="compact">Compact</option>
+              <option value="tall">Tall</option>
+          </select>
+      </div>
+      <div class="medium disabled"  ng-if="button.type!='web_url'">
+      </div>
+    </li>
+    <li ng-if="ui.outgoing_message.fb_attachment.buttons.length < 3" class="placeholder_button">
+        <button ng-click="addFBButton(ui.outgoing_message,'postback')">+ Button</button>
+        <button ng-click="addFBButton(ui.outgoing_message,'web_url')">+ Link</button>
+        <button ng-click="addFBButton(ui.outgoing_message,'phone_number')">+ Call</button>
+    </li>
+</ul>

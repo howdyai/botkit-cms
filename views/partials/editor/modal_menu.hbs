@@ -1,0 +1,49 @@
+<form ng-submit="ui.modal_menu=false; makeDirty();">
+    <div class="editor_modal_box" ng-if="ui.modal_menu">
+      <header>
+        <h1>Edit Menu Options</h1>
+      </header>
+      <section>
+      <ul class="sheet">
+        <li>
+          <div class="delete"></div>
+          <div class="cell">
+              Text
+          </div>
+          <div class="cell">
+              Value
+          </div>
+          <div class="cell">
+              Description
+          </div>
+          <div class="checkbox">
+
+          </div>
+        </li>
+        <li ng-repeat="option in ui.current_action.options track by $index">
+          <div class="delete">
+            <button class="delete" ng-click="deleteMenuOption(ui.current_action, $index)"></button>
+          </div>
+          <div class="cell">
+              <input type="text" ng-model="option.text" required placeholder="Display Text" />
+          </div>
+          <div class="cell">
+              <input type="text" ng-model="option.value" required placeholder="Value" />
+          </div>
+          <div class="cell">
+              <input type="text" ng-model="option.description" placeholder="Description" />
+          </div>
+          <div class="checkbox" ng-click="toggleSelected(ui.current_action.options,$index)">
+              <input type="checkbox" ng-checked="option.selected" />
+          </div>
+        </li>
+        <li class="placeholder_button">
+            <button ng-click="ui.current_action.options.push({})">Add Option</button>
+        </li>
+      </ul>
+    </section>
+    <footer>
+      <button type="submit">Done</button>
+    </footer>
+    </div>
+</form>

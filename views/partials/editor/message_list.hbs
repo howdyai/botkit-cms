@@ -1,0 +1,364 @@
+<div class="thread_header" ng-if="thread" id="topic-{% thread.topic %}">
+
+  <h2>{% thread.topic %}</h2>
+  <p ng-if="thread.topic=='default'">
+    This is the entry point for the {% command.command %} script.
+  </p>
+  <p ng-if="thread.topic!='default'">
+    This is a thread in the {% command.command %} script.
+  </p>
+  <div class="backlinks">
+    <div ng-if="thread.topic=='default' && command.triggers.length">
+      Triggers: <br/>
+      <span class="message_option" ng-repeat="trigger in command.triggers"><span class="utterance" ng-click="ui.triggers=true">{% trigger.pattern %}</span></span>
+      <!-- <span class="message_option" ng-click="ui.triggers=true">+</span> -->
+    </div>
+
+    <div ng-if="ui.backlinks.length">
+      Transition from:</br>
+      <div class="message_option" ng-repeat="option in ui.backlinks">
+        <span ng-switch="option.action">
+          <span class="action" ng-switch-when="execute_script">
+            <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+            from
+            <span class="branch-title" ng-click="followOption(option,$event)">{% option.execute.script | truncateString:35:true %}:{% option.execute.thread | truncateString:35:true %}</span>
+          </span>
+          <span class="action" ng-switch-default>
+            <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+            from
+            <span class="branch-title" ng-click="followOption(option,$event)">{% option.action | truncateString:35:true %}</span>
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <div class="message_option" ng-if="(thread.topic!='default' && !ui.backlinks.length) || (thread.topic=='default' && !ui.backlinks.length && !command.triggers.length)">
+      <span class="warning">
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        No known entry point
+      </span>
+    </div>
+  </div>
+
+
+</div>
+
+<div dnd-list="thread.script"  dnd-allowed-types="['message']" >
+    <div class="card-loop" id="card{% $index %}" ng-repeat="line in thread.script"
+     dnd-draggable="line"
+     dnd-dragstart="unfocus()"
+     dnd-moved="thread.script.splice($index, 1); unfocus(); makeDirty(); processGroups();"
+     dnd-effect-allowed="move"
+     dnd-type="'message'"
+     dnd-disable-if="$index == (thread.script.length-1)"
+     >
+
+     <div ng-if="line.placeholder && bot.platform=='facebook'" class="message_placeholder">
+         <button ng-click="fb_insertAttachment(line,'image'); $event.stopPropagation()">Media Message</button>
+         <button ng-click="fb_insertAttachment(line,'button'); $event.stopPropagation()">Button Template</button>
+         <button ng-click="fb_insertAttachment(line,'generic'); $event.stopPropagation()">Generic Template</button>
+         <button ng-click="removeLineAt($index); $event.stopPropagation();" class="danger">Cancel</button>
+     </div>
+
+     <div ng-controller="teamsMode" ng-if="line.placeholder && bot.platform=='teams'" class="message_placeholder">
+         <button ng-click="addTeamsAttachment(line,'hero'); $event.stopPropagation()">Hero Card</button>
+         <button ng-click="addTeamsAttachment(line,'thumbnail'); $event.stopPropagation()">Thumbnail Card</button>
+         <button ng-click="addTeamsAttachment(line,'file'); $event.stopPropagation()">Image</button>
+         <button ng-click="removeLineAt($index); $event.stopPropagation();" class="danger">Cancel</button>
+     </div>
+
+
+    <!-- START BOT MESSAGES -->
+    <!-- DEFINES THE NORMAL MESSAGE BOX -->
+    <div ng-if="line.conditional" ng-click="focusConditional(line)" class="ng-class: {focused: line.focused}; message-wrapper conditional">
+      <div class="ng-class: {first_in_group: line.first_in_group, last_in_group: line.last_in_group, middle_of_group: line.middle_of_group}; message bot" ng-click="focusConditional(line); $event.stopPropagation()">
+        <button class="delete" ng-click="removeLineAt($index)"></button>
+        <div class="message-box">
+            <div class="conditional_statement">
+                <div class="renderarea" ng-bind-html="renderConditional(line)"></div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div ng-if="!line.conditional && !line.placeholder && line.text" class="ng-class: {focused: line.focused}; message-wrapper bot">
+        <div class="ng-class: {first_in_group: line.first_in_group, last_in_group: line.last_in_group, middle_of_group: line.middle_of_group}; message bot" ng-click="focus(line); $event.stopPropagation()">
+
+            <button class="delete" ng-click="removeLineAt($index)"></button>
+            <div class="message-box" ng-if="bot.platform!='facebook' || (bot.platform=='facebook' && !line.fb_attachment)">
+                <span class="username botname">{% bot.name %}</span>
+                <div class="bot-statement" ng-if="line.text && line.text[0]">
+                    <div class="renderarea" ng-bind-html="rendered(line.text[0])"></div>
+                </div>
+            </div>
+
+            <div class="teams_attachments_wrapper {% line.platforms.teams.attachmentLayout %}" ng-if="line.platforms.teams.attachments.length">
+              <div class="teams_attachments {% line.platforms.teams.attachmentLayout %}">
+                  <div class="ng-class: {has_image: attachment.images.length}; teams_attachment {% attachment.type %}" ng-if="bot.platform=='teams'" ng-repeat="attachment in line.platforms.teams.attachments">
+                <div ng-if="attachment.type=='file'">
+                  <img ng-if="attachment.contentUrl" ng-src="{% attachment.contentUrl %}">
+                  <div ng-if="!attachment.contentUrl" class="image_placeholder">
+                    [IMAGE GOES HERE]
+                  </div>
+                </div>
+                <div ng-if="attachment.type!='file'">
+
+                    <div ng-if="attachment.type=='thumbnail' && attachment.images.length" class="image" ng-repeat="image in attachment.images">
+                      <img ng-if="image.url" ng-src="{% image.url %}">
+                    </div>
+                    <p ng-if="attachment.title" class="title">{% attachment.title %}</p>
+                    <p ng-if="attachment.subtitle" class="subtitle">{% attachment.subtitle %}</p>
+                    <div ng-if="attachment.type=='hero' && attachment.images.length" class="image" ng-repeat="image in attachment.images">
+                      <img ng-if="image.url" ng-src="{% image.url %}">
+                    </div>
+                    <p ng-if="attachment.text" class="text">{% attachment.text %}</p>
+
+                    <div class="buttons" ng-if="attachment.buttons.length">
+                      <div class="button" ng-repeat="button in attachment.buttons">
+                        {% button.title %}
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              </div>
+            </div>
+            <div ng-if="line.platforms.teams.attachmentLayout == 'carousel' && line.platforms.teams.attachments.length" class="carousel_dots">
+              <div ng-repeat="attachment in line.platforms.teams.attachments" class="ng-class:{current: $index==0};">
+                  &#9679;
+              </div>
+            </div>
+
+
+            <div class="file_attachment" ng-if="bot.platform=='web'" ng-repeat="file in line.platforms.web.files">
+              <i class="fa fa-file" aria-hidden="true"></i>
+              <a ng-href="{% file.url %}" target="_blank">{% displayFilenameFromURL(file.url) %}</a>
+            </div>
+
+
+            <div class="ciscospark_attachment" ng-if="bot.platform=='ciscospark'" ng-repeat="file in line.platforms.ciscospark.files">
+              <i class="fa fa-file" aria-hidden="true"></i>
+              <a ng-href="{% file.url %}" target="_blank">{% displayFilenameFromURL(file.url) %}</a>
+            </div>
+
+            <div class="fb_attachment" ng-if="bot.platform=='facebook' && line.fb_attachment">
+                <button class="delete" ng-click="removeLineAt($index)"></button>
+
+                <div class="bot-statement media" ng-if="line.fb_attachment.type">
+                        <div ng-if="line.fb_attachment.type=='image'" class="media">
+                            <strong>[IMAGE]</strong>
+                            <p>URL: <a ng-href="{% line.fb_attachment.payload.url %}">{% line.fb_attachment.payload.url %}</a></p>
+                            <!-- <img ng-src="{% line.fb_attachment.payload.url %}" /> -->
+                        </div>
+                        <div ng-if="line.fb_attachment.type=='audio'" class="media">
+                            <strong>[AUDIO]</strong>
+                            <p>URL: <a ng-href="{% line.fb_attachment.payload.url %}">{% line.fb_attachment.payload.url %}</a></p>
+                            <!-- <audio ng-src="{% line.fb_attachment.payload.url %}" /> -->
+                        </div>
+                        <div ng-if="line.fb_attachment.type=='video'" class="media">
+                            <strong>[VIDEO]</strong>
+                            <p>URL: <a ng-href="{% line.fb_attachment.payload.url %}">{% line.fb_attachment.payload.url %}</a></p>
+                            <!-- <video controls>
+                                <source ng-src="{% line.fb_attachment.payload.url %}" />
+                            </video> -->
+                        </div>
+                        <div ng-if="line.fb_attachment.type=='file'" class="media">
+                            <strong>[FILE]</strong>
+                            <p>URL: <a ng-href="{% line.fb_attachment.payload.url %}">{% line.fb_attachment.payload.url %}</a></p>
+                            <!-- <a ng-href="{% line.fb_attachment.payload.url %}">Download File</a> -->
+                        </div>
+                </div>
+
+                <div class="button_template" ng-if="line.fb_attachment.template_type=='button'">
+                    <div class="renderarea" ng-bind-html="rendered(line.text[0])"></div>
+                    <div class="fb_button" ng-repeat="button in line.fb_attachment.buttons">
+                        {% button.title %}
+                    </div>
+                </div>
+
+                <div class="generic_templates" ng-if="line.fb_attachment.template_type=='generic'">
+                    <div class="generic_template" ng-repeat="element in line.fb_attachment.elements">
+
+                        <div ng-if="element.image_url"class="element_img" style="background-image: url({% element.image_url %});"></div>
+                        <div class="body">
+                            <p class="element_title">{% element.title %}</p>
+                            <p class="element_subtitle" ng-if="element.subtitle">{% element.subtitle %}</p>
+                            <p class="element_url" ng-if="element.item_url">{% element.item_url %}</p>
+                        </div>
+                        <div class="fb_button" ng-repeat="button in element.buttons">
+                            <div ng-if="button.type=='element_share'">
+                                Share
+                            </div>
+                            {% button.title %}
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="attachments" ng-if="bot.platform=='slack'" dnd-list="line.attachments" dnd-allowed-types="['attachment']">
+                <div class="attachment" style="border-left-color: {% attachment.color || '#CCC' %}" ng-repeat="attachment in line.attachments"
+                dnd-draggable="attachment"
+                dnd-type="'attachment'"
+                dnd-moved="line.attachments.splice($index, 1); makeDirty();"
+                dnd-effect-allowed="move"
+                >
+
+                    <img ng-if="attachment.thumb_url" ng-src="{% attachment.thumb_url %}" class="thumb_url" />
+
+                    <p class="attachment-author" ng-if="attachment.author_name">
+                      <img ng-if="attachment.author_icon" ng-src="{% attachment.author_icon %}" width="16" height="16" />
+                      <a ng-href="{% attachment.author_link %}" ng-if="attachment.author_link" target="_new">{% attachment.author_name %}</a>
+                      <span ng-if="!attachment.author_link">{% attachment.author_name %}</span>
+                    </p>
+                    <p class="attachment-title" ng-if="attachment.title && !attachment.title_link">{% attachment.title %}</p>
+                    <p class="attachment-title" ng-if="attachment.title && attachment.title_link"><a href="{% attachment.title_link %}" target="_new">{% attachment.title %}</a></p>
+
+                    <p class="attachment-text" ng-if="attachment.text">{% attachment.text %}</p>
+
+                    <div class="ng-class: {short: field.short};" ng-repeat="field in attachment.fields">
+                        <p ng-if="field.title" ng-if="field.title">
+                            <label>{% field.title %}:</label>
+                        </p>
+                        <p ng-if="field.value" ng-if="field.value">{% field.value %}</p>
+                    </div>
+
+                    <p class="attachment-footer" ng-if="attachment.footer">
+                      <img ng-if="attachment.footer_icon" ng-src="{% attachment.footer_icon %}" width="16" height="16" align="absmiddle" />
+                      {% attachment.footer %}
+                    </p>
+
+                    <img ng-if="attachment.image_url" ng-src="{% attachment.image_url %}" class="image_url" />
+
+
+                    <div ng-repeat="action in attachment.actions">
+                        <button ng-if="action.type=='button'" class="slack_{% action.style %}">{% action.text %}</button>
+                        <select ng-if="action.type=='select'" class="slack_{% action.style %}"><option>{% action.text %}</option></select>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div ng-if="line.quick_replies" class="quick_replies">
+                <div class="quick_reply" ng-repeat="reply in line.quick_replies">
+                    <span ng-if="reply.content_type == 'location'">Location</span>
+                    <span ng-if="reply.content_type != 'location'">{% reply.title %}</span>
+                </div>
+            </div>
+
+            <div class="summary" ng-if="line.collect">
+                <div ng-if="line.collect.key" class="message_option capture"><span class="action"><i class="fa fa-commenting" aria-hidden="true"></i> Collect answer into <span class="variable">{% line.collect.key %}</span></span></div>
+                <div class="paths" ng-if="line.collect.options.length>1">
+                  <div ng-if="!option.default" ng-repeat="option in line.collect.options" class="message_option {% generateActionClass(option.action) %}">
+                    <span ng-if="option.pattern" class="utterance">{% option.pattern | truncateString:35:true %}</span>
+
+                    <span ng-switch="option.action">
+                      <span ng-switch-when="next" class="action"><i class="fa fa-play-circle" aria-hidden="true"></i> Continue</span>
+                      <span ng-switch-when="stop" class="action"><i class="fa fa-hand-paper-o" aria-hidden="true"></i> Failed</span>
+                      <span ng-switch-when="timeout" class="action"><i class="fa fa-clock-o" aria-hidden="true"></i> Timed Out</span>
+                      <span ng-switch-when="repeat" class="action"><i class="fa fa-repeat" aria-hidden="true"></i> Repeat</span>
+                      <span ng-switch-when="wait" class="action"><i class="fa fa-commenting" aria-hidden="true"></i> Wait for more</span>
+                      <span ng-switch-when="complete" class="action"><i class="fa fa-check-square" aria-hidden="true"></i> Conversation Complete</span>
+                      <span ng-switch-when="execute_script" class="action"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Go to <span class="branch-title" ng-click="followOption(option||line,$event)">{% option.execute.script | truncateString:35:true %}:{% option.execute.thread | truncateString:35:true %}</span></span>
+                      <span ng-switch-default class="action"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Go to <span class="branch-title" ng-click="followOption(option||line,$event)">{% option.action | truncateString:35:true %}</span></span>
+                    </span>
+                  </div>
+              </div>
+              <div ng-if="line.collect.options.length > 1 && option.default" ng-repeat="option in line.collect.options" class="message_option {% generateActionClass(option.action) %} else" >
+                <span ng-switch="option.action">
+                  <span ng-switch-when="next" class="action"><i class="fa fa-play-circle" aria-hidden="true"></i> Continue</span>
+                  <span ng-switch-when="stop" class="action"><i class="fa fa-hand-paper-o" aria-hidden="true"></i> Failed</span>
+                  <span ng-switch-when="timeout" class="action"><i class="fa fa-clock-o" aria-hidden="true"></i> Timed Out</span>
+                  <span ng-switch-when="repeat" class="action"><i class="fa fa-repeat" aria-hidden="true"></i> Repeat</span>
+                  <span ng-switch-when="wait" class="action"><i class="fa fa-commenting" aria-hidden="true"></i> Wait for more</span>
+                  <span ng-switch-when="complete" class="action"><i class="fa fa-check-square" aria-hidden="true"></i> Conversation Complete</span>
+                  <span ng-switch-when="execute_script" class="action"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Go to <span class="branch-title" ng-click="followOption(option||line,$event)">{% option.execute.script | truncateString:35:true %}:{% option.execute.thread | truncateString:35:true %}</span></span>
+                  <span ng-switch-default class="action"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Go to <span class="branch-title" ng-click="followOption(option||line,$event)">{% option.action | truncateString:35:true %}</span></span>
+                </span>
+            </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- END BOT MESSAGES -->
+
+
+</div>
+<div class="card-loop" ng-repeat="line in thread.script">
+
+<!-- START FINAL ACTION -->
+<!-- DEFINES THE FINAL ACTION BOX -->
+<div class="message-wrapper" ng-if="features.final_action && line.action">
+    <div class="card final-action" ng-click="focusOnly(line); $event.stopPropagation()">
+        <div ng-if="line.focused">
+            And then...
+            <select ng-model="line.action" ng-if="line.action != '_new'" ng-change="action_then_select(line)">
+                <optgroup label="Actions">
+                    <!-- <option value="next">Continue to next card</option> -->
+                    <!-- <option value="repeat">Repeat this card</option> -->
+                    <option value="complete">End and mark successful</option>
+                    <option value="stop" ng-if="features.allow_quit">End and mark failed</option>
+                    <option value="timeout">End and mark timed out</option>
+
+                </optgroup>
+                <optgroup label="Threads" ng-if="features.branches">
+                  <option ng-if="thread.topic=='default'" ng-repeat="thread in command.script.script" value="{% thread.topic %}">Jump to: {% thread.topic %}</option>
+                  <option ng-if="thread.topic!='default'"ng-repeat="thread in command.script.script | orderBy: 'topic'" value="{% thread.topic %}">Jump to: {% thread.topic %}</option>
+                </optgroup>
+                <optgroup label="New" ng-if="features.branches">
+                    <option value="_new">Jump to new thread</option>
+                </optgroup>
+                <optgroup label="Scripts" ng-if="ui.scripts">
+                    <option value="execute_script">Execute script</option>
+                </optgroup>
+            </select>
+
+            <div ng-if="line.action=='execute_script'">
+                <label>Script:</label>
+              <div>
+                <select ng-options="command.command as command.command for command in bot.commands | orderBy: 'command'" ng-model="line.execute.script" ng-change="execute_script_selected(line)">
+                </select>
+              </div>
+            </div>
+
+
+          <div ng-if="line.execute.script">
+              <label>Thread:</label>
+            <div >
+              <select ng-model="line.execute.thread" ng-options="thread.topic as thread.topic for thread in line.selected_scripts_threads" ng-change="makeDirty()">
+              </select>
+            </div>
+          </div>
+
+
+            <div class="new-branch" ng-if="line.action=='_new'">
+                <form ng-submit="addThreadAsAction(newbranch, line);">
+                    <div>
+                        <input type="text" ng-model="newbranch" placeholder="New thread name" />
+                        <button type="submit">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div ng-if="!line.focused && shouldDisplayFinalAction()">
+            <div class="message_option {% generateActionClass(line.action) %} final">
+              <span ng-switch="line.action">
+                <span ng-switch-when="next" class="action"><i class="fa fa-play-circle" aria-hidden="true"></i> Continue</span>
+                <span ng-switch-when="stop" class="action"><i class="fa fa-hand-paper-o" aria-hidden="true"></i> Failed</span>
+                <span ng-switch-when="timeout" class="action"><i class="fa fa-clock-o" aria-hidden="true"></i> Timed Out</span>
+                <span ng-switch-when="repeat" class="action"><i class="fa fa-repeat" aria-hidden="true"></i> Repeat</span>
+                <span ng-switch-when="wait" class="action"><i class="fa fa-commenting" aria-hidden="true"></i> Wait for more</span>
+                <span ng-switch-when="complete" class="action"><i class="fa fa-check-square" aria-hidden="true"></i> Conversation Complete</span>
+                <span ng-switch-when="execute_script" class="action"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Go to <span class="branch-title" ng-click="followOption(line,$event)">{% line.execute.script | truncateString:35:true %}:{% line.execute.thread | truncateString:35:true %}</span></span>
+                <span ng-switch-default class="action"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Go to <span class="branch-title" ng-click="followOption(line,$event)">{% line.action | truncateString:35:true %}</span></span>
+              </span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END FINAL ACTION -->
+</div>
+</div>

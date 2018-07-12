@@ -1,0 +1,88 @@
+.composer {
+    font-size: 1.2rem;
+}
+
+.faqbuilder {
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.sample_message {
+  @include clearfix;
+  margin-bottom: 1rem;
+
+
+}
+
+.user_utterance,
+.bot_utterance {
+  font-size: 1.2rem;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  display: inline-block;
+  background: #F0F0F0;
+  // max-width: 60%;
+}
+
+.user_utterance {
+  background: $main-blue;
+  color: #FFF;
+}
+
+.view_script {
+  display: block;
+}
+
+.message_test_status {
+  // text-align: center;
+  padding: 0.5rem 1rem;
+  margin: 1rem 0 0;
+
+  &.good {
+    background-color: $green;
+  }
+  &.bad {
+    background-color: $red;
+    color: #fff;
+  }
+
+}
+
+
+.successful_update {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 3rem;
+  color: #CCC;
+  a { color: #CCC; }
+}
+
+
+.halfsies {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+
+  .half {
+    flex: 1 0 45%;
+    align-self: flex-start;
+  }
+
+  .middle {
+    flex:  0 0 10%;
+
+    text-align: center;
+    span {
+      background: #CCC;
+      border-radius: 50%;
+      padding: 0.25em 0.5em;
+    }
+
+  }
+
+
+}

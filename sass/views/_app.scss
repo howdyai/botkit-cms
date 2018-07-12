@@ -1,0 +1,185 @@
+.content {
+    align-content: center;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+select {
+    flex: 1;
+}
+input[type="text"],
+input[type="textarea"],
+input[type="url"] {
+    @include script-text-input;
+}
+section {
+    @include clearfix;
+    padding: $spacing-unit/2;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    box-sizing: border-box;
+    .box {
+        button {
+            @include text-button;
+        }
+    }
+}
+.box {
+    @include clearfix;
+    background-color: $white;
+    padding: $unit;
+    h1,
+    h2,
+    h3,
+    p {
+        padding: 1rem;
+        padding-left: 0;
+        line-height: normal;
+    }
+    ul {
+        display: table;
+    }
+    th {
+        font-weight: bold;
+
+    }
+    table,
+    ul {
+        width: 100%;
+        td {
+            padding: 1rem;
+        }
+        td,
+        th {
+            text-align: left;
+            padding-left: 0;
+            &:last-child {
+                text-align: right;
+            }
+            &:first-child {
+                padding-left: 1rem;
+            }
+        }
+        th {
+            padding: .2rem 1rem .2rem 0;
+            background-color: $light-gray;
+        }
+        li,
+        tr {
+            display: table-row;
+            border-bottom: 2px solid $gray;
+        }
+    }
+    tbody {
+        tr:last-child {
+            border-bottom: none;
+        }
+        td:first-child {
+            padding-left: 1rem;
+        }
+    }
+}
+
+.simple_alert {
+    padding: 1rem;
+    border-color: $main-blue;
+    border-style: solid;
+    border-width: 2px;
+    background: #FFF;
+    margin-bottom: 1.5rem;
+    p { margin-top: 0; padding: 0;}
+    p:last-of-type {
+        margin-bottom: 0;
+    }
+}
+
+
+.tos {
+    width: 100%;
+    max-width: 800px;
+    textarea {
+        resize: none;
+        width: 100%;
+        height: 50vh;
+        overflow-y: auto;
+    }
+    button {
+        @include text-button;
+    }
+}
+.new-bot {
+    max-width: 700px;
+}
+
+
+
+// login
+.login_signup .content {
+    background-color: #F0F0F0;
+}
+
+.login {
+    background: none;
+    width: 100%;
+    max-width: 440px;
+
+    h4 {
+        margin: 0;
+    }
+
+    h5 {
+        font-family: "GT-Haptik-Light",sans-serif;
+        color: $purple;
+        font-size: 1.25rem;
+        font-weight: 300;
+    }
+
+    form {
+        box-sizing: border-box;
+        @include clearfix;
+
+        input[type="text"],
+        input[type="password"]  {
+            width: 100%;
+            margin: 0;
+            padding: 1rem;
+        }
+
+        button {
+            background: $main-blue;
+            font-family: "GT-Haptik-Light",sans-serif;
+            font-weight: bold;
+            letter-spacing: 1px;
+            width: 100%;
+            color: #FFF;
+            border-radius: 3px;
+            margin: 0;
+        }
+    }
+
+    .no_account {
+        text-align: center;
+    }
+}
+.auth-services {
+    padding: $unit;
+    display: flex;
+    flex-direction: column;
+    a {
+        text-decoration: none;
+        background-color: $lavender-light;
+        color: $dark-gray;
+        padding: $unit;
+        margin: $unit * 2;
+        text-align: center;
+        font-size: 1.5em;
+        transition: all 0.3s;
+        &:hover {
+            background-color: lighten($lavender-light, 5%);
+        }
+    }
+}
+
+code {
+    @include code;
+}

@@ -1,0 +1,24 @@
+@include u-keyframes(bounce) {
+  0%, 85%, 100% {
+    @include u-transform(translateY(0) scaleY(1) scaleX(1) translateZ(0));
+  }
+  25% {
+    @include u-transform(translateY(-1.35rem) scaleY(1.02) scaleX(0.98));
+  }
+  35% {
+    @include u-transform(translateY(0) scaleY(0.98) scaleX(1.02));
+  }
+  50% {
+    @include u-transform(translateY(-1rem) scaleY(1.01) scaleX(0.99));
+  }
+  60% {
+    @include u-transform(translateY(0) scaleY(0.99) scaleX(1.01));
+  }
+  75% {
+    @include u-transform(translateY(-0.05rem));
+  }
+}
+
+@mixin bounce($duration: 1s, $delay: 0s, $count: 1, $fill-mode: none) {
+  @include u-animation(bounce $count $duration $delay $fill-mode);
+}

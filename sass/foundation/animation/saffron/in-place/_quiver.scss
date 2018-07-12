@@ -1,0 +1,42 @@
+@include u-keyframes(quiver) {
+  0%{
+    @include u-transform(translate3d(2px, 1px, 0) rotate(0deg));
+  }
+  10% {
+    @include u-transform(translate3d(-1px, 2px, 0) rotate($saf-quiver-angle));
+  }
+  20% {
+    @include u-transform(translate3d(-3px, 0) rotate($saf-quiver-angle * -1));
+  }
+  30% {
+    @include u-transform(translate3d(0, 2px, 0) rotate(0deg));
+  }
+  40% {
+    @include u-transform(translate3d(1px, -1px, 0) rotate($saf-quiver-angle));
+  }
+  50% {
+    @include u-transform(translate3d(-1px, 2px, 0) rotate($saf-quiver-angle * -1));
+  }
+  60% {
+    @include u-transform(translate3d(-3px, 1px, 0) rotate(0deg));
+  }
+  70% {
+    @include u-transform(translate3d(2px, 1px, 0) rotate($saf-quiver-angle));
+  }
+  80% {
+    @include u-transform(translate3d(-1px, -1px, 0) rotate($saf-quiver-angle * -1));
+  }
+  90% {
+    @include u-transform(translate3d(2px, 2px, 0) rotate(0deg));
+  }
+  100% {
+    @include u-transform(translate3d(1px, -2px, 0) rotate($saf-quiver-angle));
+  }
+
+}
+
+@mixin quiver($duration: 0.75s, $delay: 0s, $fill-mode: none, $count: infinite) {
+  // hack to fix jagged edges
+  outline: 1px solid transparent;
+  @include u-animation(quiver $duration $delay $fill-mode $count);
+}

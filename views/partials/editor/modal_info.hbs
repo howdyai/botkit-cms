@@ -1,0 +1,45 @@
+<form ng-submit="saveInfo()" ng-if="ui.modal_info">
+<div class="editor_modal_box">
+
+  <header>
+    <h1>Script Info</h1>
+  </header>
+  <section>
+    <div class="bigform">
+          <p>
+            <label>Name:</label>
+            <input ng-model="command.command" type="text" required />
+          </p>
+          <p>
+            <label>Description:</label>
+            <input ng-model="command.description" type="text" required />
+          </p>
+
+          <label>Add Tags:</label>
+          <div class="addon">
+            <input type="text" ng-class="{invalid: tag_input_invalid == true}" ng-model="ui.tag" ng-pattern="words_only" placeholder="New Tag" />
+            <button ng-click="addTag($event)" class="primary">Add</button>
+          </div>
+          <div ng-if="command.tags && command.tags.length" class="tags">
+              <span ng-repeat="t in command.tags" class="tag">
+                <!-- <i class="fa fa-tag" aria-hidden="true"></i>  -->
+                {% t %}
+                <button class="delete" ng-click="removeTag($index)"></button>
+              </span>
+          </div>
+
+          <br/>
+        <label>Script Id: <a href="https://github.com/howdyai/botkit/blob/master/docs/readme-studio.md#controllerstudiogetbyid" target="_blank">How do I use this?</a></label>
+          <div class="addon">
+            <input type="text smaller" id="script_id" readonly ng-model="command._id" />
+            <button type="button" ngclipboard data-clipboard-target="#script_id"><i class="fa fa fa-clipboard"></i></button>
+          </div>
+    </div>
+  </section>
+
+
+  <footer>
+    <button type="submit primary">Done</button>
+  </footer>
+</div>
+</form>

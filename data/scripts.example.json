@@ -1,0 +1,495 @@
+[
+  {
+    "command": "hello",
+    "description": "Respond when a human says hello!",
+    "script": [
+      {
+        "topic": "default",
+        "script": [
+          {
+            "text": [
+              "Hello Human!",
+              "How do you do?",
+              "Nice to meet you Human.",
+              "Hi!",
+              "How’s it going?",
+              "Hey!",
+              "Hey there!",
+              "Howdy!",
+              "G`day human!",
+              "Salut!",
+              "Ciao!",
+              "Hola!",
+              "Shalom!"
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      }
+    ],
+    "triggers": [
+      {
+        "pattern": "hell.*",
+        "type": "regexp",
+        "id": "495"
+      },
+      {
+        "type": "string",
+        "pattern": "hello"
+      },
+      {
+        "type": "string",
+        "pattern": "hey"
+      },
+      {
+        "type": "string",
+        "pattern": "hi"
+      },
+      {
+        "type": "string",
+        "pattern": "howdy"
+      }
+    ],
+    "variables": []
+  },
+  {
+    "command": "goodbye",
+    "description": "Respond when a human says bye!",
+    "script": [
+      {
+        "topic": "default",
+        "script": [
+          {
+            "text": [
+              "Bye! This is my goodbye script. You can edit it to customize my behaviors.",
+              "I will miss you. Does that bother you? You can edit this script & customize my behaviors.",
+              "Don't go, we've still so much to do. For example, did you know you can edit this script at studio.botkit.ai?",
+              "Time to go already? Time sure flies when you're doing something every 345 picoseconds!  \nPS – Editing my scripts is easy, just go to studio.botkit.ai"
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      }
+    ],
+    "triggers": [
+      {
+        "type": "string",
+        "pattern": "goodbye"
+      },
+      {
+        "type": "string",
+        "pattern": "bye"
+      },
+      {
+        "type": "string",
+        "pattern": "later"
+      },
+      {
+        "type": "string",
+        "pattern": "buhbye"
+      }
+    ],
+    "variables": []
+  },
+  {
+    "command": "thanks",
+    "description": "Respond when a human says thanks!",
+    "script": [
+      {
+        "topic": "default",
+        "script": [
+          {
+            "text": [
+              "You are welcome!",
+              "You're welcome!",
+              "No problem.",
+              "Sure!",
+              "Just doing my job.",
+              "Anytime.",
+              "My pleasure.",
+              "Don’t mention it.",
+              "It's no bother",
+              "Think nothing of it"
+            ]
+          },
+          {
+            "text": [
+              "You can edit it to customize my behaviors."
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      }
+    ],
+    "triggers": [
+      {
+        "type": "string",
+        "pattern": "thanks"
+      },
+      {
+        "type": "string",
+        "pattern": "thank you"
+      }
+    ],
+    "variables": []
+  },
+  {
+    "command": "help",
+    "description": "A flexible help system for your bot",
+    "script": [
+      {
+        "topic": "default",
+        "script": [
+          {
+            "text": [
+              "I'm here to help! Here are some of the commands that come standard with my starter kit.\n\nYou can say `help <command>` to get more details."
+            ],
+            "attachments": [
+              {
+                "title": "uptime",
+                "text": "See how long this bot has been running",
+                "fields": [],
+                "actions": [],
+                "color": "#ff0000",
+                "fallback": "Command 1"
+              },
+              {
+                "title": "identify",
+                "text": "Who is this bot, anyways?",
+                "fields": [],
+                "actions": [],
+                "color": "#ff8000"
+              },
+              {
+                "title": "say <something>",
+                "text": "The bot will repeat after you",
+                "fields": [],
+                "actions": [],
+                "color": "#ffff00"
+              },
+              {
+                "title": "My Custom Command",
+                "text": "Customize me!",
+                "fields": [],
+                "actions": [],
+                "color": "#80ff00"
+              },
+              {
+                "title": "My Custom Command",
+                "text": "Customize Me!",
+                "fields": [],
+                "actions": [],
+                "color": "#0080ff"
+              }
+            ]
+          },
+          {
+            "text": [
+              "As you add features and adapt me to be _your own bot_, you should update my help system <https://studio.botkit.ai|via the Botkit Studio dialog editor.>"
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      },
+      {
+        "topic": "uptime",
+        "script": [
+          {
+            "text": [
+              "My uptime command displays information about my application process."
+            ]
+          },
+          {
+            "text": [
+              "To activate it, say `@{{identity.name}} uptime`"
+            ],
+            "attachments": [
+              {
+                "title": "",
+                "text": "",
+                "fields": [],
+                "actions": [
+                  {
+                    "text": "Try Now",
+                    "name": "say",
+                    "value": "uptime",
+                    "type": "button",
+                    "style": "default"
+                  }
+                ],
+                "fallback": "Try Now",
+                "callback_id": "help_uptime"
+              }
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      },
+      {
+        "topic": "say",
+        "script": [
+          {
+            "text": [
+              "You can make me say silly things."
+            ]
+          },
+          {
+            "text": [
+              "Say `@{{identity.name}} say _something hilarious_`"
+            ],
+            "attachments": [
+              {
+                "title": "",
+                "text": "",
+                "fields": [],
+                "actions": [
+                  {
+                    "text": "Say Foo",
+                    "name": "say",
+                    "value": "say foo",
+                    "type": "button"
+                  },
+                  {
+                    "text": "Say Bar",
+                    "name": "say",
+                    "value": "bar",
+                    "type": "button"
+                  }
+                ],
+                "callback_id": "say_example"
+              }
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      },
+      {
+        "topic": "identify",
+        "script": [
+          {
+            "text": [
+              "As a Botkit-powered robot, I am required to identify myself when asked."
+            ]
+          },
+          {
+            "text": [
+              "Say `@{{identity.name}} identify yourself` or `@{{identity.name}} who are you?`"
+            ],
+            "attachments": [
+              {
+                "title": "",
+                "text": "",
+                "fields": [],
+                "actions": [
+                  {
+                    "text": "Try now",
+                    "name": "say",
+                    "value": "identify yourself",
+                    "type": "button"
+                  }
+                ],
+                "callback_id": "identify_help"
+              }
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      }
+    ],
+    "triggers": [
+      {
+        "type": "string",
+        "pattern": "help"
+      }
+    ],
+    "variables": []
+  },
+  {
+    "command": "onboarding",
+    "description": "Script for welcoming new users to your bot",
+    "script": [
+      {
+        "topic": "default",
+        "script": [
+          {
+            "text": [
+              "Hello boss! I am your new bot, fresh out of the box and ready for you to customize."
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      },
+      {
+        "topic": "timeout",
+        "script": [
+          {
+            "text": [
+              "Looks like you got distracted. We can continue later."
+            ]
+          },
+          {
+            "action": "timeout"
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "variables": []
+  },
+  {
+    "command": "channel_join",
+    "description": "What the bot says when it is invited to a new channel",
+    "script": [
+      {
+        "topic": "default",
+        "script": [
+          {
+            "text": [
+              "I have arrived! I'm a friendly, helpful bot here to assist you."
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      },
+      {
+        "topic": "timeout",
+        "script": [
+          {
+            "text": [
+              "Looks like you got distracted. We can continue later."
+            ]
+          },
+          {
+            "action": "timeout"
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "variables": []
+  },
+  {
+    "command": "identify_yourself",
+    "description": "What the bot says when someone asks, \"who are you?\"",
+    "script": [
+      {
+        "topic": "default",
+        "script": [
+          {
+            "text": [
+              "Hello! I am a bot created with Botkit Studio, here to assist you in any way I can."
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      },
+      {
+        "topic": "timeout",
+        "script": [
+          {
+            "text": [
+              "Looks like you got distracted. We can continue later."
+            ]
+          },
+          {
+            "action": "timeout"
+          }
+        ]
+      }
+    ],
+    "triggers": [
+      {
+        "type": "string",
+        "pattern": "identify"
+      },
+      {
+        "type": "string",
+        "pattern": "are you a person"
+      },
+      {
+        "type": "string",
+        "pattern": "are you a robot"
+      },
+      {
+        "type": "string",
+        "pattern": "what are you"
+      },
+      {
+        "type": "string",
+        "pattern": "who are you"
+      },
+      {
+        "type": "string",
+        "pattern": "identify yourself"
+      }
+    ],
+    "variables": [
+      {
+        "name": "question_1",
+        "type": "string"
+      },
+      {
+        "name": "question_2",
+        "type": "string"
+      },
+      {
+        "name": "question_3",
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "command": "fallback",
+    "description": "What the bot says if no other trigger matches",
+    "script": [
+      {
+        "topic": "default",
+        "script": [
+          {
+            "text": [
+              "I apologize, but my circuits have not been configured for that input. Say `help` for information about my current capabilities."
+            ]
+          },
+          {
+            "action": "complete"
+          }
+        ]
+      },
+      {
+        "topic": "timeout",
+        "script": [
+          {
+            "text": [
+              "Looks like you got distracted. We can continue later."
+            ]
+          },
+          {
+            "action": "timeout"
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "variables": []
+  }
+]

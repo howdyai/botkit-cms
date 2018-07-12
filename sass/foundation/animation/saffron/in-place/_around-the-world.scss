@@ -1,0 +1,12 @@
+@include u-keyframes(aroundTheWorld) {
+  0% {
+    @include u-transform(rotate(0deg) translate3d($saf-distance-from-origin * -1, $saf-distance-from-origin * -1, 0) rotate(0deg));
+  }
+  100% {
+    @include u-transform(rotate(360deg) translate3d($saf-distance-from-origin * -1, $saf-distance-from-origin * -1, 0) rotate(-360deg));
+  }
+}
+
+@mixin aroundTheWorld($duration: 2s, $delay: 0s, $fill-mode: none, $count: infinite, $timing: ease-in-out) {
+  @include u-animation(aroundTheWorld $count $duration $delay $fill-mode $timing);
+}

@@ -1,0 +1,7 @@
+@mixin u-transition ($properties...) {
+  @if u-contains($saf-prefixes, "webkit") {
+    @include u-prefix(transition, $properties, webkit spec);
+  } @else {
+    @include u-prefix(transition, $properties, spec);
+  }
+}

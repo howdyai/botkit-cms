@@ -1,0 +1,32 @@
+<form ng-submit="submitWatsonUtterance()">
+<div class="editor_modal_box" ng-if="ui.watson_classify">
+  <header>
+    <h1>Train Bot</h1>
+  </header>
+  <section class="bigform">
+    <p class="with_sub_setting">
+      <label>Use this example text to help your bot understand future messages:</label>
+    </p>
+    <div class="utterance">
+      {% ui.training_data.text %}
+    </div>
+    <p>
+      <label>Train your bot that messages like this mean:</label>
+      <select ng-model="ui.training_data.intentName" ng-if="ui.training_data.intentName!='_new'" required>
+        <option value="">-- Choose Intent --</option>
+        <option value="{% intent.name %}" ng-repeat="intent in ui.intents">{% intent.name %}</option>
+        <option value="_new">-- New Intent --</option>
+      </select>
+      <div ng-if="ui.training_data.intentName=='_new'" class="addon">
+          <input ng-model="ui.new_intent" type="text" required ng-disabled="ui.busy_intent" />
+          <button type="button" ng-click="createIntent(ui.new_intent)" ng-disabled="ui.busy_intent">Create Intent</button>
+      </div>
+    </p>
+  </section>
+  <footer>
+    <button ng-disabled="ui.busy_utterance" type="submit">Save</button>
+    <button  ng-disabled="ui.busy_utterance" ng-click="ui.watson_classify=false;">Cancel</button>
+    <a href="https://botkit.groovehq.com/knowledge_base/topics/search?search=training" target="_blank" class="hint">Learn about Training</a>
+  </footer>
+</div>
+</form>

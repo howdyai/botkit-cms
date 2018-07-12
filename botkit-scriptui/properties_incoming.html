@@ -1,0 +1,168 @@
+<div class="panel">
+    <ul>
+        <li>
+            <label>Question:</label>
+            <a href="#" ng-click="focus(ui.incoming_message);">{% ui.incoming_message.text[0] %}</a>
+        </li>
+        <li  ng-if="features.custom_variables">
+            <label>Variable:</label>
+            <select ng-model="ui.incoming_message.collect.key" ng-options="item for item in command.script.variables"  ng-change="makeDirty()" class="ng-class: {invalid: ui.incoming_message.invalid_key};">
+                <option value="">* Add Custom Variable *</option>
+            </select>
+        </li>
+        <li  ng-if="ui.incoming_message.collect.key == null">
+            <form class="add-entry" name="formHolder.add_variable" ng-submit="addVariableAndSet(variable,ui.incoming_message.collect)">
+                <input type="hidden" ng-model="variable.type" required value="string" />
+                <input type="text" required ng-model="variable.name" placeholder="new_variable_name" pattern="[a-z,0-9,\-\_]{3,30}"/>
+                <button type="submit" ng-disabled="formHolder.add_variable.$invalid">Add</button>
+            </form>
+            <span class="validation_requirements">lowercase letters, numbers, _, -</span>
+
+        </li>
+
+        <li ng-if="ui.incoming_message.collect">
+            <label class="checkbox"><input type="checkbox" ng-model="ui.incoming_message.collect.multiple" ng-click="toggleMultiple(ui.incoming_message)" id="responseToggle"> Enable multi-line responses</label>
+        </li>
+    </ul>
+</div>
+
+<div class="panel">
+    <ul>
+        <li class="label">
+            <label>Conditional Actions</label>
+        </li>
+    </ul>
+            <ul class="fields" ng-repeat="option in ui.incoming_message.collect.options" ng-if="!option.default">
+                <li >
+                    <button class="delete" ng-click="removeCondition(ui.incoming_message,$index);"></button>
+
+                    <label>User says</label>
+                    <input type="text" ng-model="option.pattern"  ng-change="makeDirty()" class="ng-class: {invalid: option.invalid};"  ng-if="option.type=='regex' || option.type=='string'">
+
+                    <select class="ng-class: {invalid: option.invalid}; utterances" ng-change="makeDirty()" ng-model="option.pattern" ng-if="option.type=='utterance'" >
+                        <option value="yes">Yes, yeah, sure, yup...</option>
+                        <option value="no">No, nope...</option>
+                        <option value="quit">Quit, cancel, stop...</option>
+                    </select>
+                </li>
+                <li>
+                    <label>If:</label>
+                    <select class="ng-class: {invalid: option.invalid}; option-type conditional_select"  ng-change="makeDirty()" ng-model="option.type">
+                        <option value="string">exact match</option>
+                        <option value="regex">matches the regex</option>
+                        <option value="utterance">is a variation of</option>
+                    </select>
+                </li>
+                <li>
+                    <label>Then:</label>
+                    <select ng-model="option.action"  ng-change="action_then_select(option)" ng-if="option.action != '_new'">
+                        <optgroup label="Actions">
+                            <option value="next">Then continue with thread</option>
+                            <option value="repeat">Then repeat this message</option>
+                            <option value="complete">Then end and mark successful</option>
+                            <option value="stop" ng-if="features.allow_quit">Then end and mark failed</option>
+                        </optgroup>
+                        <optgroup label="Threads" ng-if="features.branches">
+                            <option ng-repeat="thread in command.script.script" value="{% thread.topic %}">Jump to: {% thread.topic %}</option>
+                        </optgroup>
+                        <optgroup label="New" ng-if="features.branches">
+                            <option value="_new">Jump to new thread</option>
+                        </optgroup>
+                        <optgroup label="Scripts" ng-if="ui.scripts">
+                            <option value="execute_script">Execute script</option>
+                        </optgroup>
+                    </select>
+
+
+
+                    <li ng-if="option.action=='execute_script'">
+                        <label>Script:</label>
+                    <div>
+                      <select ng-options="command.command as command.command for command in bot.commands" ng-model="option.execute.script" ng-change="execute_script_selected(option)">
+                      </select>
+                    </div>
+                  </li>
+
+
+                  <li ng-if="option.execute.script">
+                      <label>Thread:</label>
+                  <div >
+                    <select ng-model="option.execute.thread" ng-options="thread.topic as thread.topic for thread in option.selected_scripts_threads" ng-change="makeDirty()">
+                    </select>
+                  </div>
+                </li>
+
+
+                    <div class="new-branch" ng-if="option.action=='_new'">
+                        <form ng-submit="addThreadAsAction(newbranch, option);">
+                            <div class="add-entry">
+                                <input type="text" ng-model="newbranch" placeholder="New thread name" />
+                                <button type="submit">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+            <ul>
+                <li class="placeholder_button" ng-if="features.conditionals" ng-mouseover="setHelp('add condition');">
+                    <button class="add-button" title="Add Condition" ng-click="addCondition(ui.incoming_message.collect.options);" >Add Condition</button>
+                </li>
+            </ul>
+
+        <ul>
+        <li class="row" ng-repeat="option in ui.incoming_message.collect.options" ng-if="ui.incoming_message.collect.options.length > 1 && option.default">
+            <label>If no conditions match:</label>
+            <select ng-model="option.action" ng-if="option.action != '_new'" ng-change="action_then_select(option)">
+                <optgroup label="Actions">
+                    <option value="wait" ng-if="ui.incoming_message.collect.multiple">Wait for more input (multi-line only)</option>
+                    <option value="next">Continue with thread</option>
+                    <option value="repeat">Repeat this message</option>
+
+                    <!-- <option value="complete">End and mark successful</option>
+                    <option value="stop" ng-if="features.allow_quit">End and mark failed</option> -->
+                </optgroup>
+                <optgroup label="Threads" ng-if="features.branches">
+                    <option ng-repeat="thread in command.script.script" value="{% thread.topic %}">Jump to: {% thread.topic %}</option>
+                </optgroup>
+                <optgroup label="New" ng-if="features.branches">
+                    <option value="_new">Jump to new thread</option>
+                </optgroup>
+
+                <optgroup label="Scripts" ng-if="ui.scripts">
+                    <option value="execute_script">Execute script</option>
+                </optgroup>
+
+            </select>
+
+            <div ng-if="option.action=='execute_script'">
+                <label>Script:</label>
+              <div>
+                <select ng-options="command.command as command.command for command in bot.commands" ng-model="option.execute.script" ng-change="execute_script_selected(option)">
+                </select>
+              </div>
+            </div>
+
+
+          <div ng-if="option.execute.script">
+              <label>Thread:</label>
+            <div >
+              <select ng-model="option.execute.thread" ng-options="thread.topic as thread.topic for thread in option.selected_scripts_threads" ng-change="makeDirty()">
+              </select>
+            </div>
+          </div>
+
+
+            <div class="new-branch" ng-if="option.action=='_new'">
+                <form ng-submit="addThreadAsAction(newbranch, option);">
+                    <div class="add-entry">
+                        <input type="text" ng-model="newbranch" placeholder="New thread name" />
+                        <button type="submit">Add</button>
+                    </div>
+                </form>
+            </div>
+
+
+
+
+        </li>
+    </ul>

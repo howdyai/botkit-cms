@@ -1,0 +1,76 @@
+<script>
+    var command_id = "{{command_id}}";
+    var bot_id = 1;
+</script>
+<div class="fullscreen">
+<div  class="workspace_wrapper {{^is_active}}locked{{/is_active}}" ng-controller="scriptEditor">
+    <div class="ng-class:{active: ui.confirmShow}; confirmation">
+        <div class="wrapper">
+            <div class="message" ng-bind-html="ui.confirmText"></div>
+        </div>
+    </div>
+
+    <div class="toolbar">
+        <button ng-click="goto('/');">Back</button>
+        <button ng-click="ui.modal_info=true">Info</button>
+        <button ng-click="ui.triggers=true">Triggers</button>
+        <!-- <button class="lockable" ng-click="showCode()">Code</button> -->
+        <!-- <button class="lockable" ng-click="export()">Export</button> -->
+
+        <div style="float: right;">
+        <span class="saveStatus" ng-if="ui.lastSaved && !ui.invalid" ng-bind-html="saveStatus()"></span>
+        <span class="validationError" ng-if="ui.invalid">❗ {% ui.validation_error %}</span>
+        <button ng-click="save()" class="ng-class: {invalid: ui.invalid, saving: ui.saving, dirty: ui.dirty, clean: !ui.dirty}; lockable save-button"><span ng-if="ui.saving">Saving</span><span ng-if="!ui.saving">Save</span></button>
+        </div>
+    </div>
+    <div class="workspace {% ui.editor_mode %} {% bot.platform %}">
+
+    <div class="ng-class:{active: (ui.triggers || ui.editbranch || ui.modal_menu || ui.modal_export || ui.modal_code || ui.modal_info || ui.dupethread )}; editor_modal">
+      {{> editor/modal_triggers}}
+      {{> editor/modal_branch}}
+      {{> editor/modal_duplicate}}
+      {{> editor/modal_menu}}
+      <!-- {{> editor/modal_export}} -->
+      <!-- {{> editor/modal_code}} -->
+      {{> editor/modal_info}}
+
+    </div>
+
+    <div class="workspace_sidebar editor_sidebar">
+        {{> editor/description}}
+
+        {{> editor/branches}}
+    </div>
+
+
+
+
+    <div class="workspace_body">
+        <div class="message_window">
+            <div  style="padding: 1rem; border-bottom: 2px solid #CCC;" ng-if="bot.platform=='text'">
+              <label>Preview:</label>
+              <select ng-model="ui.editor_mode">
+                <option value="multiuser">Multi-user Chat</option>
+                <option value="oneonone">1:1 Messaging</option>
+              </select>
+            </div>
+            <div class="message_list" ng-click="unfocus()">
+
+                {{> editor/message_list}}
+
+            </div>
+            <div class="message_input">
+                <input type="text" ng-model="ui.new_line" ng-focus="unfocus()" placeholder="Add a message to the script" ng-keypress="entryKeypress($event)" class="ng-pristine ng-untouched ng-valid">
+                <button class="default" ng-click="addLine();">Add</button>
+                &nbsp;<button class="default" ng-if="bot.platform=='facebook' || bot.platform=='teams'" ng-click="addAttachmentLine();">Attach</button>
+            </div>
+        </div>
+
+        <div class="ng-class: {empty_inspector: propertiesIsEmpty()}; message_editor">
+          <div ng-include="properties()"></div>
+        </div>
+
+    </div>
+</div>
+</div>
+</div>

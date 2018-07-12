@@ -1,0 +1,15 @@
+<div class="editor_modal_box" ng-if="ui.modal_export">
+  <header>
+    <h1>Export Script</h1>
+    <p>Download exported scripts, or copy the JSON below into your own file.</p>
+
+  </header>
+  <section>
+    <textarea rows="10" id="export" readonly ng-model="ui.export_json"></textarea>
+  </section>
+  <footer>
+    <a class="button" ng-href="{% ui.exported_text %}" download="scripts.json">Download</a>
+    <button ngclipboard data-clipboard-target="#export" ngclipboard-success="clipped(e);" ngclipboard-error="clipError(e);"><i class="fa fa fa-clipboard"></i> {% ui.copy %}</button>
+    <button ng-click="ui.modal_export=false">Done</button>
+  </footer>
+</div>

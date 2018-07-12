@@ -1,0 +1,87 @@
+<ul ng-repeat="element in ui.outgoing_message.fb_attachment.elements" ng-if="ui.outgoing_message.fb_attachment.elements.length > 0" class="ng-class:{invalid: element.invalid}; fields">
+    <li class="label">
+        <button class="delete" ng-click="deleteFBElement(ui.outgoing_message,$index)" ng-if="ui.outgoing_message.fb_attachment.elements.length>1"></button>
+        Carousel Element
+    </li>
+    <li class="ng-class:{invalid: element.invalid_title};">
+        <label>Title</label>
+        <input type="text" required ng-model="element.title" placeholder="Item Title" ng-change="makeDirty()">
+    </li>
+    <li>
+        <label>Subtitle</label>
+        <input type="text" ng-model="element.subtitle" placeholder="Subtitle"  ng-change="makeDirty()" />
+    </li>
+    <li>
+        <label>URL</label>
+        <input type="text" ng-model="element.item_url" placeholder="https://..."  ng-change="makeDirty()" />
+    </li>
+    <li>
+        <label>Image URL</label>
+        <input type="text" ng-model="element.image_url" placeholder="https://..."  ng-change="makeDirty()" />
+    </li>
+    <li class="label">
+        <label>Buttons</label>
+    </li>
+    <li>
+      <ul class="ng-class:{invalid_field: button.invalid}; sheet">
+        <li class="header" ng-if="element.buttons.length">
+          <div class="delete"></div>
+          <div class="short">Type</div>
+          <div class="cell">Title</div>
+          <div class="cell">Payload Value</div>
+          <div class="medium">Size</div>
+        </li>
+
+          <li ng-repeat="button in element.buttons" class="ng-class:{invalid: button.invalid}">
+              <div class="delete">
+                <button class="delete" ng-click="deleteFBElementButton(ui.outgoing_message,$parent.$index,$index)"></button>
+              </div>
+              <div class="short static">
+                {% translateButtonType(button.type) %}
+              </div>
+            <div class="cell" ng-if="button.type!='element_share'">
+                <input type="text" ng-model="button.title" placeholder="Button Title" ng-change="makeDirty()">
+            </div>
+            <div class="cell" ng-if="button.type=='postback'">
+                <input type="text" ng-model="button.payload" placeholder="Postback Payload" ng-change="makeDirty()">
+            </div>
+            <div class="cell" ng-if="button.type=='phone_number'">
+                <input type="text" ng-model="button.payload" placeholder="+14155551212" ng-change="makeDirty()">
+            </div>
+            <div class="cell" ng-if="button.type=='web_url'">
+                <input type="text" ng-model="button.url" placeholder="https://mywebsite.com" ng-change="makeDirty()">
+            </div>
+            <div class="medium"  ng-if="button.type=='web_url'">
+                <select ng-model="button.webview_height_ratio" ng-change="makeDirty()">
+                    <option value="full">Full</option>
+                    <option value="compact">Compact</option>
+                    <option value="tall">Tall</option>
+                </select>
+            </div>
+            <div class="cell static" ng-if="button.type=='element_share'">
+              Share
+            </div>
+            <div class="cell disabled" ng-if="button.type=='element_share'">
+            </div>
+
+            <div class="medium disabled"  ng-if="button.type!='web_url'">
+            </div>
+
+          </li>
+          <li class="placeholder_button" ng-if="!element.buttons || element.buttons.length < 3">
+              <button ng-click="addFBElementButton(ui.outgoing_message, 'postback', $index)">+ Button</button>
+              <button ng-click="addFBElementButton(ui.outgoing_message, 'web_url', $index)">+ Link</button>
+              <button ng-click="addFBElementButton(ui.outgoing_message, 'phone_number', $index)">+ Call</button>
+              <button ng-click="addFBElementButton(ui.outgoing_message, 'element_share', $index)">+ Share</button>
+          </li>
+      </ul>
+
+    </li>
+</ul>
+
+
+    <ul ng-if="ui.outgoing_message.fb_attachment.elements.length < 10">
+        <li class="placeholder_button">
+            <button ng-click="addFBElement(ui.outgoing_message)">Add Item to Carousel</button>
+        </li>
+    </ul>

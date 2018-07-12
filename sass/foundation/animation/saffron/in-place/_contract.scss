@@ -1,0 +1,6 @@
+@mixin contract($selector: ":hover", $duration: 0.5s, $delay: 0s, $timing: cubic-bezier(1.000, -0.600, 0.595, 0.835)) {
+  @include u-transition(all $duration $delay $timing);
+  &#{$selector} {
+    @include u-transform(translateY($saf-enlarge-contract-jump) scale(1 / $saf-enlarge-contract-multiple));
+  }
+}

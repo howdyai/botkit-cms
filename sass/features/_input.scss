@@ -1,0 +1,183 @@
+$input-border-color: $mid-gray;
+
+@mixin ng-invalid {
+    &.ng-invalid.ng-dirty {
+        border-color: $danger-color;
+    }
+}
+
+@mixin script-text-input {
+    @include ng-invalid;
+    border: 2px solid $input-border-color;
+    padding: $unit;
+    font-weight: 100;
+    &:focus,
+    &:active {
+        border: 2px solid $main-blue;
+        outline: 0;
+    }
+    &:hover {
+        border-color: $main-blue;
+    }
+    &.invalid {
+        border-color: $danger-color;
+    }
+}
+
+@mixin textarea-grow {
+    resize: vertical;
+    resize: none;
+}
+
+@mixin text-button-combo {
+    padding: $unit;
+
+    > div {
+        max-width: 1330px;
+        margin-left: $unit * 13;
+        margin-right: $unit * 2;
+        display: flex;
+    }
+    input[type=text] {
+        @include script-text-input;
+        border-right: none;
+        flex: 1;
+        font-size: 1em;
+        height: 36px;
+    }
+
+    button {
+        z-index: 10;
+        margin-left: unit;
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+    }
+}
+
+@mixin list-text-button-combo {
+    display: flex;
+    font-size: 16px;
+    input {
+        margin-bottom: 0;
+        flex: 1;
+        box-sizing: border-box;
+    }
+    form {
+        margin: 0;
+        display: flex;
+        width: 100%;
+    }
+    button {
+        float: right;
+    }
+}
+
+@mixin inset-shadow {
+    box-shadow: inset 0 2px 3px 0 rgba(0, 0, 0, .4);
+}
+
+.script-settings, .script-editor, .login {
+    input[type="text"],
+    input[type="url"],
+    input[type="password"],
+    textarea {
+        @include script-text-input;
+        border: 2px solid $input-border-color;
+        font-size: 1em;
+    }
+    .script_type {
+        margin-bottom: $unit;
+    }
+}
+
+.invalid,
+.invalid .select-search,
+.invalid oi-select.focused .select-search {
+    border-color: $danger-color;
+    background-color: lighten($danger-color, 50%);
+    @include attention;
+    input {
+        color: $danger-color;
+        background-color: lighten($danger-color, 50%);
+    }
+}
+
+.label-input {
+    display: flex;
+    label {
+        display: inline-block;
+        font-weight: 400;
+        width: auto;
+        line-height: 38px;
+        margin-right: $unit*2;
+    }
+    input[type="text"],
+    input[type="url"] {
+        flex: 1;
+    }
+    padding: $unit;
+}
+
+//toggle switch
+
+.toggleswitch {
+    position: relative; width: 66px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.toggleswitch-checkbox {
+    display: none;
+}
+.toggleswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid $mid-gray; border-radius: 0px;
+}
+.toggleswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.2s ease-in 0s;
+}
+.toggleswitch-inner:before, .toggleswitch-inner:after {
+    display: block; float: left; width: 50%; height: 26px; padding: 0; line-height: 26px;
+    box-sizing: border-box;
+}
+.toggleswitch-inner:before {
+    content: "Yes";
+    padding-left: $unit;
+    background-color: $seafoam-dark;
+    color: $black;
+}
+.toggleswitch-inner:after {
+    content: "No";
+    padding-right: $unit;
+    background-color: $gray;
+    color: $mid-gray;
+    text-align: right;
+}
+.toggleswitch-switch {
+    display: block; width: 19px; margin: 5.5px;
+    box-sizing: border-box;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 37px;
+    border: 2px solid $mid-gray; border-radius: 0px;
+    transition: all 0.2s ease-in 0s;
+}
+.toggleswitch-checkbox:checked + .toggleswitch-label .toggleswitch-inner {
+    margin-left: 0;
+}
+.toggleswitch-checkbox:checked + .toggleswitch-label .toggleswitch-switch {
+    right: 0px;
+}
+.add-entry {
+    @include list-text-button-combo;
+    input[type="text"] {
+        padding: 5px;
+        font-weight: 100;
+        border: 2px solid $mid-gray;
+        border-right: 0;
+        font-size: 1em;
+    }
+    button {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+    }
+}

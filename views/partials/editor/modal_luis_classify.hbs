@@ -1,0 +1,70 @@
+<form ng-submit="submitLuisUtterance()">
+<div class="editor_modal_box" ng-if="ui.classify">
+  <header>
+    <h1>Train Bot</h1>
+  </header>
+  <section class="bigform">
+    <p class="with_sub_setting">
+      <label>Use this example text to help your bot understand future messages:</label>
+    </p>
+    <div class="utterance" ng-mouseup="showSelectedText()">
+      {% ui.training_data.text %}
+    </div>
+    <div class="sub_setting">
+      <p>
+        (Optional) Highlight entities within this text:
+        <button type="button" class="inline" ng-disabled="!ui.selection_active" ng-click="captureEntity()">Add Entity</button>
+      </p>
+    </div>
+    <table class="sheet" ng-if="ui.training_data.entities.length">
+      <tr width="22">
+        <th>
+        </th>
+        <th>
+          Example Value
+        </th>
+        <th>
+          Entity Name
+        </th>
+      </tr>
+      <tr ng-repeat="entity in ui.training_data.entities">
+        <td width="22">
+          <button class="delete" ng-click="removeEntity($index)"></button>
+        </td>
+          <td>
+            {% entity.text %}
+          </td>
+          <td>
+            <select ng-model="entity.entityName" ng-if="entity.entityName!='_new'" required>
+              <option value="">-- Choose Entity --</option>
+              <option ng-repeat="var in ui.entities" value="{% var.name %}">{% var.name %}</option>
+              <option value="_new">-- New Entity --</option>
+            </select>
+            <div ng-if="entity.entityName=='_new'" class="addon">
+                  <input ng-model="ui.new_entity" type="text" ng-disabled="ui.busy_entity"/>
+                  <button type="button" ng-click="createEntity(ui.new_entity, $index)" ng-disabled="ui.busy_entity">Create Entity</button>
+            </div>
+          </td>
+      </tr>
+    </table>
+
+    <p>
+      <label>Train your bot that messages like this mean:</label>
+      <select ng-model="ui.training_data.intentName" ng-if="ui.training_data.intentName!='_new'" required>
+        <option value="">-- Choose Intent --</option>
+        <option value="{% intent.name %}" ng-repeat="intent in ui.intents">{% intent.name %}</option>
+        <option value="_new">-- New Intent --</option>
+      </select>
+      <div ng-if="ui.training_data.intentName=='_new'" class="addon">
+          <input ng-model="ui.new_intent" type="text" required ng-disabled="ui.busy_intent" />
+          <button type="button" ng-click="createIntent(ui.new_intent)" ng-disabled="ui.busy_intent">Create Intent</button>
+      </div>
+    </p>
+  </section>
+  <footer>
+    <button ng-disabled="ui.busy_utterance" type="submit">Save</button>
+    <button  ng-disabled="ui.busy_utterance" ng-click="ui.classify=false;">Cancel</button>
+    <a href="https://botkit.groovehq.com/knowledge_base/topics/search?search=training" target="_blank" class="hint">Learn about Training</a>
+  </footer>
+</div>
+</form>

@@ -1,0 +1,84 @@
+$response-color: $seafoam-dark;
+$condition-color: $purple;
+$action-color: $orange-hint;
+$variable-color: $lavender-light;
+$list-color: lighten($green, 20%);
+
+//not yet implemented
+$date-color: $pink-hint;
+$user-color: $green;
+
+// token colors are above, the following classes are only used in the script editor's token section
+
+span.variable {
+    background-color: lighten($variable-color, 10%);
+    font-weight: 800;
+    font-family: monospace;
+    padding: 3px;
+    border-radius: 3px;
+    color: $dark-gray;
+}
+
+@mixin autobracket {
+    &::before {
+        color: $mid-gray;
+        content: '{{';
+        }
+
+    &::after {
+        color: $mid-gray;
+        content: '}}';
+    }
+}
+
+@mixin autoquote {
+    &::before {
+        color: $mid-gray;
+        content: '"';
+        }
+
+    &::after {
+        color: $mid-gray;
+        content: '"';
+    }
+}
+
+@mixin text-token {
+    border-radius: 3px;
+    background-color: $lavender-light;
+    color: $dark-gray;
+    font-family: monospace;
+    font-weight: 800;
+    line-height: normal;
+    margin: 3px;
+    padding: 3px;
+
+    &.date {
+        background-color: lighten($date-color, 10%);
+        @include autobracket;
+    }
+
+    &.condition {
+        background-color: lighten($condition-color, 10%);
+        @include autoquote;
+    }
+
+    &.response {
+        background-color: lighten($response-color, 10%);
+        @include autobracket;
+    }
+
+    &.list {
+        background-color: lighten($list-color, 10%);
+        //@include autobracket;
+    }
+}
+
+
+.sidebar ul.tokens {
+    li {
+        @include inline-list;
+        @include text-token;
+        @include autobracket;
+    }
+}

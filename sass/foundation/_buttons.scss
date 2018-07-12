@@ -1,0 +1,301 @@
+@mixin gray-underline {
+    border-bottom: 2px solid $gray;
+}
+@mixin green-underline {
+    border-bottom: 2px solid $green;
+}
+@mixin red-underline {
+    border-bottom: 2px solid $red;
+}
+@mixin text-button {
+    cursor: pointer;
+    font-family: $body-font;
+    border-bottom: 2px solid $main-blue;
+    background-color: transparent;
+    padding: 0.25em 0.5em;
+    padding-top: .5em;
+    border-radius: 0;
+    font-size: 1em;
+    line-height: 1.5em;
+    margin: 0 0 0 0.5em;
+    text-decoration: none;
+    font-weight: 400;
+    color: $black;
+    outline: none;
+    transition: background-color $transition-speed;
+    &:hover {
+        @include blue-background;
+        color: $black;
+    }
+    &:active {
+        @include green-underline;
+    }
+    &:focus {
+        outline: none;
+    }
+    &.delete {
+        @include text-button-red-hover;
+        @include red-underline;
+    }
+    &.disabled {
+        @include gray-underline;
+    }
+}
+@mixin action-button ($action-button-color) {
+    transition: background-color $transition-speed;
+    font-size: 1em;
+    line-height: 1.5em;
+    text-decoration: none;
+    box-sizing: border-box;
+    //border-radius: 3px;
+    color: $white;
+    cursor: pointer;
+    background-color: $action-button-color;
+    outline: none;
+    vertical-align: middle;
+    border: 0;
+    &:hover {
+        background-color: lighten($action-button-color, 10%);
+        color: $white;
+    }
+    &.delete,
+    .danger {
+        background-color: $red;
+        &:hover {
+            background-color: lighten($red, 10%);
+        }
+    }
+    &.disabled {
+        background-color: $gray;
+        cursor: default;
+        &:hover {
+            background-color: $gray;
+        }
+    }
+    &.secondary {
+        background-color: $cantelope;
+        cursor: default;
+        &:hover {
+            background-color: saturate($cantelope, 20%);
+        }
+    }
+}
+@mixin blue-background {
+    background-color: $translucent-blue;
+}
+@mixin blue-hover {
+    &:hover {
+        @include blue-background;
+    }
+}
+@mixin red-background {
+    background-color: $translucent-red;
+}
+@mixin red-hover {
+    &:hover {
+        @include red-background;
+    }
+}
+@mixin green-background {
+    background-color: $green;
+}
+@mixin green-focus {
+    &:focus {
+        @include green-background;
+    }
+}
+@mixin red-background {
+    background-color: $translucent-red;
+}
+@mixin text-button-red-hover {
+    &:hover {
+        @include red-background;
+    }
+}
+// link "button" utility classes
+.howdy-text-button,
+a.howdy-text-button {
+    @include text-button;
+}
+// script ui buttons
+@mixin corner-button ($corner-button-color) {
+    background-color: $corner-button-color;
+    color: $white;
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: 800;
+    width: 20px;
+    height: 20px;
+    padding-bottom: 2px;
+    &::before {
+        content: '\00D7';
+    }
+    &:hover {
+        background-color: lighten($corner-button-color, 10%);
+    }
+    &:active,
+    &:focus {
+        outline: none;
+    }
+}
+@mixin square-button ($square-button-color) {
+    background-color: $square-button-color;
+    padding: 0;
+    border: none;
+    width: 21px;
+    height: 21px;
+    font-size: 16px;
+    line-height: 16px;
+    display: block;
+    font-weight: 800;
+    &:hover {
+        background-color: saturate($square-button-color, 30%);
+    }
+    &:active,
+    &:focus {
+        outline: none;
+    }
+}
+@mixin circle-button ($circle-button-color) {
+    background-color: $circle-button-color;
+    border-radius: 50%;
+    padding: 1px;
+    width: 21px;
+    height: 21px;
+    font-size: 14px;
+    display: block;
+    font-family: FontAwesome;
+    &:hover {
+        background-color: saturate($circle-button-color, 30%);
+    }
+    &:active,
+    &:focus {
+        outline: none;
+    }
+    &::before {
+        line-height: 21px;
+        font-size: 14px;
+    }
+}
+@mixin add-button($add-button-color) {
+     @include circle-button($add-button-color);
+    &::before {
+        content: '\f067';
+        color: $white;
+    }
+}
+@mixin check-button($check-button-color) {
+     @include circle-button($check-button-color);
+    &::before {
+        content: '\2713 ';
+        color: $white;
+    }
+}
+@mixin add-botkit-button($add-botkit-color) {
+    display: block;
+    &::before {
+        content: url('../../assets/icon/icon27.svg');
+        fill: $add-botkit-color;
+    }
+    &:hover {
+        //fill: lighten($add-botkit-color, 20%); //only works with inline svg
+    }
+    &:active,
+    &:focus {
+        outline: none;
+    }
+}
+
+@mixin save-button {
+    @include action-button($green);
+    transition: all 0.2s;
+    color: $white;
+    float: right;
+    &:hover {
+
+    }
+    &.saving {
+        text-align: left;
+        min-width: 75px;
+        background-color: lighten($green, 20%);
+        &::after {
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: bottom;
+            -webkit-animation: ellipsis steps(4,end) 900ms infinite;
+            animation: ellipsis steps(4,end) 900ms infinite;
+            content: "\2026";
+            /* ascii code for the ellipsis character */
+            width: 0;
+        }
+    }
+}
+
+@mixin slack-style {
+    vertical-align: middle;
+    background-color: transparent;
+    border: 1px solid rgba(160,160,162,.5);
+    color: #565759;
+    max-width: 150px;
+    font-size: .8125rem;
+    font-weight: 700;
+    height: 30px;
+    padding: 0 10px;
+    margin: 0 8px 0 0;
+    text-shadow: none;
+    border-radius: 3px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-wrap: break-word;
+    display: inline-block;
+    float: left;
+}
+
+@mixin row-delete-button {
+    @include circle-button($danger-color);
+    display: inline-block;
+    margin-left: $unit;
+    margin-top: 4px;
+    &::before {
+        font-family: FontAwesome;
+        content: '\f00d';
+        color: $white;
+    }
+}
+
+.action-button {
+    @include action-button($purple);
+    float: right;
+}
+.action-button-green {
+    @include action-button($green);
+    float: right;
+}
+
+button.save {
+    @include save-button;
+}
+
+.tertiary {
+    @include action-button($purple);
+    color: $white;
+    &:hover {
+        background-color: lighten($purple, 10%);
+    }
+}
+
+
+.primary_action_button {
+    display: block;
+    background-color: $main-blue;
+    color: #FFFFFF;
+    padding: 0.25em 0.5em;
+    padding-top: .5em;
+    margin: 20px;
+    font-family: "GT-Haptik-Light",sans-serif;
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border-radius: 3px;
+
+}

@@ -1,0 +1,316 @@
+$editor-sidebar-width: 16em;
+$editor-secondary-sidebar-width: 16em;
+$sidebar-background-color: #fff;
+$secondary-sidebar-background-color: #f7f7f7;
+$selected-bot-background-color: #fff;
+
+
+
+@mixin sidebar-ul {
+    margin: 0;
+    box-sizing: border-box;
+    line-height: 24px;
+    p {
+        font-size: 14px;
+    }
+    li {
+        box-sizing: border-box;
+        padding: 4px $spacing-unit/2;
+        line-height: 30px;
+        a {
+            display: block;
+            color: $main-blue;
+            text-decoration: none;
+        }
+        &.active {
+            font-weight: bold;
+            background-color: $yellow-hint;
+        }
+
+
+        &:nth-child(even) {
+            background-color: $light-gray;
+        }
+        button {
+            float: right;
+        }
+        strong {
+            font-weight: bold;
+            color: $dark-gray;
+        }
+    }
+    .delete {
+        @include row-delete-button;
+        position: relative;
+    }
+    .edit {
+        @include circle-button($orange);
+        display: inline-block;
+        margin-left: $unit;
+        margin-top: 4px;
+        &::before {
+            font-family: FontAwesome;
+            font-weight: 400;
+            content: '\f040';
+            color: $white;
+        }
+    }
+}
+@mixin sidebar-topics {
+    h5 {
+        font-family: "GT-Haptik-Light",sans-serif;
+        font-weight: 300;
+        font-size: 1.4rem;
+        padding: $unit $unit $unit $spacing-unit /2;
+        cursor: pointer;
+        transition: all 0.2s;
+        a {
+            display: block;
+            text-decoration: none;
+            color: $dark-gray;
+        }
+        &.expandable {
+            &::after {
+                float: right;
+                margin-right: unit;
+                padding: 6px;
+                font-size: 14px;
+                content: "\25bc";
+                color: $mid-gray;
+            }
+            &.closed::after {
+                content: "\25b6";
+            }
+        }
+        // &.selected {
+        //     background-color: $main-blue;
+        //     color: $white;
+        //     &::after {
+        //         color: $white;
+        //     }
+        //     a {
+        //         color: $white;
+        //     }
+        // }
+        &:hover {
+            background-color: $light-gray;
+        }
+    }
+}
+.sidebar-cell {
+    background-color: $white;
+
+    p {
+        font-size: 14px;
+    }
+    textarea {
+        @include textarea-grow;
+        width: 100%;
+    }
+    @include clearfix;
+}
+.edit-script-info {
+    @include clearfix;
+    input[type="text"] {
+        width: 100%;
+    }
+    p {
+        margin-bottom: $unit;
+    }
+}
+.sidebar {
+    @include sidebar-topics;
+    box-shadow: 1px 0px 1px 0px rgba(0,0,0,0.2);
+    z-index: 100;
+    background-color: $sidebar-background-color;
+    flex: 0 0 $editor-sidebar-width;
+    overflow-y: auto;
+    overflow-x: hidden;
+    ul.bot-options {
+        margin-left: $spacing-unit/2;
+        background-color: lighten($lavender-light, 10%);
+        h5.selected {
+            background-color: $lavender-light;
+        }
+    }
+    .selected-bot {
+        padding: $spacing-unit /2;
+        background-color: $selected-bot-background-color;
+        .breadcrumbsbar {
+            font-size: 16px;
+            margin-bottom: $unit;
+        }
+        img {
+            max-height: 40px;
+            margin-right: $unit * 2;
+        }
+        .bot-name {
+            font-family: "GT-Haptik-Light",sans-serif;
+            font-weight: bold;
+            font-size: 1.4rem;
+            line-height: 40px;
+            vertical-align: bottom;
+            text-decoration: none;
+            text-overflow: ellipsis;
+            word-break: break-all;
+        }
+    }
+    .script-commands {
+        .show-all {
+            @include action-button($botkit-dark);
+        }
+        button {
+            float: right;
+            margin: $unit;
+        }
+    }
+    .commands {
+        @include sidebar-ul;
+        @include clearfix;
+        @include truncate-ul;
+        button {
+            float: right;
+        }
+        &.expanded {
+            overflow: auto;
+            position: relative;
+            max-height: none;
+        }
+    }
+    &.hidden {
+        max-width: 0;
+        * {
+            opacity: 0;
+        }
+    }
+    &.hidden-add.hidden-add-active {
+        transition: max-width 0.5s;
+        max-width: 0;
+        * {
+            transition: opacity 0.5s;
+        }
+    }
+    h5 {
+        background-color: $gray-2;
+        &.active {
+            font-weight: bold;
+            background-color: $yellow-hint;
+        }
+        a {
+            display: block;
+        }
+    }
+    h6 {
+        margin: 0.5em 1em;
+    }
+    &.closed {
+        transition: flex 0.3s;
+        flex: 0 0 0;
+        * {
+            @include fadeOut(.3s);
+        }
+    }
+    a:visited {
+        color: $dark-gray;
+    }
+    @media all and (max-width: 800px) {
+        display: none;
+    }
+    > li {
+        padding: 0.25em 1em;
+        color: $main-blue;
+        cursor: pointer;
+        &.active {
+            background: #1432e0;
+            color: #fff;
+        }
+    }
+}
+.secondary-sidebar {
+    //display: none; //off for now
+    // flex: 0 0
+    width: $editor-secondary-sidebar-width;
+    background-color: $secondary-sidebar-background-color;
+    overflow-y: auto;
+    padding-bottom: 0;
+    transition: all ease-out 0.2s;
+    * {
+        z-index: 0;
+    }
+    ul {
+        @include sidebar-ul;
+    }
+    ul.branches {
+        padding-bottom: 0;
+        li {
+            color: $main-blue;
+            cursor: pointer;
+            position: relative;
+            button {
+                display: none;
+            }
+            &.active {
+                button {
+                    display: block;
+                }
+            }
+        }
+        .add-entry {
+            button {
+                display: block;
+            }
+        }
+    }
+    &.hidden {
+        max-width: 0;
+        * {
+            opacity: 0;
+        }
+    }
+    h5 {
+        background-color: $gray-2;
+        font-size: 18px;
+        padding: $unit;
+        padding-left: 14px;
+        font-family: $headline-font;
+    }
+    h6 {
+        margin: 0.5em 1em;
+    }
+    &.ng-hide {
+        flex: 0 0 0;
+        * {
+            @include fadeOut(.2s);
+        }
+    }
+    .script-info {
+        p, span {
+            font-size: 14px;
+        }
+        p {
+            margin: $unit;
+            padding: $unit;
+        }
+
+        p.editable {
+            border: 2px solid transparent;
+            &:hover {
+                border: 2px solid $main-blue;
+            }
+        }
+        padding: $unit;
+    }
+    .edit-script-info {
+
+        > form {
+            margin: $unit;
+            padding: $unit;
+        }
+    }
+    .add-entry {
+        button {
+            min-width: 47px;
+            display: block;
+        }
+    }
+}

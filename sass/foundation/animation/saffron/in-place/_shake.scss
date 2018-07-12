@@ -1,0 +1,24 @@
+@include u-keyframes(shake) {
+  0%, 100% {
+    @include u-transform(translateX(0) translateZ(0));
+  }
+  15% {
+    @include u-transform(translateX($saf-shake-distance));
+  }
+  35% {
+    @include u-transform(translateX($saf-shake-distance * -1));
+  }
+  50% {
+    @include u-transform(translateX($saf-shake-distance / 2));
+  }
+  65% {
+    @include u-transform(translateX($saf-shake-distance / 2 * -1));
+  }
+  85% {
+    @include u-transform(translateX($saf-shake-distance / 3));
+  }
+}
+
+@mixin shake($duration: 0.5s, $delay: 0s, $fill-mode: none, $count: 1) {
+  @include u-animation(shake $duration $delay $fill-mode $count);
+}

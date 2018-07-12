@@ -1,0 +1,13 @@
+@include u-keyframes(ping) {
+  0% {
+    @include u-transform(scale(0));
+  }
+  100% {
+    @include u-transform(scale(1));
+    opacity: 0;
+  }
+}
+
+@mixin ping($duration: 1.5s, $delay: 0s, $fill-mode: none, $count: infinite, $timing: ease-in-out) {
+  @include u-animation(ping $count $duration $delay $fill-mode $timing);
+}

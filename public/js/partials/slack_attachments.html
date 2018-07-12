@@ -1,0 +1,212 @@
+<!-- fields in a slack attachment:
+https://api.slack.com/docs/message-attachments
+-->
+<div class="panel">
+    <ul class="fields" ng-repeat="attachment in ui.outgoing_message.attachments track by $index">
+        <li class="label">
+            <nav class="dropdown">
+                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                <ul>
+                  <li ng-click="duplicateAttachment(ui.outgoing_message,$index)">Duplicate</li>
+                  <li class="delete" ng-click="deleteAttachment(ui.outgoing_message,$index)">Delete</li>
+                </ul>
+              </nav>
+            <label>Attachment</label>
+        </li>
+        <li>
+            <label>Title</label>
+            <input type="text" class="title_field" ng-change="makeDirty()" placeholder="Attachment Title" ng-model="attachment.title" />
+        </li>
+        <li>
+            <label>Title Link</label>
+            <input type="text" ng-disabled="!attachment.title" placeholder="https://mycoolbot.com/" ng-model="attachment.title_link" />
+        </li>
+        <li>
+            <label>Text</label>
+            <textarea rows="1" placeholder="Attachment Text" ng-change="makeDirty()" msd-elastic="" ng-model="attachment.text"></textarea>
+        </li>
+        <li>
+            <label>Color:</label>
+            <input type="color" ng-model="attachment.color" ng-change="makeDirty()" />
+            <input type="text" ng-model="attachment.color" ng-change="makeDirty()" />
+        </li>
+        <li>
+            <label>Fallback Text</label>
+            <textarea rows="1" placeholder="Required plain-text summary of the attachment" ng-change="makeDirty()" msd-elastic="" ng-model="attachment.fallback"></textarea>
+        </li>
+        <li class="placeholder_button" ng-if="!(attachment.hasAuthor || attachment.author_name || attachment.author_link || attachment.author_icon)">
+            <label>Author</label> <button ng-click="addAuthor(attachment)">Add Author</button>
+        </li>
+        <li ng-if="attachment.hasAuthor || attachment.author_name || attachment.author_link || attachment.author_icon">
+            <label>Author</label>
+            <input type="text" placeholder="A. W. Thor" ng-model="attachment.author_name" />
+        </li>
+        <li class="subfield" ng-if="attachment.hasAuthor || attachment.author_name || attachment.author_link || attachment.author_icon">
+            <ul>
+                <li>
+                    <label>Link</label>
+                    <input type="text" ng-disabled="!attachment.author_name" placeholder="https://authorsite.com" ng-model="attachment.author_link" />
+                </li>
+                <li>
+                    <label>Icon</label>
+                    <input type="text" ng-disabled="!attachment.author_name" placeholder="https://authorsite.com/icon.png" ng-model="attachment.author_icon" />
+                </li>
+            </ul>
+        </li>
+        <li class="placeholder_button" ng-if="!(attachment.hasFooter || attachment.footer || attachment.footer_icon)">
+            <label>Footer</label><button ng-click="addFooter(attachment)">Add Footer</button>
+        </li>
+        <li ng-if="(attachment.hasFooter || attachment.footer || attachment.footer_icon)">
+            <label>Footer</label>
+            <input type="text" placeholder="Footer Text" ng-model="attachment.footer" />
+        </li>
+        <li class="subfield" ng-if="(attachment.hasFooter || attachment.footer || attachment.footer_icon)">
+            <ul>
+                <li>
+                    <label>Icon</label>
+                    <input type="text" ng-disabled="!attachment.footer" placeholder="https://mywebsite.com/icon.png" ng-model="attachment.footer_icon" />
+                </li>
+            </ul>
+        </li>
+        <li class="placeholder_button" ng-if="!(attachment.hasImage || attachment.image_url || attachment.thumb_url)">
+            <label>Image</label><button ng-click="addImage(attachment)">Add Image</button>
+        </li>
+        <li ng-if="(attachment.hasImage || attachment.image_url || attachment.thumb_url)">
+            <label>Image</label>
+            <input type="text" placeholder="http://mywebsite.com/image.png" ng-if="attachment.image_url || !attachment.thumb_url" ng-model="attachment.image_url" />
+            <input type="text" placeholder="http://mywebsite.com/image.png" ng-if="attachment.thumb_url" ng-model="attachment.thumb_url" />
+        </li>
+        <li class="subfield" ng-if="(attachment.hasImage || attachment.image_url || attachment.thumb_url)">
+            <ul>
+                <li>
+                    <label class="checkbox"><input type="checkbox" ng-disabled="!(attachment.image_url || attachment.thumb_url)" ng-checked="attachment.thumb_url" ng-click="attachmentImageType(attachment)"> Use Thumbnail</label>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <label>Fields</label>
+            <div class="sheetwrapper">
+              <ul class="sheet" ng-if="attachment.fields.length">
+                  <li class="header">
+                      <div class="draghandle">&nbsp;</div>
+                      <div class="cell">Title</div>
+                      <div class="cell">Value</div>
+                      <div class="short">Short</div>
+                      <div class="delete">&nbsp;</div>
+                  </li>
+              </ul>
+              <ul class="sheet" dnd-list="attachment.fields" dnd-allowed-types="['field']" ng-if="attachment.fields.length">
+                  <li ng-repeat="field in attachment.fields"
+                  dnd-draggable="field"
+                  dnd-type="'field'"
+                  dnd-moved="attachment.fields.splice($index, 1); makeDirty();"
+                  dnd-effect-allowed="move"
+                  >
+                      <div class="draghandle" dnd-handle>
+                        <i class="fa fa-sort" aria-hidden="true"></i>
+                      </div>
+                      <div class="cell" dnd-nodrag>
+                          <input class="title_field" type="text" placeholder="Field Title" ng-model="field.title" ng-change="makeDirty()" />
+                      </div>
+                      <div class="cell" dnd-nodrag>
+                          <input type="text" placeholder="Field Value" ng-model="field.value" ng-change="makeDirty()" />
+                      </div>
+                      <div class="short" dnd-nodrag>
+                          <input type="checkbox" ng-checked="field.short===true || field.short=='true'" ng-click="toggle(field,'short'); makeDirty()">
+                      </div>
+                      <div dnd-handle class="delete">
+                          <button tabindex="-1" class="delete" ng-click="deleteField(attachment,$index)"></button>
+                      </div>
+
+                  </li>
+              </ul>
+              <ul class="sheet">
+                <li class="placeholder_button">
+                    <button ng-click="addField(attachment);">Add Field</button>
+                </li>
+              </ul>
+            </div>
+        </li>
+        <li>
+            <label>Buttons</label>
+        </li>
+        <li>
+          <div class="sheetwrapper">
+            <ul class="sheet"  ng-if="attachment.actions.length">
+              <li class="header" ng-if="attachment.actions.length">
+              <div class="draghandle">&nbsp;</div>
+              <div class="short">Type</div>
+              <div class="cell">Title</div>
+              <div class="cell">Name</div>
+              <div class="cell">Value</div>
+              <div class="slackdots"></div>
+              <div class="delete">&nbsp;</div>
+            </li>
+            </ul>
+            <ul class="sheet" dnd-list="attachment.actions" dnd-allowed-types="['action']">
+                <li ng-class="{invalid: action.invalid};" ng-repeat="action in attachment.actions"
+                dnd-draggable="action"
+                dnd-type="'action'"
+                dnd-moved="attachment.actions.splice($index, 1); makeDirty();"
+                dnd-effect-allowed="move"
+                >
+                    <div class="draghandle" dnd-handle>
+                      <i class="fa fa-sort" aria-hidden="true"></i>
+                    </div>
+                    <div class="short static" dnd-nodrag>
+                        {% action.type %}
+                    </div>
+                    <div class="cell" dnd-nodrag>
+                        <input type="text" placeholder="Button Text" class="action-text" ng-model="action.text" ng-change="makeDirty()" />
+                    </div>
+                    <div class="cell" dnd-nodrag>
+                        <input type="text" placeholder="Button Name" ng-model="action.name" ng-change="makeDirty()" />
+                    </div>
+                    <div class="cell" ng-if="action.type=='button'" dnd-nodrag>
+                        <input type="text" placeholder="Link URL" ng-model="action.url" ng-change="makeDirty()" ng-if="action.url != undefined"/>
+                        <input type="text" placeholder="Button Value" ng-model="action.value" ng-change="makeDirty()" ng-if="action.value != undefined" />
+                    </div>
+                    <div class="cell" ng-if="action.type=='select'" dnd-nodrag>
+                        <select ng-model="action.data_source" ng-change="makeDirty()">
+                            <option value="users">User List</option>
+                            <option value="channels">Channel List</option>
+                            <option value="conversations">All Conversations</option>
+                            <option value="default">Custom Options</option>
+                            <option value="external">External Source</option>
+                        </select>
+                    </div>
+                    <div class="slackdots" ng-if="action.type=='button'" dnd-nodrag>
+                        <b class="ng-class: {selected: action.style=='default'}; dot default" ng-click="action.style='default'; makeDirty()"></b>
+                        <b class="ng-class: {selected: action.style=='primary'}; dot primary" ng-click="action.style='primary'; makeDirty()"></b>
+                        <b class="ng-class: {selected: action.style=='danger'}; dot danger" ng-click="action.style='danger'; makeDirty()"></b>
+                    </div>
+                    <div class="slackdots" ng-if="action.type=='select'" dnd-nodrag>
+                        <button ng-if="action.data_source=='default'" ng-click="editActionMenu(action)">...</button>
+                    </div>
+                    <div class="delete">
+                        <button class="delete" ng-click="deleteButton(attachment,$index)"></button>
+                    </div>
+                </li>
+              </ul>
+              <ul class="sheet">
+                <li class="placeholder_button" ng-if="!attachment.actions || attachment.actions.length < 5">
+                    <button ng-click="addAction(attachment);">Add Button</button>
+                    <button ng-click="addLink(attachment);">Add Link Button</button>
+                    <button ng-click="addMenu(attachment);">Add Menu</button>
+                </li>
+            </ul>
+        </li>
+        <li class="ng-class:{invalid: attachment.callback_invalid};" ng-if="attachment.actions && attachment.actions.length">
+            <label>Callback ID:</label>
+            <input type="text" placeholder="Slack Callback Id" ng-change="makeDirty()" ng-model="attachment.callback_id" />
+        </li>
+    </ul>
+
+    <ul>
+        <li class="placeholder_button">
+            <button ng-click="addAttachment(ui.outgoing_message);">Add Attachment</button>
+        </li>
+    </ul>
+</div>
+
+<div ng-include="'/js/partials/meta_attachments.html'"></div>

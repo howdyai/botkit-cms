@@ -1,0 +1,25 @@
+<form name="add_command" ng-submit="addCommand()">
+  <div class="editor_modal_box">
+    <header>
+      <h1>New Script</h1>
+    </header>
+    <section>
+      <div class="bigform">
+            <p>
+              <label>Name:</label>
+              <input type="text" class="full-width" ng-model="command.trigger" placeholder="Create a script" required></input>
+            </p>
+
+            <p>
+              <label>Description:</label>
+              <input type="text" class="full-width" ng-model="command.description" placeholder="Describe what this script does" required></input>
+            </p>
+        </div>
+    </section>
+    <footer>
+      <button type="submit" class="primary">Create</button>
+      <button type="button" ng-click="ui.modal_create=false;">Cancel</button>
+
+    </footer>
+  </div>
+</form>

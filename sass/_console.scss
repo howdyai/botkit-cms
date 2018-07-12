@@ -1,0 +1,111 @@
+.understanding_intent {
+  button,
+  a.button {
+      display: inline-block;
+      padding: 0.25rem 1rem;
+      font-size: 0.8rem;
+      // border-top: 1px solid rgba(255,255,255,0.5);
+      // border-left: 1px solid rgba(255,255,255,0.5);
+
+      border-bottom: 1px solid rgba(0,0,0,0.25);
+      border-right: 1px solid rgba(0,0,0,0.25);
+      border-radius: 2px;
+      color: #333;
+
+      cursor: pointer;
+
+      background: silver linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
+  }
+}
+
+.intent_score {
+
+  &.high {
+    background-color: #CCFFCC;
+  }
+
+  .percent {
+    font-weight: bold;
+  }
+
+}
+
+
+.tip {
+  position: relative;
+
+  .tooltip {
+    display: none;
+    position: absolute;
+    background: #FFF;
+
+    top: 2rem;
+    left: calc(50% - 100px);
+    width: 200px;
+    box-shadow: 0px 10px 10px rgba(0,0,0,0.25);
+    z-index: 2;
+
+    ul {
+      padding: 0.25rem 0;
+    }
+
+    li {
+      padding: 0.25rem 1rem;
+
+      &.footnote {
+        border-top: 1px solid #CCC;
+      }
+    }
+
+
+
+  }
+
+  .tooltip:before {
+      z-index: -1;
+      content: '';
+      display: block;
+      position: absolute;
+      top: -10px;
+      left: 90px;
+      width: 20px;
+      height: 20px;
+      background: #FFF;
+      transform: rotate(45deg);
+  }
+
+  &:hover .tooltip {
+    display: block;
+  }
+
+}
+
+
+.console {
+
+
+  a {
+    color: #999;
+  }
+
+  .meta {
+    display: block;
+    font-size: 12px;
+    font-family: 'helvetica';
+    color: #666;
+  }
+
+
+  .utterance {
+
+    color: #000;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .el {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+}

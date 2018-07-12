@@ -1,0 +1,43 @@
+//flex wrapper wraps your whole page
+@mixin flexbox {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+@mixin inline-flex {
+    display: -webkit-inline-box;
+    display: -webkit-inline-flex;
+    display: -moz-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+}
+%flex-wrapper {
+    @include flexbox;
+    flex-direction: column;
+    min-height: 100vh;
+}
+//flex content wraps everything but footer and header to make it grow to fill the page
+%flex-content {
+    @include flexbox;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.flex-column {
+    flex-direction: column;
+    width: 100%;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.column {
+    display: flex-column;
+}

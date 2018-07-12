@@ -1,0 +1,17 @@
+@include u-keyframes(sway) {
+  0%, 50%, 100% {
+    @include u-transform(rotate($saf-sway-angle) translateZ(0));
+  }
+  25% {
+    @include u-transform(rotate($saf-sway-angle * -1));
+  }
+  75% {
+    @include u-transform(rotate($saf-sway-angle * -1));
+  }
+}
+
+@mixin sway($duration: 6.5s, $delay: 0s, $fill-mode: none, $count: infinite, $timing: ease-in-out) {
+  // hack to fix jagged edges
+  outline: 1px solid transparent;
+  @include u-animation(sway $count $duration $delay $fill-mode $timing);
+}

@@ -1,0 +1,132 @@
+$text-color:       $black;
+$body-font: "freight-sans-pro",sans-serif;
+$headline-font: "GT-Haptik-Light",sans-serif;
+$headline-oblique-font: 'GT-Haptik-Light-Oblique',sans-serif;
+$headline-color: $main-blue;
+$base-font-size:   16px !default;
+$base-font-weight: 400 !default;
+$small-font-size:  $base-font-size * 0.875 !default;
+$base-line-height: 1.5 !default;
+
+$h1-initial-size: 4.0rem !default;
+$h2-initial-size: 3.2rem !default;
+$h3-initial-size: 2.4rem !default;
+$h4-initial-size: 2.0rem !default;
+
+//This is where we define mixins and variables for typography. The styles get applied in either surface (for default selectors) or higher up for specific classes.
+
+// Light
+@font-face {
+    font-family: 'GT-Haptik-Light';
+    src: url(/assets/webfonts/GT-Haptik-Light.eot);
+    src: url(/assets/webfonts/GT-Haptik-Light.eot?#iefix) format('embedded-opentype'), url(/assets/webfonts/GT-Haptik-Light.woff) format('woff'), url(/assets/webfonts/GT-Haptik-Light.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+// Light Oblique
+@font-face {
+    font-family: 'GT-Haptik-Light-Oblique';
+    src: url(/assets/webfonts/GT-Haptik-Light-Oblique.eot);
+    src: url(/assets/webfonts/GT-Haptik-Light-Oblique.eot?#iefix) format('embedded-opentype'), url(/assets/webfonts/GT-Haptik-Light-Oblique.woff) format('woff'), url(/assets/webfonts/GT-Haptik-Light-Oblique.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+// Medium
+@font-face {
+    font-family: 'GT-Haptik-Medium';
+    src: url(/assets/webfonts/GT-Haptik-Medium.eot);
+    src: url(/assets/webfonts/GT-Haptik-Medium.eot?#iefix) format('embedded-opentype'), url(/assets/webfonts/GT-Haptik-Medium.woff) format('woff'), url(/assets/webfonts/GT-Haptik-Medium.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+//this webkit font size adjustment and kerning stuff is untouched from the old styles
+@mixin body-font-style {
+  font: $base-font-weight #{$base-font-size}/#{$base-line-height} $base-font-family;
+  font-size: $base-font-size;
+  color: $text-color;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-feature-settings: "kern" 1;
+  -moz-font-feature-settings: "kern" 1;
+  -o-font-feature-settings: "kern" 1;
+  font-feature-settings: "kern" 1;
+  font-kerning: normal;
+}
+
+@mixin h1-style {
+  font-family: $headline-font;
+  color: $main-blue;
+  font-size: $h1-initial-size;
+  font-weight: $base-font-weight;
+}
+
+@mixin h2-style {
+  font-family: $headline-font;
+  color: $main-blue;
+  font-size: $h2-initial-size;
+  font-weight: 300;
+}
+
+@mixin h3-style {
+  font-family: $headline-font;
+  color: $main-blue;
+  font-size: $h3-initial-size;
+  font-weight: bold;
+}
+
+@mixin h4-style {
+  font-family: $headline-font;
+  color: $main-blue;
+  font-size: $h4-initial-size;
+  font-weight: 300;
+}
+
+@mixin p-bold {
+    span.bold {
+        font-weight: bold;
+    }
+    strong {
+        font-weight: bold;
+    }
+}
+
+@mixin p1 {
+    font: 400 16px / 1.5 "freight-sans-pro",sans-serif;
+    @include p-bold;
+}
+
+@mixin p2 {
+    font: 400 14px / 1.3 "freight-sans-pro",sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 100%;
+    line-height: inherit;
+    @include p-bold;
+}
+
+@mixin code {
+    font-family: monospace;
+    padding: 1px 5px;
+}
+
+@mixin truncate-ul($lineHeight: 30px, $lineCount: 6, $bgColor: white) {
+    //display: -webkit-box;
+    //-webkit-line-clamp: 6;
+    //-webkit-box-orient: vertical;
+    overflow: hidden;
+    position: relative;
+    line-height: $lineHeight;
+    max-height: $lineHeight * $lineCount;
+    text-align: justify;
+    margin-right: -1em;
+    padding-right: 1em;
+}
+
+.align-right {
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+}
+.align-center {
+    text-align: center;
+}

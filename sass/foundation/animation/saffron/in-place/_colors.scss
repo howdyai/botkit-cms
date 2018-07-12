@@ -1,0 +1,23 @@
+@mixin backgroundColor($from, $to, $selector: ":hover", $duration: 1.5s, $delay: 0s) {
+  background-color: $from;
+  @include u-transition(background-color $duration $delay);
+  &#{$selector} {
+    background-color: $to;
+  }
+}
+
+@mixin borderColor($from, $to, $selector: ":hover", $duration: 1.5s, $delay: 0s) {
+  border-color: $from;
+  @include u-transition(border-color $duration $delay);
+  &#{$selector} {
+    border-color: $to;
+  }
+}
+
+@mixin color($from, $to, $selector: ":hover", $duration: 1.5s, $delay: 0s) {
+  color: $from;
+  @include u-transition(color $duration $delay);
+  &#{$selector} {
+    color: $to;
+  }
+}

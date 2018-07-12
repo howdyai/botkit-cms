@@ -1,0 +1,28 @@
+.deploy_target {
+  text-transform: capitalize;
+}
+
+.deploy_status {
+
+  margin-bottom: 0px;
+
+  button.primary {
+    padding: 1rem 1rem;
+    margin: 0px auto 1rem;
+    font-size: 1.5rem;
+    display: block;
+  }
+
+  button.secondary {
+    margin: 0px auto;
+    display: block;
+  }
+
+  .train_status button.primary {
+    display: block;
+    margin: 1rem 0 0;
+    float: none;
+  }
+
+
+}

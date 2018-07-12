@@ -1,0 +1,29 @@
+@include u-keyframes(slideOutLeft) {
+  35% {
+    opacity: 1;
+    @include u-transform(translateX($saf-translateX-distance) translateZ(0));
+  }
+  100% {
+    opacity: 0;
+    @include u-transform(translateX($saf-translateX-distance * -10));
+  }
+}
+
+@mixin slideOutLeft($duration: 1s, $delay: 0s, $fill-mode: forwards) {
+  @include u-animation(slideOutLeft $duration $delay $fill-mode);
+}
+
+@include u-keyframes(slideOutRight) {
+  35% {
+    opacity: 1;
+    @include u-transform(translateX($saf-translateX-distance * -1) translateZ(0));
+  }
+  100% {
+    opacity: 0;
+    @include u-transform(translateX($saf-translateX-distance * 10));
+  }
+}
+
+@mixin slideOutRight($duration: 1s, $delay: 0s, $fill-mode: forwards) {
+  @include u-animation(slideOutRight $duration $delay $fill-mode);
+}

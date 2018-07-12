@@ -1,0 +1,20 @@
+<form ng-submit="duplicateThread(ui.dupe_thread_name)">
+
+<div class="editor_modal_box" ng-if="ui.dupethread">
+  <header>
+    <h1>Duplicate Thread</h1>
+  </header>
+  <section>
+    <div class="bigform">
+          <p>
+            <label>Thread Name:</label>
+            <input ng-model="ui.dupe_thread_name" type="text" required />
+          </p>
+    </div>
+  </section>
+  <footer>
+    <button type="submit">Save</button>
+    <button type="button" ng-click="ui.dupethread=false;">Cancel</button>
+  </footer>
+</div>
+</form>

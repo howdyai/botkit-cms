@@ -1,0 +1,96 @@
+<div class="panel">
+    <ul>
+        <li class="subfield">
+            <label>Condition:</label>
+            <ul class="fields">
+                <li>
+                    <label>Left:</label>
+                    <select ng-model="ui.conditional.conditional.left" ng-change="updateConditionalText(ui.conditional)">
+                      <optgroup label="Responses" ng-if="features.custom_variables">
+                        <option ng-repeat="item in command.variables" value="{{responses.{% item.name %}}}">{% item.name %}</option>
+                      </optgroup>
+                      <optgroup label="Custom">
+                          <option value="_new">Custom Value:</option>
+                      </optgroup>
+                    </select>
+                    <input ng-if="ui.conditional.conditional.left=='_new'" type="text" ng-class="{invalid: ui.conditional.conditional.validators.left_val_invalid == true}" ng-model="ui.conditional.conditional.left_val" placeholder="Enter here" />
+                </li>
+                <li>
+                    <label>Test:</label>
+                    <select ng-model="ui.conditional.conditional.test" ng-class="{invalid: ui.conditional.conditional.validators.test_invalid == true}" ng-change="updateConditionalText(ui.conditional)">
+                        <option value="equals">equals</option>
+                        <option value="!equals">not equals</option>
+                        <option value="exists">exists</option>
+                        <option value="!exists">doesn't exists</option>
+                      </select>
+                </li>
+                <li ng-show="ui.conditional_needRight">
+                    <label>Right:</label>
+                    <select ng-model="ui.conditional.conditional.right" ng-change="updateConditionalText(ui.conditional)">
+                      <optgroup label="Responses" ng-if="features.custom_variables">
+                        <option ng-repeat="item in command.variables" value="{{responses.{% item.name %}}}">{% item.name %}</option>
+                      </optgroup>
+                      <optgroup label="Custom">
+                          <option value="_new">Custom Value:</option>
+                      </optgroup>
+                      </select>
+                    <input ng-if="ui.conditional.conditional.right=='_new'" type="text" ng-class="{invalid: ui.conditional.conditional.validators.right_val_invalid == true}" ng-model="ui.conditional.conditional.right_val" placeholder="Enter here" />
+                </li>
+            </ul>
+        </li>
+
+        <li class="subfield">
+            <label>Action:</label>
+            <ul class="fields">
+                <li>
+                    <select ng-model="ui.conditional.conditional.action" ng-class="{invalid: ui.conditional.conditional.validators.action_invalid == true}" ng-change="condition_action_then_select(ui.conditional)">
+                      <optgroup label="Actions">
+                          <option value="next">Then continue with thread</option>
+                          <option value="repeat">Then repeat this message</option>
+                          <option value="complete">Then end and mark successful</option>
+                          <option value="stop" ng-if="features.allow_quit">Then end and mark failed</option>
+                      </optgroup>
+                      <optgroup label="Threads" ng-if="features.branches">
+                          <option ng-repeat="thread in command.script.script" value="{% thread.topic %}">Jump to: {% thread.topic %}</option>
+                      </optgroup>
+                      <optgroup label="New" ng-if="features.branches">
+                          <option value="_new">Jump to new thread</option>
+                      </optgroup>
+                      <optgroup label="Scripts" ng-if="ui.scripts">
+                          <option value="execute_script">Execute script</option>
+                      </optgroup>
+                  </select>
+                </li>
+                <li ng-if="ui.conditional.conditional.action=='execute_script'">
+                    <label>Script:</label>
+                    <div>
+                        <select ng-options="command.command as command.command for command in bot.commands" ng-model="ui.conditional.conditional.execute.script" ng-change="conditional_execute_script_selected(ui.conditional)">
+                        </select>
+                    </div>
+                </li>
+                <li ng-if="ui.conditional.conditional.execute.script">
+                    <label>Thread:</label>
+                    <div>
+                        <select ng-model="ui.conditional.conditional.execute.thread" ng-options="thread.topic as thread.topic for thread in ui.conditional.conditional.selected_scripts_threads" ng-change="conditional_tread_select(ui.conditional)">
+                        </select>
+                    </div>
+                </li>
+            </ul>
+        </li>
+
+    </ul>
+
+
+
+    <div class="new-branch" ng-if="ui.conditional.conditional.action=='_new'">
+        <form ng-submit="addThreadAsAction(newbranch, ui.conditional.conditional);">
+            <div class="add-entry">
+                <input type="text" ng-class="{invalid: ui.conditional.conditional.validators.action_new_invalid == true}" ng-model="newbranch" placeholder="New thread name" />
+                <button type="submit">Add</button>
+            </div>
+        </form>
+    </div>
+
+
+
+</div>

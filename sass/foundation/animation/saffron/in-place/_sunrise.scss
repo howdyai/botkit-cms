@@ -1,0 +1,12 @@
+@include u-keyframes(sunrise) {
+  0% {
+    @include u-transform(rotate(0deg) translate($saf-sunrise-arch) rotate(0deg));
+  }
+  100% {
+    @include u-transform(rotate(180deg) translate($saf-sunrise-arch) rotate(-180deg));
+  }
+}
+
+@mixin sunrise($duration: 4s, $delay: 0s, $fill-mode: both, $count: 1, $timing: ease-in-out) {
+  @include u-animation(sunrise $count $duration $delay $fill-mode $timing);
+}

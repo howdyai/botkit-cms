@@ -1,0 +1,55 @@
+@mixin cubeFlipUp($selector: ".flipUp", $duration: 0.5s, $delay: 0s, $timing: cubic-bezier(0.905, -0.190, 0.480, 0.995)) {
+  position: relative;
+  @include u-prefix(transform-style, preserve-3d, webkit spec);
+  @include u-transition(all $duration $delay $timing);
+  &#{$selector} {
+    @include u-transform(rotateX(-90deg) translateY(100%) translateZ(0));
+    @include u-prefix(transform-origin, 50% 100%, webkit moz spec);
+  }
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
+  &::before {
+    top: 100%;
+    @include u-transform(rotateX(-90deg));
+    @include u-prefix(transform-origin, 0 0, webkit moz spec);
+  }
+  &::after {
+    top: -100%;
+    @include u-transform(rotateX(90deg));
+    @include u-prefix(transform-origin, 0 100%, webkit moz spec);
+  }
+}
+
+@mixin cubeFlipDown($selector: ".flipDown", $duration: 0.5s, $delay: 0s, $timing: cubic-bezier(0.905, -0.190, 0.480, 0.995)) {
+  position: relative;
+  @include u-prefix(transform-style, preserve-3d, webkit spec);
+  @include u-transition(all $duration $delay $timing);
+  &#{$selector} {
+    @include u-transform(rotateX(90deg) translateY(-100%) translateZ(0));
+    @include u-prefix(transform-origin, 50% 0, webkit moz spec);
+  }
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
+  &::before {
+    top: 100%;
+    @include u-transform(rotateX(-90deg));
+    @include u-prefix(transform-origin, 0 0, webkit moz spec);
+  }
+  &::after {
+    top: -100%;
+    @include u-transform(rotateX(90deg));
+    @include u-prefix(transform-origin, 0 100%, webkit moz spec);
+  }
+}

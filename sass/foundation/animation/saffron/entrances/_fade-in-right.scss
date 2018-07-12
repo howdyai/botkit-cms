@@ -1,0 +1,13 @@
+@include u-keyframes(fadeInRight) {
+  0% {
+    opacity: 0;
+    @include u-transform(translateX($saf-translateX-distance) translateZ(0));
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@mixin fadeInRight($duration: 1s, $delay: 0s, $fill-mode: forwards) {
+  @include u-animation(fadeInRight $duration $delay $fill-mode);
+}

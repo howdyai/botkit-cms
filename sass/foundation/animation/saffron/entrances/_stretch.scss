@@ -1,0 +1,33 @@
+@include u-keyframes(stretch) {
+  0% {
+    @include u-transform(scaleY(0));
+  }
+  40% {
+    @include u-transform(scaleY($saf-stretch-compress-exageration));
+  }
+  60% {
+    @include u-transform(scaleY($saf-stretch-compress-exageration - ($saf-stretch-compress-exageration * .075)));
+  }
+  80% {
+    @include u-transform(scaleY($saf-stretch-compress-exageration));
+  }
+  100% {
+    @include u-transform(scaleY($saf-stretch-compress-exageration - ($saf-stretch-compress-exageration * .075)));
+  }
+  80% {
+    @include u-transform(scaleY($saf-stretch-compress-exageration - ($saf-stretch-compress-exageration * .025)));
+  }
+  100% {
+    @include u-transform(scaleY(1));
+  }
+}
+
+@mixin stretchUp($duration: 1.75s, $delay: 0s, $count: 1, $fill-mode: both, $timing: ease-out) {
+  @include u-animation(stretch $count $duration $delay $fill-mode $timing);
+  @include u-prefix(u-transform-origin, 0 100%, webkit moz spec);
+}
+
+@mixin stretchDown($duration: 1.75s, $delay: 0s, $count: 1, $fill-mode: both, $timing: ease-out) {
+  @include u-animation(stretch $count $duration $delay $fill-mode $timing);
+  @include u-prefix(u-transform-origin, 0 0, webkit moz spec);
+}

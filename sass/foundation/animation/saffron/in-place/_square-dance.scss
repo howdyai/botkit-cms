@@ -1,0 +1,18 @@
+@include u-keyframes(squareDance) {
+  0%, 100% {
+    @include u-transform(translate3d(100%, 0, 0));
+  }
+  25% {
+    @include u-transform(translate3d(100%, 100%, 0));
+  }
+  50% {
+    @include u-transform(translate3d(0, 100%, 0));
+  }
+  75% {
+    @include u-transform(translate3d(0, 0, 0));
+  }
+}
+
+@mixin squareDance($duration: 3s, $delay: 0s, $fill-mode: none, $count: infinite, $timing: ease-in-out) {
+  @include u-animation(squareDance $count $duration $delay $fill-mode $timing);
+}

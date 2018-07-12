@@ -1,0 +1,27 @@
+<div class="panel" ng-controller="ciscosparkMode">
+    <ul>
+        <li class="label">
+            <label>Attached File</label>
+            <ul class="sheet">
+              <li class="header" ng-if="ui.outgoing_message.platforms.ciscospark.files.length">
+                <div class="delete">&nbsp;</div>
+                <div class="cell">URL</div>
+              </li>
+              <li ng-repeat="file in ui.outgoing_message.platforms.ciscospark.files" ng-class="{invalid: file.invalid};">
+                <div class="delete">
+                  <button tabindex="-1" class="delete" ng-click="deleteCiscoFile($index)"></button>
+                </div>
+                <div class="cell">
+                  <input type="text" placeholder="http://myserver.com/word.doc" ng-model="file.url" ng-change="makeDirty()" required />
+                </div>
+              </li>
+              <li ng-if="!ui.outgoing_message.platforms.ciscospark.files || ui.outgoing_message.platforms.ciscospark.files.length<1" class="placeholder_button">
+                <button ng-click="addCiscoFile()">Add File</button>
+              </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+
+<div ng-include="'/js/partials/meta_attachments.html'"></div>

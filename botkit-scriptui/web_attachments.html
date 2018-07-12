@@ -1,0 +1,74 @@
+<div class="panel">
+    <ul>
+        <li class="label">
+            <label>Quick Replies</label>
+        </li>
+    </ul>
+    <ul class="sheet full" ng-if="ui.outgoing_message.quick_replies.length">
+        <li class="header">
+          <div class="draghandle">&nbsp;</div>
+          <div class="cell">Title</div>
+          <div class="cell">Payload</div>
+          <div class="delete">&nbsp;</div>
+        </li>
+      </ul>
+      <ul class="sheet full" ng-if="ui.outgoing_message.quick_replies.length" dnd-list="ui.outgoing_message.quick_replies" dnd-allowed-types="['reply']">
+        <li ng-repeat="reply in ui.outgoing_message.quick_replies" class="ng-class:{invalid: reply.invalid}"
+        dnd-draggable="reply"
+        dnd-type="'reply'"
+        dnd-moved="ui.outgoing_message.quick_replies.splice($index, 1); makeDirty();"
+        dnd-effect-allowed="move">
+        <div class="draghandle" dnd-handle>
+          <i class="fa fa-sort" aria-hidden="true"></i>
+        </div>
+            <div class="cell" dnd-nodrag>
+                <span ng-if="reply.content_type=='text'">
+                    <input type="text" ng-model="reply.title" ng-change="makeDirty()">
+                </span>
+            </div>
+            <div class="ng-class:{disabled: reply.content_type=='location'}; cell" dnd-nodrag>
+                <span ng-if="reply.content_type=='text'">
+                    <input type="text" ng-model="reply.payload" ng-change="makeDirty()">
+                </span>
+            </div>
+            <div class="delete">
+                <button class="delete" ng-click="removeQuickReply(ui.outgoing_message,$index);"></button>
+            </div>
+        </li>
+        </ul>
+        <ul class="sheet full" ng-if="!ui.outgoing_message.quick_replies || ui.outgoing_message.quick_replies.length < 11">
+        <li class="placeholder_button" >
+            <button ng-click="fb_addQuickReply(ui.outgoing_message,'text')">Add Quick Reply</button>
+        </li>
+        </ul>
+    </ul>
+
+</div>
+
+<div class="panel" ng-controller="webMode">
+    <ul>
+        <li class="label">
+            <label>Attached File</label>
+            <ul class="sheet">
+              <li class="header" ng-if="ui.outgoing_message.platforms.web.files.length">
+                <div class="delete">&nbsp;</div>
+                <div class="cell">URL</div>
+              </li>
+              <li ng-repeat="file in ui.outgoing_message.platforms.web.files" ng-class="{invalid: file.invalid};">
+                <div class="delete">
+                  <button tabindex="-1" class="delete" ng-click="deleteWebFile($index)"></button>
+                </div>
+                <div class="cell">
+                  <input type="text" placeholder="http://myserver.com/word.doc" ng-model="file.url" ng-change="makeDirty()" required />
+                </div>
+              </li>
+              <li ng-if="!ui.outgoing_message.platforms.web.files || ui.outgoing_message.platforms.web.files.length<1" class="placeholder_button">
+                <button ng-click="addWebFile()">Add File</button>
+              </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+
+<div ng-include="'/js/partials/meta_attachments.html'"></div>

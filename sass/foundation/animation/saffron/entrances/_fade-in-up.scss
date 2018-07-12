@@ -1,0 +1,13 @@
+@include u-keyframes(fadeInUp) {
+  0% {
+    opacity: 0;
+    @include u-transform(translateY($saf-translateY-distance) translateZ(0));
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@mixin fadeInUp($duration: 1s, $delay: 0s, $fill-mode: forwards) {
+  @include u-animation(fadeInUp $duration $delay $fill-mode);
+}

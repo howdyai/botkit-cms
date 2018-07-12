@@ -1,0 +1,26 @@
+<div class="panel">
+    <ul ng-if="ui.outgoing_message.meta && ui.outgoing_message.meta.length>0">
+        <li class="label">Custom Fields</label>
+    </ul>
+    <ul class="sheet">
+        <li class="header" ng-if="ui.outgoing_message.meta && ui.outgoing_message.meta.length>0">
+            <div class="delete">&nbsp;</div>
+            <div class="cell">Key</div>
+            <div class="cell">Value</div>
+        </li>
+        <li ng-class="{invalid: meta.invalid};" ng-repeat="meta in ui.outgoing_message.meta track by $index">
+            <div class="delete">
+                <button class="delete" ng-click="deleteMeta(meta,$index)"></button>
+            </div>
+            <div class="cell">
+                <input type="text" placeholder="Key" class="action-text" maxlength="14" ng-model="meta.key" ng-change="makeDirty()" />
+            </div>
+            <div class="cell">
+                <input type="text" placeholder="Value" ng-model="meta.value" ng-change="makeDirty()" />
+            </div>
+        </li>
+        <li class="placeholder_button">
+            <button ng-click="addMetaVar();">Add Custom Field</button>
+        </li>
+    </ul>
+</div>

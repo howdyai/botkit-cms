@@ -1,0 +1,9 @@
+@mixin u-transform($property: none) {
+  @if u-contains($saf-prefixes, "webkit") and u-contains($saf-prefixes, "ms") {
+    @include u-prefix(transform, $property, webkit ms spec);
+  } @else if u-contains($saf-prefixes, "webkit") {
+    @include u-prefix(transform, $property, webkit spec);
+  } @else {
+    @include u-prefix(transform, $property, spec);
+  }
+}

@@ -1,0 +1,58 @@
+<div class="editor_modal_box" ng-if="ui.triggers">
+  <header>
+    <h1>Add Trigger</h1>
+
+    <form name="formHolder.add_trigger" ng-submit="addTrigger()">
+
+        <p>
+            <label>Trigger Type</label>
+              <select ng-model="trigger.type">
+                <option value="string">Exact String Match</option>
+                <option value="regexp">Regular Expression</option>
+                <option value="intent" ng-if="bot.settings.luis">Intent from LUIS.ai</option>
+                <option value="intent" ng-if="bot.settings.watson">Intent from IBM Watson Assistant</option>
+            </select>
+        </p>
+
+        <p ng-if="trigger.type=='intent'">
+            <label>Intent</label>
+            <select ng-model="trigger.pattern" ng-options="intent.name as intent.name for intent in intents track by intent.name">
+            </select>
+        </p>
+
+        <p ng-if="trigger.type!='intent'">
+            <label>Pattern</label>
+            <input type="text" ng-model="trigger.pattern" required placeholder="New Trigger" />
+        </p>
+
+        <button type="submit" ng-disabled="!trigger.pattern" class="primary">Add</button>
+    </form>
+  </header>
+  <section>
+  <table class="sheet">
+    <tr>
+      <th></th>
+      <th>
+        Trigger Type
+      </th>
+      <th>
+        Pattern
+      </th>
+    </tr>
+    <tr ng-repeat="trigger in command.triggers">
+      <td width="22">
+        <button class="delete" ng-click="removeTrigger($index)"></button>
+      </td>
+      <td width="50">
+        {% trigger.type %}
+      </td>
+      <td>
+        {% trigger.pattern %}
+      </td>
+    </tr>
+  </table>
+</section>
+<footer>
+  <button ng-click="closeTriggers()">Done</button>
+</footer>
+</div>

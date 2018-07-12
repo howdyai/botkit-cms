@@ -1,0 +1,16 @@
+<li>
+    <label>Name</label>
+    <input type="text" class="title_field"  ng-change="makeDirty()" placeholder="File Name" ng-model="attachment.name" />
+</li>
+<li>
+    <label>URL</label>
+    <input type="text" class="title_field"  ng-change="makeDirty()" placeholder="URL to file" ng-model="attachment.contentUrl" />
+</li>
+<li>
+    <label>Type</label>
+    <select ng-change="makeDirty()" ng-model="attachment.contentType">
+      <option value="image/jpg">JPG</option>
+      <option value="image/png">PNG</option>
+      <option value="image/gif">GIF</option>
+    </select>
+</li>

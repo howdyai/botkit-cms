@@ -1,0 +1,17 @@
+@include u-keyframes(float) {
+  0%, 50%, 100% {
+    @include u-transform(translateY($saf-float-bob-distance * -1) translateZ(0));
+  }
+  25% {
+    @include u-transform(translateY($saf-float-bob-distance) rotate($saf-float-bob-angle));
+  }
+  75% {
+    @include u-transform(translateY($saf-float-bob-distance) rotate($saf-float-bob-angle * -1));
+  }
+}
+
+@mixin float($duration: 5s, $delay: 0s, $fill-mode: none, $count: infinite, $timing: ease-in-out) {
+  // hack to fix jagged edges
+  outline: 1px solid transparent;
+  @include u-animation(float $count $duration $delay $fill-mode $timing);
+}

@@ -1,0 +1,3 @@
+@mixin u-animation($properties...) {
+  @include u-prefix(animation, $properties, webkit spec);
+}

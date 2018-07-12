@@ -1,0 +1,36 @@
+<div class="editor_modal_box">
+  <header>
+      <h1>Import Scripts</h1>
+  </header>
+  <section class="container">
+    <form class="subcontainer bigform" name="importExternal" ng-submit="getExternalUrl()" ng-if="!commands_for_import.length">
+       <h3>Import from URL</h3>
+       <input type="url" ng-model="ui.external_url" required placeholder="https://github.com/org/repo/scripts.json" />
+       <button class="primary" type="submit" >Import from URL</button>
+    </form>
+    <form class="subcontainer" name="import_commands" ng-submit="import_unparsed()" ng-if="!commands_for_import.length">
+        <h3>Import JSON</h3>
+        <textarea rows='10' ng-model="ui.un_parsed_commands" required></textarea>
+        <button type="submit" class="primary">Import JSON</button>
+    </form>
+    <div ng-if="commands_for_import.length">
+      <table class="sheet importable_scripts">
+        <tr>
+          <th>Import</th>
+          <th>Script Name</th>
+          <th>Description</th>
+        </tr>
+        <tr ng-repeat="c in commands_for_import" class="ng-class:{exists: c.already_exist && !c.exclude_from_import};">
+          <td ng-click="add_to_import(c)"><input type="checkbox" ng-checked="!c.exclude_from_import" ></input</td>
+          <td>{% c.command %}</td>
+          <td>{% c.description %}</td>
+        </tr>
+    </table>
+  </section>
+  <footer>
+    <form name="finalize_import" ng-submit="makeImportApi()">
+      <button class="primary" type="submit" ng-disabled="!commands_for_import.length" >{% ui.import_button_text %}</button>
+      <button type="button" ng-click="ui.import_mode=false;">Cancel</button>
+    </form>
+  </footer>
+</div>

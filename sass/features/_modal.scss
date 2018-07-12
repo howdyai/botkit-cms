@@ -1,0 +1,39 @@
+.modal-overlay {
+    @include flexbox;
+    display: none;
+    opacity: 0;
+    @include fadeIn(.3s);
+    z-index: 2000;
+    position: fixed;
+    background-color: $shade;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    .modal {
+        @include inset-shadow;
+        @include popIn(.2s);
+        z-index: 200;
+		background: $white;
+		text-align: center;
+		max-width: 800px;
+        padding: $spacing-unit;
+        button {
+            @include text-button;
+            &:first-of-type {
+                margin-left: 2em;
+            }
+        }
+    }
+
+    &.visible {
+        display: flex;
+    }
+}
+
+
+.export_modal {
+    width: 600px;
+}

@@ -1,0 +1,31 @@
+@include u-keyframes(turnInDown) {
+  0% {
+    opacity: 0;
+    @include u-transform(perspective(500px) rotateX($saf-turn-angle * -1) translateZ(150px));
+  }
+  100% {
+    opacity: 1;
+    @include u-transform(perspective(800px) rotateX(0deg) translateZ(0));
+    @include u-prefix(backface-visibility, hidden, webkit moz spec);
+  }
+}
+
+@mixin turnInDown($duration: 1s, $delay: 0s, $fill-mode: forwards) {
+  @include u-animation(turnInDown $duration $delay $fill-mode);
+}
+
+@include u-keyframes(turnInUp) {
+  0% {
+    opacity: 0;
+    @include u-transform(perspective(500px) rotateX($saf-turn-angle) translateZ(150px));
+  }
+  100% {
+    opacity: 1;
+    @include u-transform(perspective(800px) rotateX(0deg) translateZ(0));
+    @include u-prefix(backface-visibility, hidden, webkit moz spec);
+  }
+}
+
+@mixin turnInUp($duration: 1s, $delay: 0s, $fill-mode: forwards) {
+  @include u-animation(turnInUp $duration $delay $fill-mode);
+}

@@ -1,0 +1,105 @@
+$spacing-unit:     30px;
+$half-spacing-unit: $spacing-unit / 2;
+$unit: 5px;
+
+// Colors
+$white: #fff;
+$light-gray: #f7f7f7;
+$gray: #e6e6e6;
+// $gray-2: #dde;
+$mid-gray: #888;
+$dark-gray: #444;
+$black: #111;
+$code-dark: #002240;
+$code-white: #e7e7e7;
+$orange: #ff8917;
+$main-blue: #1432e0;
+$light-blue: #eef1fd;
+$lavender: #bbc5f6;
+$green: #14e07f;
+$seafoam: #bdf4ed;
+$yellow: #ffe517;
+
+$cantelope: #f9bf8c;
+$red: #f81645;
+// $purple: #b195f4;
+$purple: #666;
+$gray-2: #ccc;
+
+
+// translucent colors
+$translucent-blue: rgba(187, 197, 246, .5);
+$translucent-red: rgba(248, 22, 69, .5);
+$translucent-white: rgba(255, 255, 255, .4);
+$translucent-black: rgba(0, 0, 0, .3);
+$translucent-cantelope: rgba(249, 191, 140 , .6);
+$shade: rgba(0,0,0,0.6);
+
+//tinted cd-colors
+$seafoam-light: #d3f8f3;
+$seafoam-dark: #a7f0e7;
+$green-light: #8af2a7;
+$green-hint: #dbf9d4;
+$yellow-hint: #fffdd9;
+$orange-hint: #ffeed9;
+$main-blue-hint: #dde3fa;
+$pink-hint: #f8d3f0;
+$lavender-light: #abdbef;
+$main-blue-dark: #1028b4;
+$purple-hint: lighten($purple, 10%);
+
+//topic color settings
+$danger-color: darken($red, 10%);
+$warning-color: darken($cantelope, 10%);
+$success-color: $green;
+$app-background-blue: #eef1fd;
+
+//talkabot colors
+$talkabot-background-color: #109acb;
+$talkabot-magenta:      #D8117D;
+
+//botkit colors
+$botkit-brand-color: $main-blue; //$cantelope;
+
+//botkit studio colors
+$botkit-studio-brand-color: $purple;
+$botkit-light: lighten($botkit-studio-brand-color, 10%);
+$botkit-dark: darken($botkit-studio-brand-color, 10%);
+$body-font: "freight-sans-pro",sans-serif;
+$headline-font: "GT-Haptik-Light",sans-serif;
+$headline-oblique-font: 'GT-Haptik-Light-Oblique',sans-serif;
+$transition-speed: .2s;
+
+@mixin truncate-ul($lineHeight: 30px, $lineCount: 6, $bgColor: white) {
+    //display: -webkit-box;
+    //-webkit-line-clamp: 6;
+    //-webkit-box-orient: vertical;
+    overflow: hidden;
+    position: relative;
+    line-height: $lineHeight;
+    max-height: $lineHeight * $lineCount;
+    text-align: justify;
+    margin-right: -1em;
+    padding-right: 1em;
+}
+@mixin inline-list {
+  display: inline;
+  list-style: none;
+  float: left;
+}
+
+@mixin attention {
+  // @include pulsate();
+  transition: all .3s;
+  border: 2px solid $cantelope;
+  box-shadow: 0px 5px 1px -5px rgba(0,0,0,0.20);
+  z-index: 100;
+}
+
+@mixin clearfix {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}

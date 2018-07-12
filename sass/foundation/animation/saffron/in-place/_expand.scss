@@ -1,0 +1,6 @@
+@mixin expand($direction, $amount: 1em, $selector: ":hover", $duration: 0.5s, $delay: 0s, $timing: cubic-bezier(0.680, -0.550, 0.275, 1.465)) {
+  @include u-transition(padding-#{$direction} $duration $delay $timing);
+  &#{$selector} {
+    padding-#{$direction}: $amount;
+  }
+}
