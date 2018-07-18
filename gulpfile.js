@@ -3,13 +3,8 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     sass = require('gulp-sass'),
     nodemon = require('gulp-nodemon'),
-    gutil = require('gulp-util'),
-    package = require('./package.json');
+    gutil = require('gulp-util');
 
-var banner = function() {
-    return '/*! ' + package.name + ' - v' + package.version + ' - ' + gutil.date(new Date(), "yyyy-mm-dd") +
-        ' [copyright: ' + package.copyright + ']' + ' */';
-};
 
 function logData() {
     gutil.log(
@@ -66,18 +61,10 @@ gulp.task('controller-concat', function() {
         .pipe(concat('scripts.js'))
         .pipe(gulp.dest('./public/js/'));
 });
-//
-// Rebuild all the things
-// -----------------------------------------------------------/
+
 gulp.task('build', ['controller-concat','sass'], ready);
-// -----------------------------------------------------------/
-// Default ('default') Task Handler setup:
-// * on 'restart' event rebuild assets in the public distribution directory
-// * notify (gulp-notify) sends Notification to Mac Notification Center, Linux notifications
-// -----------------------------------------------------------/
+
 gulp.task('default', function() {
-    // listen for changes
-    // configure nodemon
     nodemon({
         // the script to run the app
         watch: ['./js', './sass','./index.js'],
@@ -89,5 +76,6 @@ gulp.task('default', function() {
         ignore: ['public/*', 'node_modules/*', 'bower_modules/*'],
         tasks: ['build']
     }).on('restart', function() {
+      logData('Restarted!');
     });
 });

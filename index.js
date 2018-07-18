@@ -110,8 +110,6 @@ webserver.post('/admin/api/script', function(req, res) {
   });
 
 
-
-
   if (allowed_tokens && allowed_tokens.length) {
     // require an access token
     webserver.use(function(req, res, next) {
@@ -137,8 +135,7 @@ webserver.post('/admin/api/script', function(req, res) {
   }
 
 
-  /* Recreate the bot-facing API */
-
+  /* define the bot-facing API */
   // receives: triggers, user
   webserver.post('/api/v1/commands/triggers', function(req, res) {
     // look for triggers

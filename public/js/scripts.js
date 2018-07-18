@@ -3534,7 +3534,7 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
 
     $scope.lastError = null;
-    $scope.decideMode(platform);
+    $scope.ui.editor_mode = $scope.decideMode(platform);
 
 }]);
 
