@@ -1,6 +1,7 @@
 <script>
     var command_id = "{{command_id}}";
     var bot_id = 1;
+    var platform = "{{platform}}";
 </script>
 <div class="fullscreen">
 <div  class="workspace_wrapper {{^is_active}}locked{{/is_active}}" ng-controller="scriptEditor">
@@ -11,16 +12,13 @@
     </div>
 
     <div class="toolbar">
-        <button ng-click="goto('/');">Back</button>
+        <button ng-click="goto('/admin');">Back</button>
         <button ng-click="ui.modal_info=true">Info</button>
         <button ng-click="ui.triggers=true">Triggers</button>
-        <!-- <button class="lockable" ng-click="showCode()">Code</button> -->
-        <!-- <button class="lockable" ng-click="export()">Export</button> -->
-
         <div style="float: right;">
-        <span class="saveStatus" ng-if="ui.lastSaved && !ui.invalid" ng-bind-html="saveStatus()"></span>
-        <span class="validationError" ng-if="ui.invalid">❗ {% ui.validation_error %}</span>
-        <button ng-click="save()" class="ng-class: {invalid: ui.invalid, saving: ui.saving, dirty: ui.dirty, clean: !ui.dirty}; lockable save-button"><span ng-if="ui.saving">Saving</span><span ng-if="!ui.saving">Save</span></button>
+          <span class="saveStatus" ng-if="ui.lastSaved && !ui.invalid" ng-bind-html="saveStatus()"></span>
+          <span class="validationError" ng-if="ui.invalid">❗ {% ui.validation_error %}</span>
+          <button ng-click="save()" class="ng-class: {invalid: ui.invalid, saving: ui.saving, dirty: ui.dirty, clean: !ui.dirty}; lockable save-button"><span ng-if="ui.saving">Saving</span><span ng-if="!ui.saving">Save</span></button>
         </div>
     </div>
     <div class="workspace {% ui.editor_mode %} {% bot.platform %}">

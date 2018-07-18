@@ -10,7 +10,7 @@ $inspector-background-color: #fff;
 }
 
 @mixin inspector-cell {
-     @include ng-fade;
+     // @include ng-fade;
 }
 
 .section-list li {
@@ -81,7 +81,7 @@ $inspector-background-color: #fff;
     &.ng-hide {
         flex: 0 0 0;
         * {
-            @include fadeOut(.2s);
+            // @include fadeOut(.2s);
         }
     }
 
@@ -123,7 +123,7 @@ $inspector-background-color: #fff;
     }
     .branches, .triggers, .variables {
         @include inspector-cell;
-        @include ng-fade;
+        // @include ng-fade;
     }
     .script-info {
         input[type="text"],

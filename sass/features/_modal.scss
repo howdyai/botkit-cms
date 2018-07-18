@@ -2,7 +2,7 @@
     @include flexbox;
     display: none;
     opacity: 0;
-    @include fadeIn(.3s);
+    // @include fadeIn(.3s);
     z-index: 2000;
     position: fixed;
     background-color: $shade;
@@ -14,7 +14,7 @@
     justify-content: center;
     .modal {
         @include inset-shadow;
-        @include popIn(.2s);
+        // @include popIn(.2s);
         z-index: 200;
 		background: $white;
 		text-align: center;

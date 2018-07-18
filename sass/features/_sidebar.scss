@@ -207,7 +207,7 @@ $selected-bot-background-color: #fff;
         transition: flex 0.3s;
         flex: 0 0 0;
         * {
-            @include fadeOut(.3s);
+            // @include fadeOut(.3s);
         }
     }
     a:visited {
@@ -280,7 +280,7 @@ $selected-bot-background-color: #fff;
     &.ng-hide {
         flex: 0 0 0;
         * {
-            @include fadeOut(.2s);
+            // @include fadeOut(.2s);
         }
     }
     .script-info {

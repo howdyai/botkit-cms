@@ -1,4 +1,0 @@
-// Thanks to @lunelson and @zaus
-@function u-contains($list, $var) {
-  @return (false != index($list, $var));
-}

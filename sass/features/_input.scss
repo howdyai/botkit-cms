@@ -29,31 +29,6 @@ $input-border-color: $mid-gray;
     resize: none;
 }
 
-@mixin text-button-combo {
-    padding: $unit;
-
-    > div {
-        max-width: 1330px;
-        margin-left: $unit * 13;
-        margin-right: $unit * 2;
-        display: flex;
-    }
-    input[type=text] {
-        @include script-text-input;
-        border-right: none;
-        flex: 1;
-        font-size: 1em;
-        height: 36px;
-    }
-
-    button {
-        z-index: 10;
-        margin-left: unit;
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
-    }
-}
-
 @mixin list-text-button-combo {
     display: flex;
     font-size: 16px;
@@ -118,55 +93,6 @@ $input-border-color: $mid-gray;
     padding: $unit;
 }
 
-//toggle switch
-
-.toggleswitch {
-    position: relative; width: 66px;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
-}
-.toggleswitch-checkbox {
-    display: none;
-}
-.toggleswitch-label {
-    display: block; overflow: hidden; cursor: pointer;
-    border: 2px solid $mid-gray; border-radius: 0px;
-}
-.toggleswitch-inner {
-    display: block; width: 200%; margin-left: -100%;
-    transition: margin 0.2s ease-in 0s;
-}
-.toggleswitch-inner:before, .toggleswitch-inner:after {
-    display: block; float: left; width: 50%; height: 26px; padding: 0; line-height: 26px;
-    box-sizing: border-box;
-}
-.toggleswitch-inner:before {
-    content: "Yes";
-    padding-left: $unit;
-    background-color: $seafoam-dark;
-    color: $black;
-}
-.toggleswitch-inner:after {
-    content: "No";
-    padding-right: $unit;
-    background-color: $gray;
-    color: $mid-gray;
-    text-align: right;
-}
-.toggleswitch-switch {
-    display: block; width: 19px; margin: 5.5px;
-    box-sizing: border-box;
-    background: #FFFFFF;
-    position: absolute; top: 0; bottom: 0;
-    right: 37px;
-    border: 2px solid $mid-gray; border-radius: 0px;
-    transition: all 0.2s ease-in 0s;
-}
-.toggleswitch-checkbox:checked + .toggleswitch-label .toggleswitch-inner {
-    margin-left: 0;
-}
-.toggleswitch-checkbox:checked + .toggleswitch-label .toggleswitch-switch {
-    right: 0px;
-}
 .add-entry {
     @include list-text-button-combo;
     input[type="text"] {

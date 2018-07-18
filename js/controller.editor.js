@@ -220,7 +220,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     $scope.decideMode = function(platform) {
 
         var mode = 'oneonone';
-
         switch (platform) {
             case 'slack':
                 mode = 'multiuser';
@@ -2720,7 +2719,7 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
         $scope.bot = {
           _id: 'static',
-          platform: 'web'
+          platform: platform,
         };
 
         $scope.getCommandById(command_id).then(function(command) {
@@ -2792,5 +2791,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
 
     $scope.lastError = null;
+    $scope.decideMode(platform);
 
 }]);

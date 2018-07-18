@@ -1,21 +1,3 @@
-<!-- <ul>
-  {{#scripts}}
-    <li>
-        <a href="/edit/{{command}}" class="title">{{command}}</a>
-        {{description}}
-        {{modified}}
-    </li>
-  {{/scripts}}
-</ul> -->
-
-<!--
-
-<script>
-    var bot_id = "{{bot_id}}";
-    var botid = "{{bot_id}}";
-    var user_id = '{{user.id}}';
-</script> -->
-
 <div ng-controller="editBot" class="wrapper">
     <div class="workspace">
         <div class="workspace_body" ng-controller="botCommands">
@@ -50,7 +32,7 @@
                 </tr>
                 <tr ng-repeat="command in commands | orderBy: ui.sortField | filter:filterRow" class="ng-class: {selected: ui.export_mode && !command.exclude_from_export, is_fallback: bot.settings.fallback_action=='run' && (command._id==bot.settings.fallback_script)};">
                     <td>
-                        <a ng-href="/edit/{% command.command %}">{% command.command %}</a>
+                        <a ng-href="/admin/edit/{% command.command %}">{% command.command %}</a>
                         <div class="fallback_flag">(Fallback)</div>
                     </td>
                     <td>

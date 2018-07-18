@@ -963,7 +963,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     $scope.decideMode = function(platform) {
 
         var mode = 'oneonone';
-
         switch (platform) {
             case 'slack':
                 mode = 'multiuser';
@@ -3463,7 +3462,7 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
         $scope.bot = {
           _id: 'static',
-          platform: 'web'
+          platform: platform,
         };
 
         $scope.getCommandById(command_id).then(function(command) {
@@ -3535,6 +3534,7 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
 
     $scope.lastError = null;
+    $scope.decideMode(platform);
 
 }]);
 
@@ -3545,44 +3545,11 @@ angular.module('howdyPro').factory('sdk', ['$cookieStore', '$http', '$q', functi
         // variables
         //======================================================================
         var sdk = {};
-        var Session = {};
-        var accessToken = {};
-        var Configs = {
-            "verboselogging": "false",
-            "tracing": "false",
-            "services": {
-                "authenticationServiceURI": "/api/v1",
-                "botServiceURI": "/api/v1",
-                "statServiceURI": "/api/v1",
-                "commandServiceURI": "/api/v1",
-                "userServiceURI": "/api/v1",
-            }
-        };
-        //======================================================================
-        // constants
-        //======================================================================
-        // services
-        const AUTH_SERVICE = Configs.services.authenticationServiceURI;
-        const BOT_SERVICE = Configs.services.botServiceURI;
-        const COMMAND_SERVICE = Configs.services.commandServiceURI;
-        const STAT_SERVICE = Configs.services.statServiceURI;
-        const USER_SERVICE = Configs.services.userServiceURI;
 
-        // requests
-        const REQUEST_SLA = 2000;
+        const VERBOSE_LOGGING = false;
         const REQUEST_OK_SC = 200;
-        const REQUEST_FAILED_SC = 400;
-        const REQUEST_UNAUTH_SC = 401;
-        const REQUEST_SERVERERR_SC = 500;
-        const REQUEST_ABORTED = 'REQUEST ABORTED';
-        // exceptions
-        const INVALID_SESSION = 'Invalid Token';
-        const INVALID_METHOD = 'Invalid Method';
-        // debugging and diagnostics
-        const VERBOSE_LOGGING = Configs.verboselogging === "true" ? true : false;
-        //======================================================================
-        // Generic Exception Handling method
-        //======================================================================
+
+
         function handleError(err) {
             console.log('*** HANDLING ERROR');
             console.error(err);
@@ -3616,40 +3583,9 @@ angular.module('howdyPro').factory('sdk', ['$cookieStore', '$http', '$q', functi
             _log('data: ', data);
             _log('sign: ', sign);
             // log service endpoints
-            _log('AUTH_SERVICE: ', AUTH_SERVICE);
-            _log('BOT_SERVICE: ', BOT_SERVICE);
-            _log('COMMAND_SERVICE: ', COMMAND_SERVICE);
             var headers = {
                 "Content-Type": "application/json"
             };
-            if (sign) {
-                _log("SIGNING REQUEST: ", uri);
-                // If Session is not defined --> Extract the session object via the $cookieStore
-                if (!this.accessToken) {
-                  _log('extracting access token');
-                  var session = $cookieStore.get('session');
-//                  this.accessToken = session.id;
-                    this.accessToken = 'editor';
-                }
-                // this.Session = $cookieStore.get('session');
-                if (this.accessToken) {
-                    _log("accessToken: ", this.accessToken);
-                    if (uri.match(/\?/)) {
-                        uri = uri.concat('&access_token=', this.accessToken);
-                    } else {
-                        uri = uri.concat('?access_token=', this.accessToken);
-                    }
-                    _log("uri: ", uri);
-                    // headers = {
-                    //     "Content-Type": "application/json",
-                    //     "session": Session
-                    // };
-                } else {
-                    _log("REQUEST REJECTED ==> INVALID_SESSION");
-                    deferred.reject(INVALID_SESSION);
-                    return;
-                }
-            }
             var opts = {};
             if (method === 'get') {
                 opts = {
@@ -3732,31 +3668,6 @@ angular.module('howdyPro').factory('sdk', ['$cookieStore', '$http', '$q', functi
             });
         }
 
-        sdk.apiCall = function(method, uri, type, parameters, usetoken) {
-
-            var deferred = $q.defer();
-            request(uri, type, parameters, usetoken).then(function(response) {
-                if (response.statuscode !== REQUEST_OK_SC) {
-                    _log(method + " : RESPONSE ACCEPTED: " + response);
-                    if (response.error) {
-                        deferred.reject(response.error);
-                    } else {
-                        deferred.resolve(response);
-                    }
-                } else {
-                //   console.log('response: ', response);
-                    _log(method + " : RESPONSE REJECTED: " + response);
-                    deferred.reject('Request Failed: INVALID REQUEST: RESPONSE: ' + response);
-                }
-            }).catch(function(err) {
-            //   console.log('err: ', err);
-                _log(method + " : RESPONSE HTTP ERROR: " + err);
-                deferred.reject(err);
-            });
-            return deferred.promise;
-
-        };
-
         // get external url for import
         sdk.getExternalUrl = function(uri){
           const method = "sdk.getExternalUrl";
@@ -3776,290 +3687,32 @@ angular.module('howdyPro').factory('sdk', ['$cookieStore', '$http', '$q', functi
             return deferred.promise;
         };
 
-        //======================================================================
-        // AuthenticationService
-        //======================================================================
-        sdk.login = function(credentials) {
-            return sdk.v2('/api/v2/users/login','post', credentials, false);
-        };
-
-
-        sdk.signup = function(credentials) {
-
-            return sdk.v2('/api/v2/users','post', credentials, false);
-
-        }
-
-
-        sdk.reverify = function(username) {
-            return sdk.v2('/api/v2/users/reverify','post',{"email": username},false);
-        }
-
-        sdk.requestPasswordReset = function(username) {
-            return sdk.v2('/api/v2/users/resetPassword','post',{"email": username},false);
-        }
-
-
-        sdk.resetPassword = function(password, access_token) {
-            return sdk.v2('/api/v2/users/resetPassword','put',{"password": password, "token": access_token},false);
-            //
-            // const method = "sdk.resetPassword";
-            // var uri = AUTH_SERVICE + '/users/change-password';
-            // return sdk.apiCall(method, uri, 'post', {password: password, confirmation: password, access_token: access_token}, false);
-        }
-
-        sdk.changePassword = function(userId, password) {
-          return sdk.v2('/api/v2/users/' + userId + '/password','put',{password: password},true);
-        }
-
-        sdk.whoami = function() {
-
-          var session = $cookieStore.get('session');
-          var token = session.id;
-
-          return sdk.v2('/api/v2/users/whoami/'+token,'get', {},true);
-        }
-
-        sdk.updateTOS = function(userId) {
-            return sdk.v2('/api/v2/users/' + userId,'put', {"termsAcceptedDate": new Date(), notifications: {newsletter: true}},true);
-        }
-
-        sdk.submitSurvey = function(answers) {
-          return sdk.v2('/app/survey', 'post', answers, true);
-        }
-
-        sdk.updateUser = function(userId, fullname, notifications, settings) {
-
-            return sdk.v2('/api/v2/users/' + userId,'put',{"fullname": fullname, "notifications": notifications, "settings": settings},true);
-        }
-
-        sdk.updateUserIsNew = function(userId) {
-
-            return sdk.v2('/api/v2/users/' + userId,'put', {"isNew": false},true);
-        }
-
-        sdk.changeRole = function(customerId, userId, role) {
-
-            return sdk.v2('/api/v2/customers/' + customerId + '/users/' + userId +'/role','put',{role: role},true);
-
-        };
-
-        sdk.changeNotificationPref = function(customerId, userId, pref) {
-            return sdk.v2('/api/v2/customers/' + customerId + '/users/' + userId+'/notifications','put',{notifications: pref},true);
-        };
-        sdk.getStrataByUser = function(userId) {
-            return sdk.v2('/api/v2/users/' + userId + '/strata','get',{},true);
-        };
-
-
-        sdk.removeFromTeam = function(customerId, userId) {
-
-            return sdk.v2('/api/v2/customers/' + customerId + '/users/' + userId,'delete',{},true);
-
-        }
-
-
-        sdk.sendInvite = function(userId, customerId, email, role, created) {
-
-            var params = {
-                receiverRole: role,
-                receiverEmail: email,
-            }
-            return sdk.v2('/api/v2/customers/' + customerId + '/invite','post',params, true);
-
-        }
-
-
-        sdk.deleteInvite = function(customerId, invite_id) {
-            return sdk.v2('/api/v2/customers/' + customerId + '/invites/' + invite_id,'delete',{}, true);
-
-        };
-
-        sdk.getPlans = function() {
-            return sdk.v2('/api/v2/servicePlans','get',{}, true);
-        };
-
-        sdk.getPlan = function(plan_name) {
-            return sdk.v2('/api/v2/servicePlans','get',{name: plan_name}, true);
-        };
-
-        sdk.createSubscription = function(subscription) {
-          const method = "sdk.createSubscription";
-          var uri = COMMAND_SERVICE + '/subscriptions';
-          return sdk.apiCall(method, uri, 'post', subscription, true);
-        };
-
-        sdk.cancelSubscription = function(customerId) {
-
-          return sdk.v2('/api/v2/customers/' + customerId + '/subscription/cancel','post',{}, true);
-        };
-
-
-        sdk.getSubscription = function(customerId) {
-
-          return sdk.v2('/api/v2/customers/' + customerId+'/subscription','get',{}, true);
-        };
-
-        sdk.getInvites = function(customerId) {
-
-            return sdk.v2('/api/v2/customers/' + customerId+'/invites','get',{}, true);
-
-        }
-
-
-        sdk.getCustomerById = function(customerId) {
-            return sdk.v2('/api/v2/customers/' + customerId,'get',{}, true);
-        };
-
-        sdk.getUsersByCustomer = function(customerId) {
-            return sdk.v2('/api/v2/customers/' + customerId+'/users','get',{}, true);
-        };
-
-        sdk.getUsersByCustomerWithRoles = function(customerId) {
-            return sdk.v2('/api/v2/customers/' + customerId+'/users/roles','get',{}, true);
-        };
-
-
-        sdk.createTeam = function(customer) {
-
-            return sdk.v2('/api/v2/customers','post',customer, true);
-
-        };
-
-        sdk.createStripeSubscription = function(customerId, plan, token, coupon) {
-
-            return sdk.v2('/api/v2/customers/' + customerId + '/subscribe','post',{
-              plan: plan,
-              token: token,
-              coupon: coupon,
-            }, true);
-
-        };
-
-        sdk.changeStripeSubscription = function(customerId, plan) {
-
-            return sdk.v2('/api/v2/customers/' + customerId + '/subscribe','put',{
-              plan: plan,
-            }, true);
-
-        };
-
-        sdk.updateStripePayment = function(customerId, token) {
-
-            return sdk.v2('/api/v2/customers/' + customerId + '/subscribe','put',{
-              token: token,
-            }, true);
-
-        };
-
-
-        //======================================================================
-        // BotService
-        //======================================================================
-        sdk.getBotsByCustomer = function(customerId) {
-
-          return sdk.v2('/api/v2/customers/' + customerId + '/bots', 'get', {}, true);
-
-        };
-
-        sdk.getBotByID = function(botID) {
-
-            return sdk.v2('/api/v2/bots/' + botID, 'get', {}, true);
-
-        };
-
-
-        sdk.getBotHash = function(botID) {
-          var uri = '/app/bots/' + botID + '/hash';
-          var method ='sdk.getBotHash';
-          return sdk.apiCall(method, uri, 'get', {}, true);
-        };
-
-        sdk.createBot = function(customerId, bot) {
-            return sdk.v2('/api/v2/customers/' + customerId + '/bots', 'post', bot, true);
-        };
-
-        sdk.removeBot = function(bot) {
-            return sdk.v2('/api/v2/customers/' + bot.customerId + '/bots/'+bot._id, 'delete', {}, true);
-        };
-
-        sdk.updateBot = function(bot) {
-            // const method = "sdk.updateBot";
-            // var uri = AUTH_SERVICE + '/bots/' + bot.id;
-
-            var opts = {
-                name: bot.name,
-                description: bot.description,
-                // platform: bot.platform,
-                console_enabled: bot.console_enabled,
-                settings: bot.settings,
-            }
-
-            return sdk.v2('/api/v2/bots/' + bot._id, 'put', opts, true);
-        }
-
-        sdk.resetToken = function(bot_id) {
-
-          return sdk.v2('/api/v2/bots/' + bot_id + '/resetToken', 'put',{}, true);
-        };
-
-        // FIX THIS
-        // this should only return customers in which userId is an ADMIN
-        // but since we do not currently have the role stored... there's no way to do this!
-        sdk.getCustomersByAdmin = function(userId) {
-            return sdk.v2('/api/v2/users/' + userId + '/customers','get',{},true);
-        };
-
-        sdk.getCustomersByUser = function(userId) {
-            return sdk.v2('/api/v2/users/' + userId + '/customers','get',{},true);
-        };
-
-        sdk.updateCustomer = function(customer) {
-            const method = "sdk.updateCustomer";
-            var uri = AUTH_SERVICE + '/customers/' + customer._id;
-            var opts = {
-                name: customer.name,
-                description: customer.description,
-                invitationSent: customer.invitationSent,
-                avatarURL: customer.avatarURL,
-                settings: customer.settings,
-            }
-
-            return sdk.v2('/api/v2/customers/' + customer._id,'put',opts,true);
-        }
 
         //======================================================================
         // commandService
         //======================================================================
         sdk.getCommandById = function(botId, id) {
-            return sdk.v2('/api/v1/commands/name','post',{command: id}, true);
+            return sdk.v2('/admin/api/script','post',{command: id}, true);
         };
 
         sdk.getCommandByName = function(botId, id) {
-            return sdk.v2('/api/v1/commands/name','post',{command: id}, true);
+            return sdk.v2('/admin/api/script','post',{command: id}, true);
         };
 
 
         sdk.getCommandsByBot = function(id) {
 
-            return sdk.v2('/api/v1/commands/list','get',{}, true);
+            return sdk.v2('/admin/api/scripts','get',{}, true);
 
-        };
-
-        sdk.addCommand = function(command) {
-            return sdk.v2('/api/v2/bots/' + command.botId+'/commands','post',command, true);
         };
 
         sdk.removeCommand = function(bot_id, command) {
-          const method = "sdk.removeCommand";
           command.deleted = true;
-          // return sdk.v2('/api/v2/commands/' + command._id,'put',{deleted:true}, true);
-          var uri = '/api/v2/bots/' + bot_id + '/commands/' + command._id;
+          var uri = '/admin/api/scripts/' + command._id;
           return sdk.v2(uri, 'put',{deleted:true}, true);
         };
 
         sdk.saveCommand = function(command) {
-          const method = "sdk.saveCommand";
 
           var cloned = JSON.parse(JSON.stringify(command));
           var clean_script = cloned.script;
@@ -4120,8 +3773,6 @@ angular.module('howdyPro').factory('sdk', ['$cookieStore', '$http', '$q', functi
                     delete clean_script[t].script[m].conditional.validators;
                   }
 
-                  // console.log('clean: ', clean_script[t].script[m]);
-
                   // remove selectable threads from the complete actions
                   var last_script = clean_script[t].script[clean_script[t].script.length-1]
                   if(last_script.action === "execute_script"){
@@ -4129,514 +3780,15 @@ angular.module('howdyPro').factory('sdk', ['$cookieStore', '$http', '$q', functi
                       delete last_script.selected_scripts_threads
                     }
                   }
-
-                  // console.log('last_script: ', last_script);
               }
           }
 
 
           cloned.script = clean_script;
-          // console.log('cloned.script: ', cloned.script);
 
-          return sdk.v2('/save','post',cloned, true);
+          return sdk.v2('/admin/save','post',cloned, true);
 
         };
 
         return sdk;
     }]);
-
-// angular.module('botkit.scriptui',[]).
-//     directive('scriptui', ['$cookies', function($cookies) {
-//       return {
-//           restrict: 'A',
-//           scope: {
-//               'script': '=',
-//               'features': '='
-//           },
-//           templateUrl: '/js/partials/scriptui.html',
-//           controller: ['$scope','$sce', '$location', '$anchorScroll', function($scope,$sce,$location, $anchorScroll) {
-//
-//               $scope.mode = 'script';
-//
-//
-//
-//               $scope.addAlternate = function(line) {
-//                   line.text.push('...');
-//               };
-//
-//               $scope.deleteAlternate = function(line, index) {
-//                   line.text.splice(index,1);
-//               };
-//
-//               $scope.addAttachment = function(msg) {
-//                   if (!msg.attachments) {
-//                       msg.attachments = [];
-//                   }
-//
-//                   msg.attachments.push({
-//                       actions:[],
-//                       fields: [],
-//                   });
-//
-//                   $scope.$emit('scriptui-save');
-//
-//               }
-//
-//               $scope.deleteAttachment = function(message, index) {
-//                   message.attachments.splice(index,1);
-//                   $scope.$emit('scriptui-save');
-//
-//               }
-//
-//               $scope.deleteButton = function(attachment, index) {
-//                   attachment.actions.splice(index,1);
-//                   $scope.$emit('scriptui-save');
-//
-//               }
-//
-//               $scope.deleteField = function(attachment, index) {
-//                   attachment.fields.splice(index,1);
-//                   $scope.$emit('scriptui-save');
-//
-//               }
-//
-//
-//
-//
-//               $scope.setTopic = function(topic) {
-//
-//                   var current = $scope.topic ? $scope.topic.topic : '';
-//                   if (current == topic && topic != 'default') {
-//                       // no change
-//                       return;
-//                   }
-//
-//                   for (var t = 0; t < $scope.script.script.length; t++) {
-//                       // reset editable status
-//                       $scope.script.script[t].editable = false;
-//
-//                       if ($scope.script.script[t].topic == topic) {
-//                           $scope.topic = $scope.script.script[t];
-//                       }
-//                   }
-//
-//
-//                   $scope.$emit('scriptui-topicset', $scope.topic);
-//                   $scope.processGroups();
-//               };
-//
-//               $scope.toggleQuestion = function(line) {
-//                   if (line.collect) {
-//                       line.collect = null;
-//                   } else {
-//                       $scope.convertToQuestion(line);
-//                   }
-//
-//                   $scope.processGroups();
-//               };
-//
-//               $scope.listVariables = function() {
-//
-//                   return new Promise(function(resolve, reject) {
-//
-//                       var vars = {};
-//
-//                       for (var t = 0; t < $scope.script.script.length; t++) {
-//
-//                           var topic = $scope.script.script[t];
-//                           for (var l = 0; l < topic.script.length; l++) {
-//                               if (topic.script[l].collect) {
-//                                   vars[topic.script[l].collect.key] = 1;
-//                               }
-//                           }
-//                       }
-//
-//                       var list = [];
-//                       for (var key in vars) {
-//                           list.push(key);
-//                       }
-//                       resolve(list);
-//
-//                   });
-//               };
-//
-//               $scope.convertToQuestion = function(line) {
-//
-//                   $scope.listVariables().then(function(keys) {
-//
-//                       var keyname = null;
-//
-//                       // if a list of predefined variables is NOT present, autogenerate
-//                       if (!$scope.script.variables) {
-//                           // generate a new key name
-//                           keyname = 'question_' + (keys.length + 1);
-//
-//                           // ensure it is unique (maybe someone deleted another question)
-//                           var cursor = keys.length;
-//                           while (keys.filter(function(i) { return (i == keyname) }).length) {
-//                               cursor++;
-//                               keyname = 'question_' + (cursor + 1);
-//                           }
-//                       }
-//
-//                       line.collect = {
-//                           key: keyname,
-//                           options: [
-//                               {
-//                                   default: true,
-//                                   pattern: 'default',
-//                                   action: 'next'
-//                               }
-//                           ]
-//                       };
-//
-//                       line.focused_user = true;
-//                       $scope.$apply();
-//                       //$scope.focusUser(line);
-//                       $scope.processGroups();
-//                   });
-//
-//               };
-//
-//               $scope.removeOption = function(line, index) {
-//                   line.collect.options.splice(index,1);
-//               };
-//
-//               $scope.addLine = function(new_line) {
-//                   if (new_line) {
-//                       // add the line of dialog
-//
-//                       var msg = {
-//                           text: [new_line],
-//                       };
-//
-//                       if (msg.text[0].match(/\?$/i)) {
-//                           $scope.convertToQuestion(msg);
-//                         //   msg.collect = {
-//                         //       options: [{
-//                         //          default: true,
-//                         //          action: 'next',
-//                         //      }]
-//                         //  }
-//                       }
-//
-//                       $scope.topic.script.splice(-1,0,msg);
-//
-//                       $scope.processGroups();
-//
-//                       // scroll this card into view
-//                       $location.hash('card' + ($scope.topic.script.length - 1));
-//                       $anchorScroll();
-//
-//                   }
-//               };
-//
-//               $scope.removeLineAt = function(index) {
-//                   if (confirm('Remove this line?')) {
-//                       $scope.topic.script.splice(index,1);
-//                       $scope.processGroups();
-//                       //$scope.$apply();
-//                   };
-//               };
-//
-//               $scope.addLineAt = function(index, text) {
-//                   if ($scope.unfocus()) {
-//                       $scope.topic.script.splice(index,0,{
-//                           text: [text || ''],
-//                       });
-//                       $scope.processGroups();
-//
-//                       $scope.focus($scope.topic.script[index]);
-//                   }
-//               };
-//
-//             //   $scope.triggerKeypress = function(e) {
-//             //       if (e.keyCode == 13) {
-//             //           $scope.addTrigger();
-//             //           e.preventDefault();
-//             //           return false;
-//             //       }
-//             //   };
-//
-//             //   $scope.addTrigger = function() {
-//               //
-//             //       if ($scope.new_trigger_pattern && $scope.new_trigger_type) {
-//               //
-//             //           if (!$scope.script.triggers) {
-//             //               $scope.script.triggers = [];
-//             //           }
-//               //
-//             //           $scope.script.triggers.push({
-//             //               pattern: $scope.new_trigger_pattern,
-//             //               type: $scope.new_trigger_type,
-//             //           });
-//               //
-//             //           $scope.save();
-//               //
-//             //           $scope.new_trigger_pattern = '';
-//             //       } else {
-//             //           alert('Please specify a trigger pattern');
-//             //       }
-//               //
-//             //   };
-//               //
-//             //   $scope.deleteTrigger = function(index) {
-//             //       if (confirm('Remove this trigger?')) {
-//             //           $scope.script.triggers.splice(index,1);
-//             //           $scope.save();
-//             //       }
-//             //   }
-//
-//               $scope.rendered = function(txt) {
-//                   var rendered = txt.replace(/\{\{([\w\.\_\d]+)\}\}/igm, '<span class=\"variable\">$1</span>');
-//                   rendered = rendered.replace(/\{(.*?)\}/igm,function(matches) {
-//
-//                       var options = matches.replace(/^\{/,'').replace(/\}$/,'').split('|');
-//                       return '<span class="list">' + options[0] + '</span>';
-//
-//                   }); // "<span class=\"list\">One of: ($1)</span>");
-//
-//                   return $sce.trustAsHtml(rendered);
-//               };
-//
-//               $scope.navigate = function(branch, $event) {
-//                   $event.stopPropagation();
-//                   if (branch == 'stop' || branch == 'next' || branch == 'repeat' || branch == 'complete') {
-//                       return;
-//                   } else {
-//                       $scope.setTopic(branch);
-//                   }
-//               }
-//
-//               $scope.renderOption = function(option,count) {
-//
-//                   var rendered = '';
-//
-//                   if (option.default) {
-//                       if (count==1) {
-//                           rendered = '...and then ';
-//                       } else {
-//                           rendered = '...otherwise, ';
-//                       }
-//                   } else {
-//                       rendered = '...and if bot hears "' + option.pattern + '," ';
-//                   }
-//
-//                   switch (option.action) {
-//
-//                       case 'next':
-//                           rendered = rendered + ' <span class="bold">continue to next message</span>';
-//                           break;
-//                       case 'stop':
-//                           rendered = rendered + ' <span class="bold">stop: mark failed</span>';
-//                           break;
-//                       case 'timeout':
-//                           rendered = rendered + ' <span class="bold">stop: mark timed out</span>';
-//                           break;
-//                       case 'repeat':
-//                           rendered = rendered + ' <span class="bold">repeat this line</span>';
-//                           break;
-//                       case 'complete':
-//                           rendered = rendered + ' <span class="bold">stop: mark successful</span>';
-//                           break;
-//                       default:
-//                           rendered = rendered + ' <span class="bold">jump to thread </span><span class="branch-title">' + option.action +'</span>';
-//                   }
-//
-//
-//
-//                   return $sce.trustAsHtml(rendered);
-//               }
-//
-//               $scope.renderLastAction = function(action) {
-//
-//                   var rendered = 'And then, ';
-//                   switch (action) {
-//
-//                       case 'next':
-//                           rendered = rendered + ' <span class="bold">continue to next message</span>';
-//                           break;
-//                       case 'stop':
-//                           rendered = rendered + ' <span class="bold">stop: mark failed</span>';
-//                           break;
-//                       case 'timeout':
-//                           rendered = rendered + ' <span class="bold">stop: mark timed out</span>';
-//                           break;
-//                       case 'repeat':
-//                           rendered = rendered + ' <span class="bold">repeat this line</span>';
-//                           break;
-//                       case 'complete':
-//                           rendered = rendered + ' <span class="bold">stop: mark successful</span>';
-//                           break;
-//                       default:
-//                           rendered = rendered + ' <span class="bold">jump to thread <span class="branch-title">' + action +'</span></span>';
-//                   }
-//                   return $sce.trustAsHtml(rendered);
-//               }
-//
-//               $scope.removeAction = function(line) {
-//                   delete(line.action);
-//               };
-//
-//               $scope.isUniqueBranch = function(name) {
-//
-//                   for (var t = 0; t < $scope.script.script.length; t++) {
-//                       if ($scope.script.script[t].topic == name) {
-//                           return false;
-//                       }
-//                   }
-//
-//                   return true;
-//               };
-//
-//               $scope.addBranchAsAction = function(newbranch, line) {
-//
-//                   if ($scope.isUniqueBranch(newbranch)) {
-//                       $scope.script.script.push({
-//                           topic: newbranch,
-//                           script: [
-//                               {
-//                                   text: ['This is ' + newbranch],
-//                               },
-//                               {
-//                                   action: 'complete',
-//                               }
-//                           ]
-//                       });
-//
-//                       line.action = newbranch;
-//                   } else {
-//                       alert('That thread name is already in use');
-//                   }
-//               };
-//
-//
-//               $scope.unfocus = function() {
-//                   for (var l = 0; l < $scope.topic.script.length; l++) {
-//                       // WAIT!!! Does this script have text?
-//                       // if not, do not allow it to be collapsed.
-//                       if ($scope.topic.script[l].focused && $scope.topic.script[l].text && !$scope.topic.script[l].text[0]) {
-//                           $scope.topic.script[l].invalid = true;
-//                           return false;
-//                       }
-//                       $scope.topic.script[l].invalid = false;
-//
-//                       // does it have a proper variable name?
-//                       if ($scope.topic.script[l].focused_user && $scope.topic.script[l].collect && !$scope.topic.script[l].collect.key) {
-//                           $scope.topic.script[l].invalid_key = true;
-//                           return false;
-//                       }
-//                       $scope.topic.script[l].invalid_key = false;
-//
-//                       // are all options proper?
-//                       //
-//                       if ($scope.topic.script[l].focused_user && $scope.topic.script[l].collect && $scope.topic.script[l].collect.options && $scope.topic.script[l].collect.options.length) {
-//                         var options_valid = true;
-//                         for (var o = 0; o < $scope.topic.script[l].collect.options.length; o++) {
-//                               if (
-//                                   !$scope.topic.script[l].collect.options[o].default &&
-//                                   (!$scope.topic.script[l].collect.options[o].pattern || !$scope.topic.script[l].collect.options[o].action)
-//                               ) {
-//                                   $scope.topic.script[l].collect.options[o].invalid = true;
-//                                   options_valid = false;
-//                               } else {
-//                                   delete($scope.topic.script[l].collect.options[o].invalid);
-//                               }
-//                           }
-//
-//                           if (!options_valid) {
-//                               return false;
-//                           }
-//                       }
-//
-//
-//                       $scope.topic.script[l].focused = false;
-//                       $scope.topic.script[l].focused_user = false;
-//                   }
-//                 //   getVariableList($scope.script.script).then(function(tokens) {
-//                 //       $scope.variable_tokens = tokens;
-//                 //       $scope.$apply();
-//                 //   });
-//
-//                   return true;
-//
-//               }
-//
-//               $scope.focus = function(line) {
-//                   if (!line.focused) {
-//                       if ($scope.unfocus()) {
-//                           line.focused = true;
-//                       }
-//                   }
-//               };
-//
-//               $scope.focusUser = function(line) {
-//                   if (!line.focused_user) {
-//                       if ($scope.unfocus()) {
-//                           line.focused_user = true;
-//                       }
-//                   }
-//               };
-//
-//
-//               $scope.blur = function(line) {
-//                   line.focused = false;
-//               };
-//
-//               $scope.setHelp = function(help_topic) {
-//                   $scope.$emit('scriptui-help',help_topic);
-//               }
-//
-//               $scope.processGroups = function() {
-//
-//                   var in_group = false;
-//
-//                 // add classes to groupings of messages so they can be presented slightly differently
-//                 // basically we want to hide the bot icon til the last message if he is sending more than one
-//                 //
-//                 for (var m = 0; m < $scope.topic.script.length; m++) {
-//                     $scope.topic.script[m].first_in_group = false;
-//                     $scope.topic.script[m].last_in_group = false;
-//                     $scope.topic.script[m].middle_of_group = false;
-//
-//                     if (!in_group) {
-//                         $scope.topic.script[m].first_in_group = true;
-//                         in_group = true;
-//                     }
-//
-//                     if ($scope.topic.script[m].collect ||
-//                     (m == $scope.topic.script.length - 2)) { // why -2? final action counts
-//                         $scope.topic.script[m].last_in_group = true;
-//                         in_group = false;
-//
-//                     }
-//
-//                     if (in_group && !$scope.topic.script[m].first_in_group && !$scope.topic.script[m].last_in_group) {
-//                         $scope.topic.script[m].middle_of_group = true;
-//                     }
-//
-//                 }
-//
-//             }
-//
-//               $scope.$on('scriptui-blur',function() {
-//                   $scope.unfocus();
-//               });
-//
-//               $scope.$on('scriptui-addline',function($event,new_line) {
-//
-//                   console.log('ADDING A NEW LINE');
-//                   $scope.addLine(new_line);
-//
-//               });
-//
-//               $scope.$on('scriptui-settopic',function($event,topic) {
-//                   $scope.setTopic(topic);
-//               });
-//
-//               $scope.setTopic('default');
-//
-//
-//           }],
-//       }
-//   }]);
