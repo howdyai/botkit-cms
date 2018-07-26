@@ -1,5 +1,5 @@
 {
-  "name": "studio-api-only",
+  "name": "ministudio",
   "version": "1.0.0",
   "description": "",
   "main": "src/api.js",
