@@ -2,8 +2,14 @@ This project will serve as a drop-in replacement for users of Botkit Studio.
 
 ## Get Script Content
 
-...
+This project is designed to be used in conjunction with data exported from a Botkit Studio account.  To acquire this data file, follow the instructions below:
 
+* Login to your Botkit Studio account.  
+* Navigate to a specific bot, then navigate to that bot's "Scripts" tab.
+* Click the "Export" button located in the upper right hand corner of the script list.
+* De-select any scripts you do not want to include
+* Click the "Export N" button at the bottom of the screen.
+* Click "Download" to download the file, or copy paste the content of the window into a local file named `scripts.json`
 
 ## Add a local script service to a Botkit app
 
@@ -12,6 +18,8 @@ First, npm install this:
 ```bash
 npm install --save howdylabs/ministudio
 ```
+
+[Get your existing scripts](#get-script-content), and put the resulting `scripts.json` in the main folder of your bot project.
 
 Then, add to your's main file, just after defining your controller object
 
@@ -75,6 +83,21 @@ Set the variable to a space separated list of user:password pairs. Users will be
 You can lock down access to the API by specifying one or more access tokens in the TOKENS environment variable (or in the .env file).  
 
 If any tokens are specified, access to the API requies a valid value in the `access_token` url query parameter.  Botkit will automatically use the Botkit Studio `studio_token` value for this.
+
+## Building Project
+
+Modifications to the front end application or css should be done to their original source files, then compiled by the build process. To build the Javascript and CSS files from their source locations, run the following command:
+
+```bash
+gulp build
+```
+
+The front end editor application included in this project is built with Angular. The source code of the this application is broken up into several component files in the `js/` folder. These are compiled into a single source file and moved to a final home at `public/js/scripts.js`  by the build process.
+
+The CSS is controlled by SASS files in the `sass/` folder. These are compiled into a single source file and moved to a final home at `public/css/new.css`  by the build process.
+
+
+
 
 
 TODO:
