@@ -33,7 +33,11 @@ CONS: script content now has to live in bot repo, requires a restart for content
 
 Clone this repo and set it up on a public host somewhere. Clicking the Glitch link below will do this for you.
 
-Then, modify your Botkit app to include a pointer to this new service.
+[Get your existing scripts](#get-script-content), and put the resulting `scripts.json` file in the `data/` folder.
+
+Launch the app, then load it in your web browser. You should see a link to the editor screen.
+
+Make sure your new service is available at a public address on the web. Then, modify your Botkit app to include a pointer to this new service.
 
 ```
 var controller = Botkit.platform({
@@ -47,8 +51,26 @@ PROS: content edits that happen here don't require restart or redeploy of the bo
 
 CONS: a new microservice has to be hosted and operated
 
+### Editor Configuration
 
-### Securing API
+The Botkit dialog editor can be used in one of several different flavors, controlled by the `PLATFORM` environment variable.
+
+| Value | Description
+|--- |---
+| web | Botkit Anywhere mode
+| slack | Slack mode
+| teams | Microsoft Teams mode
+| ciscospark | Cisco Spark / Webex Teams mode
+| facebook | Facebook mode
+
+
+### Securing Admin / Editor Access
+
+Access can be limited and users can be controlled using the `USERS` environment variable.
+
+Set the variable to a space separated list of user:password pairs. Users will be shown a login prompt when accessing any url within the `/admin/` url.
+
+### Securing API Access
 
 You can lock down access to the API by specifying one or more access tokens in the TOKENS environment variable (or in the .env file).  
 
