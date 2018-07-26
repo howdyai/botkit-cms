@@ -9,11 +9,11 @@ This project will serve as a drop-in replacement for users of Botkit Studio.
 
 First, npm install this:
 
-```
+```bash
 npm install --save howdylabs/ministudio
 ```
 
-then, add to your's main file, just after defining your controller object
+Then, add to your's main file, just after defining your controller object
 
 ```js
 var studio = require('ministudio')();
