@@ -58,7 +58,7 @@ $selected-bot-background-color: #fff;
 }
 @mixin sidebar-topics {
     h5 {
-        font-family: "GT-Haptik-Light",sans-serif;
+        font-family: $headline-font;
         font-weight: 300;
         font-size: 1.4rem;
         padding: $unit $unit $unit $spacing-unit /2;
@@ -145,7 +145,7 @@ $selected-bot-background-color: #fff;
             margin-right: $unit * 2;
         }
         .bot-name {
-            font-family: "GT-Haptik-Light",sans-serif;
+            font-family: $headline-font;
             font-weight: bold;
             font-size: 1.4rem;
             line-height: 40px;

@@ -1,6 +1,6 @@
 // sdk.js
 
-angular.module('howdyPro').factory('sdk', ['$cookieStore', '$http', '$q', function($cookieStore, $http, $q) {
+angular.module('howdyPro').factory('sdk', ['$http', '$q', function($http, $q) {
         //======================================================================
         // variables
         //======================================================================

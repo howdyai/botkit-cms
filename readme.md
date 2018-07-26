@@ -8,7 +8,7 @@ This project is designed to be used in conjunction with data exported from a Bot
 * Navigate to a specific bot, then navigate to that bot's "Scripts" tab.
 * Click the "Export" button located in the upper right hand corner of the script list.
 * De-select any scripts you do not want to include
-* Click the "Export N" button at the bottom of the screen.
+* Click the "Export ##" button at the bottom of the screen.
 * Click "Download" to download the file, or copy paste the content of the window into a local file named `scripts.json`
 
 ## Add a local script service to a Botkit app
@@ -122,4 +122,7 @@ The CSS is controlled by SASS files in the `sass/` folder. These are compiled in
 
 TODO:
 
+* move stuff out of bower to cdn where possible
 * support for fallback script
+* deal with id/command/uniqueness
+* delete script

@@ -3,7 +3,7 @@ module.exports = function() {
   var api = {}
   var scripts = [];
   var triggers = [];
-
+  var PATH_TO_SCRIPTS;
 
   api.parseAdminUsers = function(string) {
 
@@ -29,17 +29,18 @@ module.exports = function() {
         return reject(err);
       }
 
+      PATH_TO_SCRIPTS = src;
       api.mapTriggers();
       resolve(scripts);
 
     });
   }
 
-  api.writeScriptsToFile = function(path, new_scripts) {
+  api.writeScriptsToFile = function(new_scripts, alt_path) {
 
     return new Promise(function(resolve, reject) {
       try {
-        require('fs').writeFileSync(path, JSON.stringify(new_scripts,null,2));
+        require('fs').writeFileSync(alt_path || PATH_TO_SCRIPTS, JSON.stringify(new_scripts,null,2));
       } catch(err) {
         return reject(err);
       }

@@ -23,7 +23,6 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.3.2",
     "gulp-util": "^3.0.7",
-    "querystring": "^0.2.0",
-    "studio-api-only": "howdylabs/studio-api-only"
+    "querystring": "^0.2.0"
   }
 }

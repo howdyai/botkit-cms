@@ -1,15 +1,3 @@
-$highlight: #FFFFF0;
-$body-font: "freight-sans-pro",sans-serif;
-$headline-font: "GT-Haptik-Light",sans-serif;
-$headline-oblique-font: 'GT-Haptik-Light-Oblique',sans-serif;
-$purple: #a795ef;
-$green: #b0f0ab;
-$blue: #283ed8;
-$lavender: #bcc4f1;
-$seafoam: #cff4ed;
-$cantaloupe: #eabd91; // $red: #dd99be;
-$white: #FFF;
-$pink: #D8117D;
 
 li,
 p {
@@ -39,7 +27,7 @@ label.buttony {
     border: 1px solid #666;
     text-align: center;
     text-decoration: none;
-    font-family: "GT-Haptik-Light",sans-serif;
+    font-family: $headline-font;
     font-weight: bold;
     letter-spacing: 1px;
     padding: 0.5rem 2rem;
@@ -65,7 +53,7 @@ button {
     // background: #666;
     text-align: center;
     text-decoration: none;
-    font-family: "GT-Haptik-Light",sans-serif;
+    font-family: $headline-font;
     font-weight: bold;
     letter-spacing: 1px;
     line-height: 1;
@@ -121,30 +109,7 @@ button {
         }
     }
 }
-// Light
-@font-face {
-    font-family: 'GT-Haptik-Light';
-    src: url("/assets/webfonts/GT-Haptik-Light.eot");
-    src: url("/assets/webfonts/GT-Haptik-Light.eot?#iefix") format('embedded-opentype'), url("/assets/webfonts/GT-Haptik-Light.woff") format('woff'), url("/assets/webfonts/GT-Haptik-Light.ttf") format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-// Light Oblique
-@font-face {
-    font-family: 'GT-Haptik-Light-Oblique';
-    src: url("/assets/webfonts/GT-Haptik-Light-Oblique.eot");
-    src: url("/assets/webfonts/GT-Haptik-Light-Oblique.eot?#iefix") format('embedded-opentype'), url("/assets/webfonts/GT-Haptik-Light-Oblique.woff") format('woff'), url("/assets/webfonts/GT-Haptik-Light-Oblique.ttf") format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-// Medium
-@font-face {
-    font-family: 'GT-Haptik-Medium';
-    src: url("/assets/webfonts/GT-Haptik-Medium.eot");
-    src: url("/assets/webfonts/GT-Haptik-Medium.eot?#iefix") format('embedded-opentype'), url("/assets/webfonts/GT-Haptik-Medium.woff") format('woff'), url("/assets/webfonts/GT-Haptik-Medium.ttf") format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
+
 
 body,
 html {
@@ -768,7 +733,7 @@ td.trend_down {
     }
 
     h5 {
-        font-family: "GT-Haptik-Light",sans-serif;
+        font-family: $headline-font;
         color: $purple;
         font-size: 1.25rem;
         font-weight: 300;

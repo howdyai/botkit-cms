@@ -1,6 +1,6 @@
 /* this is the main app.js file */
 
-var app = angular.module('howdyPro', ['ngCookies','ngclipboard','dndLists','monospaced.elastic', 'color.picker']);
+var app = angular.module('howdyPro', ['ngCookies','ngclipboard','dndLists','monospaced.elastic']);
 
 app.config(function($interpolateProvider) {
     $interpolateProvider.startSymbol('{%');
@@ -3540,7 +3540,7 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
 // sdk.js
 
-angular.module('howdyPro').factory('sdk', ['$cookieStore', '$http', '$q', function($cookieStore, $http, $q) {
+angular.module('howdyPro').factory('sdk', ['$http', '$q', function($http, $q) {
         //======================================================================
         // variables
         //======================================================================

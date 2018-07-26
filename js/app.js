@@ -1,6 +1,6 @@
 /* this is the main app.js file */
 
-var app = angular.module('howdyPro', ['ngCookies','ngclipboard','dndLists','monospaced.elastic', 'color.picker']);
+var app = angular.module('howdyPro', ['ngCookies','ngclipboard','dndLists','monospaced.elastic']);
 
 app.config(function($interpolateProvider) {
     $interpolateProvider.startSymbol('{%');

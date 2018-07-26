@@ -65,10 +65,21 @@ $botkit-brand-color: $main-blue; //$cantelope;
 $botkit-studio-brand-color: $purple;
 $botkit-light: lighten($botkit-studio-brand-color, 10%);
 $botkit-dark: darken($botkit-studio-brand-color, 10%);
-$body-font: "freight-sans-pro",sans-serif;
-$headline-font: "GT-Haptik-Light",sans-serif;
-$headline-oblique-font: 'GT-Haptik-Light-Oblique',sans-serif;
 $transition-speed: .2s;
+
+
+$highlight: #FFFFF0;
+$body-font: "helvetica",sans-serif;
+$headline-font: "helvetica",sans-serif;
+$headline-oblique-font: 'helvetica',sans-serif;
+$purple: #a795ef;
+$green: #b0f0ab;
+$blue: #283ed8;
+$lavender: #bcc4f1;
+$seafoam: #cff4ed;
+$cantaloupe: #eabd91; // $red: #dd99be;
+$white: #FFF;
+$pink: #D8117D;
 
 @mixin truncate-ul($lineHeight: 30px, $lineCount: 6, $bgColor: white) {
     //display: -webkit-box;
