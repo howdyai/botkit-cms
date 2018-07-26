@@ -59,6 +59,26 @@ PROS: content edits that happen here don't require restart or redeploy of the bo
 
 CONS: a new microservice has to be hosted and operated
 
+### Configuration
+
+Options for this service are controlled via environment variables, which can be stored in a `.env` file at the project root.
+
+Here is an example `.env` file:
+
+```
+# Chat platform
+# PLATFORM=[slack,teams,ciscospark,web,facebook]
+PLATFORM=slack
+
+# authentication tokens for Bot users
+# TOKENS=123 456
+TOKENS=youwillneverguessmysecretbottoken
+
+# Admin users for UI
+# USERS=username:password username2:password2 username3:password3
+USERS=admin:123secret
+```
+
 ### Editor Configuration
 
 The Botkit dialog editor can be used in one of several different flavors, controlled by the `PLATFORM` environment variable.
