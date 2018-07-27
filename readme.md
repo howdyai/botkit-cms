@@ -11,32 +11,6 @@ This project is designed to be used in conjunction with data exported from a Bot
 * Click the "Export ##" button at the bottom of the screen.
 * Click "Download" to download the file, or copy paste the content of the window into a local file named `scripts.json`
 
-## Add a local script service to a Botkit app
-
-First, npm install this:
-
-```bash
-npm install --save howdylabs/ministudio
-```
-
-[Get your existing scripts](#get-script-content), and put the resulting `scripts.json` in the main folder of your bot project.
-
-Then, add to your's main file, just after defining your controller object
-
-```js
-var studio = require('ministudio')();
-studio.useLocalStudio(controller);
-
-studio.loadScriptsFromFile(__dirname + '/scripts.json').catch(function(err) {
-  console.error('Error loading scripts', err);
-});
-```
-
-PROS: no external api calls
-
-CONS: script content now has to live in bot repo, requires a restart for content changes
-
-
 ## Create a replacement API microservice
 
 Clone this repo and set it up on a public host somewhere. Clicking the Glitch link below will do this for you.
@@ -115,6 +89,32 @@ gulp build
 The front end editor application included in this project is built with Angular. The source code of the this application is broken up into several component files in the `js/` folder. These are compiled into a single source file and moved to a final home at `public/js/scripts.js`  by the build process.
 
 The CSS is controlled by SASS files in the `sass/` folder. These are compiled into a single source file and moved to a final home at `public/css/new.css`  by the build process.
+
+
+## Alternate: Use this as a component in your Botkit App
+
+First, npm install this:
+
+```bash
+npm install --save howdylabs/ministudio
+```
+
+[Get your existing scripts](#get-script-content), and put the resulting `scripts.json` in the main folder of your bot project.
+
+Then, add to your's main file, just after defining your controller object
+
+```js
+var studio = require('ministudio')();
+studio.useLocalStudio(controller);
+
+studio.loadScriptsFromFile(__dirname + '/scripts.json').catch(function(err) {
+  console.error('Error loading scripts', err);
+});
+```
+
+PROS: no external api calls
+
+CONS: script content now has to live in bot repo, requires a restart for content changes
 
 
 

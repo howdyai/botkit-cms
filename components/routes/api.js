@@ -77,6 +77,15 @@ module.exports = function(webserver, api) {
         })
       });
 
+
+      webserver.get('/api/v2/bots/identify', function(req, res) {
+        res.json({
+          name: process.env.BOT_NAME || 'Botkit Bot',
+          platforms: [{type:(process.env.PLATFORM || 'web')}]
+        })
+      });
+
+
       // receives: command, user
       webserver.post('/api/v1/stats', function(req, res) {
 

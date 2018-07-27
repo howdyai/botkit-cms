@@ -38,6 +38,14 @@ module.exports = function(api, controller) {
     return api.getScript(text);
   };
 
+  controller.studio.identify = function() {
+    return new Promise(function(resolve, reject) {
+      resolve({
+        name: process.env.BOT_NAME || 'Botkit Bot',
+        platforms: [{type:(process.env.PLATFORM || 'web')}]
+      });
+    });
+  }
 
   return controller;
 
