@@ -34,6 +34,13 @@ module.exports = function(webserver, api) {
         update.modified = new Date();
         scripts.push(update);
 
+        api.writeScriptsToFile(scripts).then(function() {
+          res.json({
+            success: true,
+            data: update,
+          });
+        });
+
       } else if (new Date(scripts[found].modified) > new Date(update.modified)) {
 
         // if the version in the database was more recently modified, reject this update!
