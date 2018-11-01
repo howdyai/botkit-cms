@@ -16,46 +16,46 @@ app.config(function($interpolateProvider) {
 
 
 app.directive('compile', ['$compile', function ($compile) {
-  return function(scope, element, attrs) {
-    scope.$watch(
-      function(scope) {
-        return scope.$eval(attrs.compile);
-      },
-      function(value) {
-        element.html(value);
-        $compile(element.contents())(scope);
-      }
-   )};
- }]);
+    return function(scope, element, attrs) {
+        scope.$watch(
+            function(scope) {
+                return scope.$eval(attrs.compile);
+            },
+            function(value) {
+                element.html(value);
+                $compile(element.contents())(scope);
+            }
+        )};
+}]);
 
 
- function truncateString(value, max, wordwise, tail) {
-       if (!value) return '';
+function truncateString(value, max, wordwise, tail) {
+    if (!value) return '';
 
-       max = parseInt(max, 10);
-       if (!max) return value;
-       if (value.length <= max) return value;
+    max = parseInt(max, 10);
+    if (!max) return value;
+    if (value.length <= max) return value;
 
-       value = value.substr(0, max);
-       if (wordwise) {
-           var lastspace = value.lastIndexOf(' ');
-           if (lastspace !== -1) {
-             //Also remove . and , so its gives a cleaner result.
-             if (value.charAt(lastspace-1) === '.' || value.charAt(lastspace-1) === ',') {
-               lastspace = lastspace - 1;
-             }
-             value = value.substr(0, lastspace);
-           }
-       }
+    value = value.substr(0, max);
+    if (wordwise) {
+        var lastspace = value.lastIndexOf(' ');
+        if (lastspace !== -1) {
+            //Also remove . and , so its gives a cleaner result.
+            if (value.charAt(lastspace-1) === '.' || value.charAt(lastspace-1) === ',') {
+                lastspace = lastspace - 1;
+            }
+            value = value.substr(0, lastspace);
+        }
+    }
 
-       return value + (tail || ' …');
- }
+    return value + (tail || ' …');
+}
 
 
 app.filter('truncateString', function () {
-         return function (value, max, wordwise, tail) {
-           return truncateString(value, max, wordwise, tail);
-         }
+    return function (value, max, wordwise, tail) {
+        return truncateString(value, max, wordwise, tail);
+    }
 });
 
 app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location', function($scope, $http, $sce, $cookies, sdk, $location) {
@@ -74,13 +74,13 @@ app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location',
 
     $scope.goto = function(url) {
 
-      window.location = url;
+        window.location = url;
 
     }
 
     $scope.open = function(url) {
 
-      window.open(url);
+        window.open(url);
 
     }
 
@@ -115,7 +115,7 @@ app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location',
 
         var cookie_domain = '.botkit.ai';
         if (!$location.host().match(/botkit\.ai/)) {
-          cookie_domain = $location.host();
+            cookie_domain = $location.host();
         }
 
         $cookies.put(key,val,{
@@ -137,13 +137,13 @@ app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location',
 
     $scope.showUpgrade = function(reason) {
 
-      $scope.ui.showUpgrade = true;
-      $scope.$apply();
+        $scope.ui.showUpgrade = true;
+        $scope.$apply();
 
     }
 
     $scope.dismissUpgrade = function() {
-      $scope.ui.showUpgrade = false;
+        $scope.ui.showUpgrade = false;
     }
 
     $scope.handleAjaxError = function(error) {
@@ -152,12 +152,12 @@ app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location',
         if (error.message) {
             error_text = error.message;
         } else if (error.error) {
-          if (error.error == 'account_inactive') {
-            $scope.showUpgrade(error);
-            return;
-          } else {
-            error_text = error.error;
-          }
+            if (error.error == 'account_inactive') {
+                $scope.showUpgrade(error);
+                return;
+            } else {
+                error_text = error.error;
+            }
         } else if (error.data && error.data.error && error.data.error) {
             // details, name, message, stack, status, statusCode
             // details contains a bunch of info, down to the field
@@ -166,9 +166,9 @@ app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location',
             error_text = error.statusText;
         } else {
             if (typeof(error) == 'string') {
-              error_text = error;
+                error_text = error;
             } else {
-              error_text = JSON.stringify(error);
+                error_text = JSON.stringify(error);
             }
         }
 
@@ -198,7 +198,7 @@ app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location',
 
 function getParameterByName(name, url) {
     if (!url) {
-      url = window.location.href;
+        url = window.location.href;
     }
     name = name.replace(/[\[\]]/g, "\\$&");
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),

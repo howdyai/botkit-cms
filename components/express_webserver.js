@@ -21,16 +21,16 @@ module.exports = function(admin_creds) {
     webserver.set('views', __dirname + '/../views/');
 
     var authFunction = basicAuth({
-      users: admin_creds,
-      challenge: true,
+        users: admin_creds,
+        challenge: true,
     });
 
     webserver.use(function(req, res, next) {
-      if (req.url.match(/^\/admin/)) {
-        authFunction(req, res, next);
-      } else {
-        next();
-      }
+        if (req.url.match(/^\/admin/)) {
+            authFunction(req, res, next);
+        } else {
+            next();
+        }
     });
 
 

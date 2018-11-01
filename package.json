@@ -5,10 +5,13 @@
   "main": "src/api.js",
   "scripts": {
     "start": "node index.js",
+    "gulp": "./node_modules/gulp/bin/gulp.js",
+    "eslint": "./node_modules/eslint/bin/eslint.js js/ src/ components/",
+
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "benbrown@gmail.com",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.17.2",
     "debug": "^2.6.8",
@@ -16,13 +19,13 @@
     "express": "^4.15.3",
     "express-basic-auth": "^1.1.5",
     "express-hbs": "^1.0.4",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^2.3.1",
-    "gulp-concat": "^2.6.0",
-    "gulp-nodemon": "^2.1.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.3.2",
-    "gulp-util": "^3.0.7",
     "querystring": "^0.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.7.0",
+    "gulp": "^4.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-sass": "^4.0.2",
+    "gulp-util": "^3.0.7"
   }
 }
