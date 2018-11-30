@@ -116,24 +116,8 @@ module.exports = function(webserver, api) {
     });
 
     webserver.delete('/admin/api/scripts/:id', function(req, res) {
-        api.getScripts().then(function(scripts) {
-
-            // delete script out of list.
-            scripts = scripts.filter((script) => { return (script.id !== req.params.id) });
-
-            // write scripts back to file.
-            api.writeScriptsToFile(scripts).then(function() {
-                res.json({
-                    success: true,
-                    data: scripts,
-                });
-            });
-
-        }).catch(function(err) {
-            if (err) {
-                console.error('Error in getScripts',err);
-            }
-            res.json({});
+        api.deleteScript(req.params.id).then(function(response) {
+            res.json(response);
         })
     });
 

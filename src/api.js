@@ -93,6 +93,36 @@ module.exports = function(db) {
         });
     }
 
+    api.deleteScript = function(command) {
+        return new Promise(function(resolve, reject) {
+            if (db === null) {
+                api.getScripts().then(function(scripts) {
+
+                    // delete script out of list.
+                    scripts = scripts.filter((script) => { return (script.id !== command) });
+        
+                    // write scripts back to file.
+                    api.writeScriptsToFile(scripts).then(function() {
+                        res.json({
+                            success: true,
+                            data: scripts,
+                        });
+                    });
+        
+                }).catch(function(err) {
+                    if (err) {
+                        console.error('Error in getScripts',err);
+                    }
+                    res.json({});
+                })
+            } else {
+                db.collection('scripts').deleteOne({'command': command}, function(err, resp) {
+                    api.getScripts().then(function(response) {
+                        resolve(response);
+                    })
+                })
+            }
+        });
     }
 
     api.saveScripts = function(update) {
