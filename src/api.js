@@ -289,6 +289,12 @@ module.exports = function(db) {
     api.evaluateTriggers = function(message_text) {
 
         return new Promise(function(resolve, reject) {
+            if (db) {
+                api.getScripts().then(function(results) {
+                    scripts = results;
+                    api.mapTriggers();
+                });
+            }
             var res = [];
 
             api.enrichMessage(message_text).then(function(query) {
