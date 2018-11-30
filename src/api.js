@@ -287,22 +287,34 @@ module.exports = function(db) {
     api.getScript = function(name) {
 
         return new Promise(function(resolve, reject) {
-            for (var s = 0; s < scripts.length; s++) {
-                if (name.toLowerCase() == scripts[s].command.toLowerCase()) {
-                    return resolve(scripts[s]);
+            if (db === null) {
+                for (var s = 0; s < scripts.length; s++) {
+                    if (name.toLowerCase() == scripts[s].command.toLowerCase()) {
+                        return resolve(scripts[s]);
+                    }
                 }
+            } else {
+                db.collection('scripts').findOne({ 'command': name.toLowerCase() }, function(err, response) {
+                    return resolve(response);
+                })
             }
-            reject();
+            
         });
     }
 
     api.getScriptById = function(id) {
 
         return new Promise(function(resolve, reject) {
-            for (var s = 0; s < scripts.length; s++) {
-                if (id == scripts[s]._id || id == scripts[s].id) {
-                    return resolve(scripts[s]);
+            if (db === null) {
+                for (var s = 0; s < scripts.length; s++) {
+                    if (id == scripts[s]._id || id == scripts[s].id) {
+                        return resolve(scripts[s]);
+                    }
                 }
+            } else {
+                db.collection('scripts').findOne({ 'command': id }, function(err, response) {
+                    return resolve(response);
+                })
             }
             reject();
         });
