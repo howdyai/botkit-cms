@@ -311,12 +311,26 @@ module.exports = function(db) {
     api.getScripts = function(tag) {
 
         return new Promise(function(resolve, reject) {
-            if (tag) {
-                resolve(scripts.filter(function(s) {
-                    return s.tags ? (s.tags.indexOf(tag) >= 0) : false;
-                }))
+            
+            if (db === null) {
+                if (tag) {
+                    resolve(scripts.filter(function(s) {
+                        return s.tags ? (s.tags.indexOf(tag) >= 0) : false;
+                    }))
+                } else {
+                    resolve(scripts);
+                }
+            } else {
+                if (tag) {
+                    query = {'tag': tag}
+                } else {
+                    query = {}
+                }
+                db.collection('scripts').find(query, function(err, result) {
+                    resolve(result.toArray());
+                });
             }
-            resolve(scripts);
+            
         });
 
     }
