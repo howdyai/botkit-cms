@@ -95,6 +95,87 @@ module.exports = function(db) {
 
     }
 
+    api.saveScripts = function(update) {
+        return new Promise(function(resolve, reject) {
+            if (db === null) {
+                api.getScripts().then(function(scripts) {
+                    var found = false;
+                    for (var s = 0; s < scripts.length; s++) {
+                        if (scripts[s].id === update.id) {
+                            found = s;
+                        }
+                    }
+
+                    if (update.is_fallback) {
+                        scripts.forEach(function(script) {
+                            script.is_fallback = false;
+                        });
+                    }
+        
+                    if (found === false) {
+        
+                        if (!update.id && update._id) {
+                            update.id = update._id;
+                        } else if (!update.id) {
+                            update.id = uuidv4();
+                        }
+                        update.modified = new Date();
+                        scripts.push(update);
+                        api.writeScriptsToFile(scripts).then(function() {
+                            res.json({
+                                success: true,
+                                data: update,
+                            });
+                        });
+        
+                    } else if (new Date(scripts[found].modified) > new Date(update.modified)) {
+        
+                        // if the version in the database was more recently modified, reject this update!
+                        resolve({
+                            success: false,
+                            message: 'Script was modified more recently, please refresh your browser to load the latest',
+                        });
+        
+                    } else {
+        
+                        var original_name = scripts[found].command;
+
+                        scripts[found] = update;
+                        scripts[found].modified = new Date();
+        
+                        if (update.command != original_name) {
+                            handleRenamed(scripts, original_name, update.command).then(function() {
+                                api.writeScriptsToFile(scripts).then(function() {
+                                    res.json({
+                                        success: true,
+                                        data: update,
+                                    });
+                                });
+                            });
+                        } else {
+                            api.writeScriptsToFile(scripts).then(function() {
+                                res.json({
+                                    success: true,
+                                    data: update,
+                                });
+                            });
+                        }
+                    }
+                });
+            } else {
+                update.modified = new Date();
+                delete update._id;
+                db.collection('scripts').updateOne({'command': update.command}, { $set: update }, {upsert: true}, function(err, res) {
+                    resolve({
+                        success: true,
+                        data: update,
+                    });
+                });
+            }
+        });
+    }
+
+
     api.mapTriggers = function() {
         for (var s = 0; s < scripts.length; s++) {
 
@@ -352,6 +433,46 @@ module.exports = function(db) {
 
         var mutagen = require(__dirname + '/botkit_mutagen.js');
         return mutagen(api, botkit);
+    }
+
+    function handleRenamed(scripts, original_name, new_name) {
+        return new Promise(function(resolve, reject) {
+            async.each(scripts, function(command, next) {
+                updateExecScript(command, original_name, new_name, next);
+            }, function() {
+                resolve();
+            })
+        });
+    }
+
+    function updateExecScript(command, original_name, new_name, next) {
+        // need to look at command.script[*].script[*].action
+        // need to look at command.script[*].script[*].collect.options[*].action
+        var dirty = false;
+        for (var t = 0; t < command.script.length; t++) {
+            for (var m = 0; m < command.script[t].script.length; m++) {
+                if (command.script[t].script[m].action == 'execute_script' && command.script[t].script[m].execute && command.script[t].script[m].execute.script == original_name) {
+                    command.script[t].script[m].execute.script = new_name;
+                    dirty = true;
+                }
+
+                if (command.script[t].script[m].collect && command.script[t].script[m].collect.options) {
+                    for (var o = 0; o < command.script[t].script[m].collect.options.length; o++) {
+                        if (command.script[t].script[m].collect.options[o].action=='execute_script' && command.script[t].script[m].collect.options[o].execute && command.script[t].script[m].collect.options[o].execute.script == original_name) {
+                            command.script[t].script[m].collect.options[o].execute.script = new_name;
+                            dirty = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (dirty) {
+            command.modified = new Date();
+            next();
+        } else {
+            next();
+        }
     }
 
     return api;
