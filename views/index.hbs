@@ -49,8 +49,6 @@
                         <nav>
                             &hellip;
                             <ul>
-                                <li><a ng-href="/app/bots/{% bot_id %}/stats#/report/commands/{% command.command %}">Stats</a></li>
-                                <!-- <li><a ng-href="/app/bots/{% bot_id %}/code/{% command._id %}">Code Sample</a></li> -->
                                 <li ng-if="!(bot.settings.fallback_action=='run' && (command._id==bot.settings.fallback_script))"><a ng-click="setAsFallback(command._id)">Use as Fallback</a></li>
                                 <li ng-if="(bot.settings.fallback_action=='run' && (command._id==bot.settings.fallback_script))">Fallback ✔️️</li>
                                 <li class="delete"><a ng-href="#" ng-click="deleteCommand(command)">Delete</li>

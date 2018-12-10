@@ -118,7 +118,8 @@ CONS: script content now has to live in bot repo, requires a restart for content
 
 TODO:
 
-* move stuff out of bower to cdn where possible
 * support for fallback script
 * deal with id/command/uniqueness
-* delete script
+
+* optional mongo support for scripts
+* support for LUIS
