@@ -112,14 +112,60 @@ module.exports = function(webserver, api) {
         })
     });
 
+    function parseLUISEndpoint(endpoint) {
+
+        // endpoint in form of 
+        // https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/<APPID>?subscription-key=<SUBID>&verbose=true&timezoneOffset=-360&q=
+
+        const config = {
+            region: 'westus',
+            app: '',
+            key: '',
+        }
+
+        config.region = endpoint.match(/https\:\/\/(.*?)\.api/)[1];
+        config.app = endpoint.match(/\/apps\/(.*?)\?/)[1];
+        config.key = endpoint.match(/subscription\-key\=(.*?)\&/)[1];
+        config.version = process.env.LUIS_VERSION || "0.1";
+
+        return config;
+
+    }
+
     webserver.get('/admin/api/luisIntents', function(req, res) {
         if (process.env.LUIS_ENDPOINT) {
-            res.json({success: true, data: [{
-                intent: 'foo',
-            }]});
+
+            const luisConfig = parseLUISEndpoint(process.env.LUIS_ENDPOINT);
+            var url = `https://${ config.region }.api.cognitive.microsoft.com/luis/api/v2.0/apps/${ config.app }/versions/${ config.version }/intents?skip=0&take=500`;
+
+            console.log('GET INTENTS ', url);
+
+            var options = {
+                method: 'GET',
+                url: url,
+                headers: {
+                    'Ocp-Apim-Subscription-Key': subscription_key
+                }
+            };
+            request(options, function(err, resp, body) {
+                if (err) {
+                console.error('Error commnicating with LUIS:', err);
+                res.json({success: true, data: []});
+                } else {
+                    var intents = [];
+                    try {
+                    intents = JSON.parse(body);
+                    } catch(err) {
+                    console.error('Error parsing LUIS intents:', err);
+                    }
+                res.json({success: true, data: intents});
+                }                  
+            });
+          
         } else {
             res.json({success: true, data: []});
         }
+
     });
 
     webserver.delete('/admin/api/scripts/:id', function(req, res) {

@@ -82,7 +82,7 @@ module.exports = function() {
             };
 
             // endpoint in the form of 
-            // https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/<APPID>subscription-key=<SUBID>&verbose=true&timezoneOffset=-360&q=
+            // https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/<APPID>?subscription-key=<SUBID>&verbose=true&timezoneOffset=-360&q=
             if (process.env.LUIS_ENDPOINT) {
 
                 var luis_uri = process.env.LUIS_ENDPOINT + query.text;
@@ -131,7 +131,7 @@ module.exports = function() {
                 if (query.intents && query.intents.length) {
                     // check intents first
                     for (var t = 0; t < triggers.length; t++) {
-                        var trigger = triggers[t];
+                        var trigger = triggers[t].trigger;
                         if (trigger.type == 'intent') {
                             for (var i = 0; i < query.intents.length; i++) {
                                 var intent = query.intents[i];
