@@ -196,7 +196,33 @@ module.exports = function() {
                 }
 
                 if (res.length) {
-                    resolve(scripts[res[0]]);
+
+                    // this is the script that will be triggered.
+                    var triggered = scripts[res[0]];
+
+                    // copy entities from LUIS into the conversation script
+                    if (query.entities && query.entities.length) {
+                        query.entities.forEach(function(e) {
+                            var ne = {
+                                name: e.type,
+                                value: e.entity,
+                                type: 'entity'
+                            };
+                            var cv = triggered.variables.filter(function(v) {
+                                return v.name === ne.name && v.value === ne.value && v.type === ne.type;
+                            });
+                            if (cv.length === 0) {
+                                triggered.variables.push(ne);
+                            }
+                        });
+                    }
+
+                    // if LUIS results exist, pass them down to the bot.
+                    if (query.luis) {
+                        triggered.luis = query.luis;
+                    }
+
+                    resolve(triggered);
                 } else {
                     reject();
                 }
