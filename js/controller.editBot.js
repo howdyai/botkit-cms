@@ -377,13 +377,10 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
                 var muxed = {};
                 muxed.command = $scope.commands[x].command;
                 muxed.description = $scope.commands[x].description;
-                // muxed.posthooks = $scope.commands[x].posthooks;
-                // muxed.prehooks = $scope.commands[x].prehooks;
                 muxed.script = $scope.commands[x].script;
                 muxed.triggers = $scope.commands[x].triggers;
                 muxed.variables = $scope.commands[x].variables;
                 muxed.tags = $scope.commands[x].tags;
-
                 $scope.parsed_commands.push(muxed);
             }
         }
