@@ -122,8 +122,6 @@ module.exports = function(webserver, api) {
         }
     });
 
-
-
     webserver.delete('/admin/api/scripts/:id', function(req, res) {
         api.getScripts().then(function(scripts) {
 
