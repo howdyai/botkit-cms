@@ -29,6 +29,12 @@ module.exports = function(webserver, api) {
                 }
             }
             
+            if (update.is_fallback) {
+                scripts.forEach(function(script) {
+                    script.is_fallback = false;
+                });
+            }
+
             if (found === false) {
                 if (!update.id && update._id) {
                     update.id = update._id;

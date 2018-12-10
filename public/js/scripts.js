@@ -637,12 +637,19 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
         $scope.ui.modal_create = true;
     }
 
-    $scope.setAsFallback = function(script_id) {
-
-        $scope.bot.settings.fallback_action = 'run';
-        $scope.bot.settings.fallback_script = script_id;
-        $scope.submitEdit();
-
+    $scope.setAsFallback = function(command) {
+        command.is_fallback = true;
+        $scope.saveCommand(command).then(function() {
+            // update UI
+            $scope.commands.forEach(function(c) {
+                if (c.id !== command.id) {
+                    c.is_fallback = false;
+                }
+            });
+            $scope.$apply();
+        }).catch(function(err) {
+            $scope.handleAjaxError(err);
+        });
     }
 
     $scope.addCommand = function() {

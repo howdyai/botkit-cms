@@ -30,7 +30,7 @@
                     <th ng-if="!ui.export_mode">Actions</th>
                     <th ng-if="ui.export_mode">Export</th>
                 </tr>
-                <tr ng-repeat="command in commands | orderBy: ui.sortField | filter:filterRow" class="ng-class: {selected: ui.export_mode && !command.exclude_from_export, is_fallback: bot.settings.fallback_action=='run' && (command._id==bot.settings.fallback_script)};">
+                <tr ng-repeat="command in commands | orderBy: ui.sortField | filter:filterRow" class="ng-class: {selected: ui.export_mode && !command.exclude_from_export, is_fallback: (command.is_fallback)};">
                     <td>
                         <a ng-href="/admin/edit/{% command.command %}">{% command.command %}</a>
                         <div class="fallback_flag">(Fallback)</div>
@@ -49,8 +49,8 @@
                         <nav>
                             &hellip;
                             <ul>
-                                <li ng-if="!(bot.settings.fallback_action=='run' && (command._id==bot.settings.fallback_script))"><a ng-click="setAsFallback(command._id)">Use as Fallback</a></li>
-                                <li ng-if="(bot.settings.fallback_action=='run' && (command._id==bot.settings.fallback_script))">Fallback ✔️️</li>
+                                <li ng-if="!command.is_fallback"><a ng-click="setAsFallback(command)">Use as Fallback</a></li>
+                                <li ng-if="command.is_fallback">Fallback ✔️️</li>
                                 <li class="delete"><a ng-href="#" ng-click="deleteCommand(command)">Delete</li>
                         </ul>
                     </nav>

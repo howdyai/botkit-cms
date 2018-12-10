@@ -19,8 +19,6 @@ module.exports = function() {
 
     }
 
-
-
     api.loadScriptsFromFile = function(src) {
         return new Promise(function(resolve, reject) {
             try {
@@ -51,8 +49,6 @@ module.exports = function() {
         });
 
     }
-
-
 
     api.mapTriggers = function() {
         for (var s = 0; s < scripts.length; s++) {
