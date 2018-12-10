@@ -2667,7 +2667,7 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     }
 
     $scope.getLUISIntents = function() {
-        sdk.getLuisIntents().then(function(intents) {
+        sdk.getLUISIntents().then(function(intents) {
             $scope.ui.intents = intents;
             $scope.$apply();
         });
