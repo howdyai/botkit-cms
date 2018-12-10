@@ -284,9 +284,6 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
             $scope.ui.import_mode = false;
         }
 
-        // FIX THIS
-        // we need to use async or some other system
-        // so that we can display a confirmation message at the end of the process
         $scope.import_already_exists = [];
 
         async.each($scope.imported_commands, function(command, next) {
@@ -301,6 +298,7 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
                     return e.command === upd_cmd.command;
                 });
                 upd_cmd._id = to_update[0]._id;
+                upd_cmd.id = to_update[0].id;
                 sdk.saveCommand(upd_cmd).then(function() {
                     next();
                 }).catch(function(err) {
@@ -396,21 +394,13 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
 
     };
 
-    // $scope.getCommands = function() {
-    //     sdk.getCommandsByBot($scope.bot_id).then(function(commands) {
-    //
-    //         $scope.commands = commands;
-    //
-    //         $scope.$apply();
-    //     });
-    // };
 
     $scope.deleteCommand = function(command) {
 
         var is_fallback = false;
 
         // WAIT! Is this the fallback script?
-        if ($scope.bot.settings.fallback_action=='run' && (command._id == $scope.bot.settings.fallback_script)) {
+        if ($scope.bot.settings.fallback_action=='run' && (command.id == $scope.bot.settings.fallback_script)) {
             if (!confirm('Deleting this script will disable your bot\'s fallback behavior. Are you sure you want to continue?')) {
                 return false;
             }
