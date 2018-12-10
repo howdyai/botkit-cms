@@ -136,7 +136,7 @@ module.exports = function(webserver, api) {
         if (process.env.LUIS_ENDPOINT) {
 
             const luisConfig = parseLUISEndpoint(process.env.LUIS_ENDPOINT);
-            var url = `https://${ config.region }.api.cognitive.microsoft.com/luis/api/v2.0/apps/${ config.app }/versions/${ config.version }/intents?skip=0&take=500`;
+            var url = `https://${ luisConfig.region }.api.cognitive.microsoft.com/luis/api/v2.0/apps/${ luisConfig.app }/versions/${ luisConfig.version }/intents?skip=0&take=500`;
 
             console.log('GET INTENTS ', url);
 
