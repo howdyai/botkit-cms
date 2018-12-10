@@ -118,8 +118,7 @@ CONS: script content now has to live in bot repo, requires a restart for content
 
 TODO:
 
-* support for fallback script
-* deal with id/command/uniqueness
-
 * optional mongo support for scripts
 * support for LUIS
+
+?? deal with id/command/uniqueness

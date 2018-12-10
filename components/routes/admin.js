@@ -23,7 +23,7 @@ module.exports = function(webserver, api) {
         api.getScripts().then(function(scripts) {
             var found = false;
             for (var s = 0; s < scripts.length; s++) {
-                if (scripts[s].command === update.command) {
+                if (scripts[s].id === update.id) {
                     found = s;
                     console.log('found timestamp', scripts[s].modified, 'incoming timestamp:', update.modified);
                 }
