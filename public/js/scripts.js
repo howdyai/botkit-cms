@@ -16,46 +16,46 @@ app.config(function($interpolateProvider) {
 
 
 app.directive('compile', ['$compile', function ($compile) {
-  return function(scope, element, attrs) {
-    scope.$watch(
-      function(scope) {
-        return scope.$eval(attrs.compile);
-      },
-      function(value) {
-        element.html(value);
-        $compile(element.contents())(scope);
-      }
-   )};
- }]);
+    return function(scope, element, attrs) {
+        scope.$watch(
+            function(scope) {
+                return scope.$eval(attrs.compile);
+            },
+            function(value) {
+                element.html(value);
+                $compile(element.contents())(scope);
+            }
+        )};
+}]);
 
 
- function truncateString(value, max, wordwise, tail) {
-       if (!value) return '';
+function truncateString(value, max, wordwise, tail) {
+    if (!value) return '';
 
-       max = parseInt(max, 10);
-       if (!max) return value;
-       if (value.length <= max) return value;
+    max = parseInt(max, 10);
+    if (!max) return value;
+    if (value.length <= max) return value;
 
-       value = value.substr(0, max);
-       if (wordwise) {
-           var lastspace = value.lastIndexOf(' ');
-           if (lastspace !== -1) {
-             //Also remove . and , so its gives a cleaner result.
-             if (value.charAt(lastspace-1) === '.' || value.charAt(lastspace-1) === ',') {
-               lastspace = lastspace - 1;
-             }
-             value = value.substr(0, lastspace);
-           }
-       }
+    value = value.substr(0, max);
+    if (wordwise) {
+        var lastspace = value.lastIndexOf(' ');
+        if (lastspace !== -1) {
+            //Also remove . and , so its gives a cleaner result.
+            if (value.charAt(lastspace-1) === '.' || value.charAt(lastspace-1) === ',') {
+                lastspace = lastspace - 1;
+            }
+            value = value.substr(0, lastspace);
+        }
+    }
 
-       return value + (tail || ' …');
- }
+    return value + (tail || ' …');
+}
 
 
 app.filter('truncateString', function () {
-         return function (value, max, wordwise, tail) {
-           return truncateString(value, max, wordwise, tail);
-         }
+    return function (value, max, wordwise, tail) {
+        return truncateString(value, max, wordwise, tail);
+    }
 });
 
 app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location', function($scope, $http, $sce, $cookies, sdk, $location) {
@@ -74,13 +74,13 @@ app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location',
 
     $scope.goto = function(url) {
 
-      window.location = url;
+        window.location = url;
 
     }
 
     $scope.open = function(url) {
 
-      window.open(url);
+        window.open(url);
 
     }
 
@@ -115,7 +115,7 @@ app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location',
 
         var cookie_domain = '.botkit.ai';
         if (!$location.host().match(/botkit\.ai/)) {
-          cookie_domain = $location.host();
+            cookie_domain = $location.host();
         }
 
         $cookies.put(key,val,{
@@ -137,13 +137,13 @@ app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location',
 
     $scope.showUpgrade = function(reason) {
 
-      $scope.ui.showUpgrade = true;
-      $scope.$apply();
+        $scope.ui.showUpgrade = true;
+        $scope.$apply();
 
     }
 
     $scope.dismissUpgrade = function() {
-      $scope.ui.showUpgrade = false;
+        $scope.ui.showUpgrade = false;
     }
 
     $scope.handleAjaxError = function(error) {
@@ -152,12 +152,12 @@ app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location',
         if (error.message) {
             error_text = error.message;
         } else if (error.error) {
-          if (error.error == 'account_inactive') {
-            $scope.showUpgrade(error);
-            return;
-          } else {
-            error_text = error.error;
-          }
+            if (error.error == 'account_inactive') {
+                $scope.showUpgrade(error);
+                return;
+            } else {
+                error_text = error.error;
+            }
         } else if (error.data && error.data.error && error.data.error) {
             // details, name, message, stack, status, statusCode
             // details contains a bunch of info, down to the field
@@ -166,9 +166,9 @@ app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location',
             error_text = error.statusText;
         } else {
             if (typeof(error) == 'string') {
-              error_text = error;
+                error_text = error;
             } else {
-              error_text = JSON.stringify(error);
+                error_text = JSON.stringify(error);
             }
         }
 
@@ -198,7 +198,7 @@ app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location',
 
 function getParameterByName(name, url) {
     if (!url) {
-      url = window.location.href;
+        url = window.location.href;
     }
     name = name.replace(/[\[\]]/g, "\\$&");
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
@@ -309,9 +309,9 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
     }
 
     $scope.filter_by_tag = function(tag, event){
-      // console.log('tag: ', tag);
-      $scope.ui.filter = tag;
-      event.preventDefault();
+        // console.log('tag: ', tag);
+        $scope.ui.filter = tag;
+        event.preventDefault();
     };
 
     $scope.clipped = function(e) {
@@ -331,12 +331,12 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
 
         //search by tags
         if(row.tags){
-          var in_tags = row.tags.filter(function(t){
-            return t === $scope.ui.filter;
-          });
-          if(in_tags.length != 0){
-            return true;
-          }
+            var in_tags = row.tags.filter(function(t){
+                return t === $scope.ui.filter;
+            });
+            if(in_tags.length != 0){
+                return true;
+            }
         }
 
         // search name and description first
@@ -385,101 +385,101 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
     };
 
     $scope.updateImportButton = function() {
-      var import_count = 0;
-      var update_count = 0;
-      for (var x = 0; x < $scope.commands_for_import.length; x++) {
-        if (!$scope.commands_for_import[x].exclude_from_import) {
-            if ($scope.commands_for_import[x].already_exist) {
-              update_count++;
-            } else {
-              import_count++;
+        var import_count = 0;
+        var update_count = 0;
+        for (var x = 0; x < $scope.commands_for_import.length; x++) {
+            if (!$scope.commands_for_import[x].exclude_from_import) {
+                if ($scope.commands_for_import[x].already_exist) {
+                    update_count++;
+                } else {
+                    import_count++;
+                }
             }
         }
-      }
 
-      var texts = [];
-      if (import_count > 0) {
-        texts.push('Import ' + import_count);
-      }
-      if (update_count > 0) {
-        texts.push('Update ' + update_count);
-      }
+        var texts = [];
+        if (import_count > 0) {
+            texts.push('Import ' + import_count);
+        }
+        if (update_count > 0) {
+            texts.push('Update ' + update_count);
+        }
 
-      if (texts.length) {
-        $scope.ui.import_button_text =  texts.join(' and ');
-      } else {
-        $scope.ui.import_button_text = 'Import';
-      }
+        if (texts.length) {
+            $scope.ui.import_button_text =  texts.join(' and ');
+        } else {
+            $scope.ui.import_button_text = 'Import';
+        }
 
     }
 
     $scope.getExternalUrl = function(){
-      sdk.getExternalUrl(String($scope.ui.external_url)).then(function(response){
-        var data = response.data;
-        $scope.commands_for_import = [];
-        try{
-          // var parsed = JSON.parse(response.data);
-          data.forEach(function(c){
+        sdk.getExternalUrl(String($scope.ui.external_url)).then(function(response){
+            var data = response.data;
+            $scope.commands_for_import = [];
+            try{
+                // var parsed = JSON.parse(response.data);
+                data.forEach(function(c){
 
 
-            if (!c.command || !c.script || !c.script.length) {
-              throw new Error('Invalid script discovered in imported JSON.');
+                    if (!c.command || !c.script || !c.script.length) {
+                        throw new Error('Invalid script discovered in imported JSON.');
+                    }
+
+                    var demuxed = c;
+                    demuxed.botId = $scope.bot_id;
+                    demuxed.deleted = false;
+                    var existencia = $scope.commands.filter(function(c){
+                        return c.command === demuxed.command;
+                    });
+                    if(existencia.length > 0){
+                        demuxed.already_exist = true;
+                    }else {
+                        demuxed.already_exist = false;
+                    }
+                    $scope.commands_for_import.push(demuxed);
+                    $scope.updateImportButton();
+                });
             }
+            catch(err){
+                // we should do some sort of ajaxy error handling thing here maybe.
+                return $scope.handleAjaxError('Data at URL does not appear to be valid scripts');
 
-            var demuxed = c;
-            demuxed.botId = $scope.bot_id;
-            demuxed.deleted = false;
-            var existencia = $scope.commands.filter(function(c){
-              return c.command === demuxed.command;
-            });
-            if(existencia.length > 0){
-              demuxed.already_exist = true;
-            }else {
-              demuxed.already_exist = false;
             }
-            $scope.commands_for_import.push(demuxed);
-            $scope.updateImportButton();
-          });
-        }
-        catch(err){
-          // we should do some sort of ajaxy error handling thing here maybe.
-          return $scope.handleAjaxError('Data at URL does not appear to be valid scripts');
-
-        }
-      });
+        });
     };
 
     $scope.import_unparsed = function(){
-      $scope.commands_for_import = [];
+        $scope.commands_for_import = [];
 
-      try{
-        var parsed = JSON.parse($scope.ui.un_parsed_commands);
-        parsed.forEach(function(c){
+        try{
+            var parsed = JSON.parse($scope.ui.un_parsed_commands);
+            parsed.forEach(function(c){
 
-          if (!c.command || !c.script || !c.script.length) {
-            throw new Error('Invalid script discovered in imported JSON.');
-          }
+                if (!c.command || !c.script || !c.script.length) {
+                    throw new Error('Invalid script discovered in imported JSON.');
+                }
 
-          var demuxed = c;
-          demuxed.botId = $scope.bot_id;
-          demuxed.deleted = false;
-          var existencia = $scope.commands.filter(function(c){
-            return c.command === demuxed.command;
-          });
-          if(existencia.length > 0){
-            demuxed.already_exist = true;
-          }else {
-            demuxed.already_exist = false;
-          }
-          $scope.commands_for_import.push(demuxed);
-          $scope.updateImportButton();
-        });
-      }
-      catch(err){
+                var demuxed = c;
+                demuxed.botId = $scope.bot_id;
+                demuxed.deleted = false;
+                var existencia = $scope.commands.filter(function(c){
+                    return c.command === demuxed.command;
+                });
+                if(existencia.length > 0){
+                    demuxed.already_exist = true;
+                }else {
+                    demuxed.already_exist = false;
+                }
+                $scope.commands_for_import.push(demuxed);
+                $scope.updateImportButton();
+            });
+        }
+        catch(err){
         // we should do some sort of ajaxy error handling thing here maybe.
-        console.log('err: ', err);
-        $scope.handleAjaxError(err);
-      }
+            console.log('err: ', err);
+            $scope.handleAjaxError(err);
+        }
     };
 
     $scope.makeImportApi = function(){
@@ -487,68 +487,66 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
         $scope.parseImport();
 
         if ($scope.imported_commands.length) {
-          if (!confirm('Import or update ' + $scope.imported_commands.length + ' scripts?')) {
-            return false;
-          }
+            if (!confirm('Import or update ' + $scope.imported_commands.length + ' scripts?')) {
+                return false;
+            }
         } else {
-          $scope.ui.import_mode = false;
+            $scope.ui.import_mode = false;
         }
 
-        // FIX THIS
-        // we need to use async or some other system
-        // so that we can display a confirmation message at the end of the process
-      $scope.import_already_exists = [];
+        $scope.import_already_exists = [];
 
-      async.each($scope.imported_commands, function(command, next) {
+        async.each($scope.imported_commands, function(command, next) {
 
-          var existencia = $scope.commands.filter(function(c){
-            return c.command === command.command;
-          });
-          if(existencia.length > 0){
+            var existencia = $scope.commands.filter(function(c){
+                return c.command === command.command;
+            });
+            if(existencia.length > 0){
             // get the id and do an update instead
-            var upd_cmd = command;
-            var to_update = existencia.filter(function(e){
-              return e.command === upd_cmd.command;
-            });
-            upd_cmd._id = to_update[0]._id;
-            sdk.saveCommand(upd_cmd).then(function() {
-                next();
-            }).catch(function(err) {
-                next(err);
-            });
-          }else {
-            sdk.saveCommand(command).then(function(command) {
-                next();
-            }).catch(function(err) {
-                next(err);
-            });
-          }
+                var upd_cmd = command;
+                var to_update = existencia.filter(function(e){
+                    return e.command === upd_cmd.command;
+                });
+                upd_cmd._id = to_update[0]._id;
+                upd_cmd.id = to_update[0].id;
+                sdk.saveCommand(upd_cmd).then(function() {
+                    next();
+                }).catch(function(err) {
+                    next(err);
+                });
+            }else {
+                sdk.saveCommand(command).then(function(command) {
+                    next();
+                }).catch(function(err) {
+                    next(err);
+                });
+            }
 
-      }, function(err) {
+        }, function(err) {
 
-        $scope.getCommands();
-        if (err) {
-          $scope.handleAjaxError(err);
-         } else {
-             $scope.ui.import_mode = false;
-             $scope.confirmation('Import successful!');
-         }
-        $scope.imported_commands = [];
-      });
+            $scope.getCommands();
+            if (err) {
+                $scope.handleAjaxError(err);
+            } else {
+                $scope.ui.import_mode = false;
+                $scope.confirmation('Import successful!');
+            }
+            $scope.imported_commands = [];
+        });
     };
 
     $scope.add_to_import = function(command){
-      command.exclude_from_import = !command.exclude_from_import;
-      $scope.updateImportButton();
+        command.exclude_from_import = !command.exclude_from_import;
+        $scope.updateImportButton();
     };
 
     $scope.parseImport = function() {
-      $scope.imported_commands = [];
-      for (var x = 0; x < $scope.commands_for_import.length; x++) {
-          if (!$scope.commands_for_import[x].exclude_from_import) {
-            $scope.imported_commands.push($scope.commands_for_import[x]);
-          }
-      }
+        $scope.imported_commands = [];
+        for (var x = 0; x < $scope.commands_for_import.length; x++) {
+            if (!$scope.commands_for_import[x].exclude_from_import) {
+                $scope.imported_commands.push($scope.commands_for_import[x]);
+            }
+        }
     };
 
     $scope.toggleExportMode = function() {
@@ -567,14 +565,14 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
 
 
     $scope.add_to_export = function(command){
-      command.exclude_from_export = !command.exclude_from_export;
-      var count = 0;
-      for (var x = 0; x < $scope.commands.length; x++) {
-        if (!$scope.commands[x].exclude_from_export) {
-            count++;
+        command.exclude_from_export = !command.exclude_from_export;
+        var count = 0;
+        for (var x = 0; x < $scope.commands.length; x++) {
+            if (!$scope.commands[x].exclude_from_export) {
+                count++;
+            }
         }
-      }
-      $scope.ui.export_count = count;
+        $scope.ui.export_count = count;
     };
 
     $scope.clearExport = function() {
@@ -583,60 +581,49 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
     }
 
     $scope.createExport = function() {
-      $scope.parsed_commands = [];
-      for (var x = 0; x < $scope.commands.length; x++) {
-          if (!$scope.commands[x].exclude_from_export) {
-            var muxed = {};
-            muxed.command = $scope.commands[x].command;
-            muxed.description = $scope.commands[x].description;
-            // muxed.posthooks = $scope.commands[x].posthooks;
-            // muxed.prehooks = $scope.commands[x].prehooks;
-            muxed.script = $scope.commands[x].script;
-            muxed.triggers = $scope.commands[x].triggers;
-            muxed.variables = $scope.commands[x].variables;
-            muxed.tags = $scope.commands[x].tags;
+        $scope.parsed_commands = [];
+        for (var x = 0; x < $scope.commands.length; x++) {
+            if (!$scope.commands[x].exclude_from_export) {
+                var muxed = {};
+                muxed.command = $scope.commands[x].command;
+                muxed.description = $scope.commands[x].description;
+                muxed.script = $scope.commands[x].script;
+                muxed.triggers = $scope.commands[x].triggers;
+                muxed.variables = $scope.commands[x].variables;
+                muxed.tags = $scope.commands[x].tags;
+                $scope.parsed_commands.push(muxed);
+            }
+        }
 
-            $scope.parsed_commands.push(muxed);
-          }
-      }
+        $scope.ui.exported_text = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify($scope.parsed_commands,0,4));
 
-      $scope.ui.exported_text = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify($scope.parsed_commands,0,4));
-
-      $scope.ui.export_display = true;
+        $scope.ui.export_display = true;
 
     };
 
-    // $scope.getCommands = function() {
-    //     sdk.getCommandsByBot($scope.bot_id).then(function(commands) {
-    //
-    //         $scope.commands = commands;
-    //
-    //         $scope.$apply();
-    //     });
-    // };
 
     $scope.deleteCommand = function(command) {
 
         var is_fallback = false;
 
         // WAIT! Is this the fallback script?
-        if ($scope.bot.settings.fallback_action=='run' && (command._id == $scope.bot.settings.fallback_script)) {
-          if (!confirm('Deleting this script will disable your bot\'s fallback behavior. Are you sure you want to continue?')) {
-            return false;
-          }
-          is_fallback = true;
+        if ($scope.bot.settings.fallback_action=='run' && (command.id == $scope.bot.settings.fallback_script)) {
+            if (!confirm('Deleting this script will disable your bot\'s fallback behavior. Are you sure you want to continue?')) {
+                return false;
+            }
+            is_fallback = true;
         } else {
-          if (!confirm('Delete this command?')) {
-            return false;
-          }
+            if (!confirm('Delete this command?')) {
+                return false;
+            }
         }
         sdk.removeCommand($scope.bot_id, command).then(function() {
 
             $scope.getCommands();
             if (is_fallback) {
-              $scope.bot.settings.fallback_action = 'nothing';
-              delete($scope.bot.settings.fallback_script);
-              $scope.submitEdit();
+                $scope.bot.settings.fallback_action = 'nothing';
+                delete($scope.bot.settings.fallback_script);
+                $scope.submitEdit();
             }
 
         }).catch(function(err) {
@@ -647,14 +634,14 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
 
 
     $scope.createScriptModal = function() {
-      $scope.ui.modal_create = true;
+        $scope.ui.modal_create = true;
     }
 
     $scope.setAsFallback = function(script_id) {
 
-      $scope.bot.settings.fallback_action = 'run';
-      $scope.bot.settings.fallback_script = script_id;
-      $scope.submitEdit();
+        $scope.bot.settings.fallback_action = 'run';
+        $scope.bot.settings.fallback_script = script_id;
+        $scope.submitEdit();
 
     }
 
@@ -662,9 +649,9 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
 
         // make sure this command name does not already exist
         for (var c = 0; c < $scope.commands.length; c++) {
-          if ($scope.commands[c].command.toLowerCase() == $scope.command.trigger.toLowerCase()) {
-              return $scope.handleAjaxError('A script with the name "' + $scope.command.trigger + '" already exists. Please choose another name.');
-          }
+            if ($scope.commands[c].command.toLowerCase() == $scope.command.trigger.toLowerCase()) {
+                return $scope.handleAjaxError('A script with the name "' + $scope.command.trigger + '" already exists. Please choose another name.');
+            }
         }
 
         var new_command = {
@@ -678,18 +665,18 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
                 }
             ],
             variables: [
-              {
-                "name":"question_1",
-                "type":"string"
-              },
-              {
-                "name":"question_2",
-                "type":"string"
-              },
-              {
-                "name":"question_3",
-                "type":"string"
-              }
+                {
+                    "name":"question_1",
+                    "type":"string"
+                },
+                {
+                    "name":"question_2",
+                    "type":"string"
+                },
+                {
+                    "name":"question_3",
+                    "type":"string"
+                }
             ],
             script: [{
                 "topic":"default",
@@ -997,88 +984,88 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
 
     $scope.updateConditionlessOption = function(opt){
-      console.log('updateConditionlessOption: ', opt);
-      $scope.makeDirty()
+        console.log('updateConditionlessOption: ', opt);
+        $scope.makeDirty()
     }
 
 
     $scope.updateConditionalText = function(opt){
-      // console.log('updateConditionalText opt: ', opt);
-      // this needs a bunch of work
-      $scope.ui.conditional_needRight = false;
+        // console.log('updateConditionalText opt: ', opt);
+        // this needs a bunch of work
+        $scope.ui.conditional_needRight = false;
 
-      if(opt.conditional.test){
-        if(opt.conditional.test == 'equals' || opt.conditional.test == '!equals'){
-          $scope.ui.conditional_needRight = true;
+        if(opt.conditional.test){
+            if(opt.conditional.test == 'equals' || opt.conditional.test == '!equals'){
+                $scope.ui.conditional_needRight = true;
+            }
         }
-      }
 
-      if(opt.conditional.execute && opt.conditional.execute.script){
-        var selected_command = $scope.bot.commands.filter(function(c){
-          return c.command === opt.conditional.execute.script;
-        })
-        opt.conditional.selected_scripts_threads = selected_command[0].script;
+        if(opt.conditional.execute && opt.conditional.execute.script){
+            var selected_command = $scope.bot.commands.filter(function(c){
+                return c.command === opt.conditional.execute.script;
+            })
+            opt.conditional.selected_scripts_threads = selected_command[0].script;
         // pick the first one in the list
         // opt.conditional.execute.thread = opt.conditional.selected_scripts_threads[0].topic;
-      }
+        }
     }
 
 
 
     $scope.condition_action_then_select = function(opt){
-      // console.log('condition_action_then_select opt: ', opt);
-      $scope.makeDirty();
-      if(opt.conditional.action !== "execute_script"){
+        // console.log('condition_action_then_select opt: ', opt);
+        $scope.makeDirty();
+        if(opt.conditional.action !== "execute_script"){
         //  cleaning off these options because the user is NOT executing a script at this point.
-        delete opt.conditional['execute'];
-      }else {
-        if (!opt.conditional.execute) {
-          opt.conditional.execute = {
-            script: null,
-            thread: null,
-          }
-          // we want this to default to the first script in the list
-          // set the dropdown value to the name of the command
-          opt.conditional.execute.script = $scope.bot.commands[0].command;
+            delete opt.conditional['execute'];
+        }else {
+            if (!opt.conditional.execute) {
+                opt.conditional.execute = {
+                    script: null,
+                    thread: null,
+                }
+                // we want this to default to the first script in the list
+                // set the dropdown value to the name of the command
+                opt.conditional.execute.script = $scope.bot.commands[0].command;
 
-          // now we need a reference to the list of threads for this command
-          opt.conditional.selected_scripts_threads = $scope.bot.commands[0].script;
+                // now we need a reference to the list of threads for this command
+                opt.conditional.selected_scripts_threads = $scope.bot.commands[0].script;
 
-          // console.log('HERE IS THE LIST OF THREADS I HAVE TO DEAL WITH', opt.selected_scripts_threads);
-          // and we need to select the first one
-          opt.conditional.execute.thread = opt.conditional.selected_scripts_threads[0].topic;
-          // console.log('new opt.conditional: ', opt.conditional);
-          $scope.updateConditionalText(opt);
+                // console.log('HERE IS THE LIST OF THREADS I HAVE TO DEAL WITH', opt.selected_scripts_threads);
+                // and we need to select the first one
+                opt.conditional.execute.thread = opt.conditional.selected_scripts_threads[0].topic;
+                // console.log('new opt.conditional: ', opt.conditional);
+                $scope.updateConditionalText(opt);
+            }
         }
-      }
     }
 
 
     $scope.action_then_select = function(opt){
-      console.log('action_then_select opt: ', opt);
-      $scope.makeDirty();
-      if(opt.action !== "execute_script"){
+        console.log('action_then_select opt: ', opt);
+        $scope.makeDirty();
+        if(opt.action !== "execute_script"){
         //  cleaning off these options because the user is NOT executing a script at this point.
-        delete opt['execute'];
-      } else {
-        if (!opt.execute) {
-          opt.execute = {
-            script: null,
-            thread: null,
-          }
-          // we want this to default to the first script in the list
-          // set the dropdown value to the name of the command
-          opt.execute.script = $scope.bot.commands[0].command;
+            delete opt['execute'];
+        } else {
+            if (!opt.execute) {
+                opt.execute = {
+                    script: null,
+                    thread: null,
+                }
+                // we want this to default to the first script in the list
+                // set the dropdown value to the name of the command
+                opt.execute.script = $scope.bot.commands[0].command;
 
-          // now we need a reference to the list of threads for this command
-          opt.selected_scripts_threads = $scope.bot.commands[0].script;
+                // now we need a reference to the list of threads for this command
+                opt.selected_scripts_threads = $scope.bot.commands[0].script;
 
-          // console.log('HERE IS THE LIST OF THREADS I HAVE TO DEAL WITH', opt.selected_scripts_threads);
-          // and we need to select the first one
-          opt.execute.thread = opt.selected_scripts_threads[0].topic;
-          console.log('new opt: ', opt);
+                // console.log('HERE IS THE LIST OF THREADS I HAVE TO DEAL WITH', opt.selected_scripts_threads);
+                // and we need to select the first one
+                opt.execute.thread = opt.selected_scripts_threads[0].topic;
+                console.log('new opt: ', opt);
+            }
         }
-      }
     }
 
     $scope.ui.copy = 'Copy';
@@ -1193,25 +1180,25 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     }
 
     $scope.duplicateThread = function(new_name) {
-      if (!$scope.isUniqueThread(new_name)) {
-          alert('That thread name is already in use');
-          return;
-      }
+        if (!$scope.isUniqueThread(new_name)) {
+            alert('That thread name is already in use');
+            return;
+        }
 
-      // copy thread
-      var new_thread = angular.copy($scope.ui.thread_to_duplicate);
-      new_thread.topic = new_name;
+        // copy thread
+        var new_thread = angular.copy($scope.ui.thread_to_duplicate);
+        new_thread.topic = new_name;
 
-      // insert it
-      $scope.command.script.script.push(new_thread);
+        // insert it
+        $scope.command.script.script.push(new_thread);
 
-      // make it active
-      $scope.setThread(new_name);
+        // make it active
+        $scope.setThread(new_name);
 
 
-      // close modal
-      delete($scope.ui.thread_to_duplicate);
-      delete($scope.ui.dupethread);
+        // close modal
+        delete($scope.ui.thread_to_duplicate);
+        delete($scope.ui.dupethread);
     }
 
 
@@ -1284,11 +1271,11 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
             $scope.command.script.script.push({
                 topic: new_name,
                 script: [{
-                        text: ['This is ' + new_name],
-                    },
-                    {
-                        action: 'complete',
-                    }
+                    text: ['This is ' + new_name],
+                },
+                {
+                    action: 'complete',
+                }
                 ]
             });
         } else {
@@ -1374,42 +1361,42 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     $scope.words_only = '\\w+';
     $scope.tag_input_invalid = false;
     $scope.addTag = function(event){
-      event.preventDefault();
-      // console.log('$scope.command: ', $scope.command);
-      // console.log('tag to add: ', $scope.ui.tag);
-      // console.log('tags: ', $scope.command.tags);
-      if(!$scope.command.tags){
-        $scope.command.tags = [];
-      }
-
-      if($scope.ui.tag){
-        $scope.tag_input_invalid = false;
-        var tag_exist = $scope.command.tags.filter(function(t){
-          return t === $scope.ui.tag;
-        });
-
-        if(tag_exist.length === 0){
-          $scope.command.tags.push($scope.ui.tag);
-        }
-        $scope.ui.tag = '';
-        $scope.makeDirty();
+        event.preventDefault();
         // console.log('$scope.command: ', $scope.command);
-      }else {
-        $scope.tag_input_invalid = true;
+        // console.log('tag to add: ', $scope.ui.tag);
+        // console.log('tags: ', $scope.command.tags);
+        if(!$scope.command.tags){
+            $scope.command.tags = [];
+        }
+
+        if($scope.ui.tag){
+            $scope.tag_input_invalid = false;
+            var tag_exist = $scope.command.tags.filter(function(t){
+                return t === $scope.ui.tag;
+            });
+
+            if(tag_exist.length === 0){
+                $scope.command.tags.push($scope.ui.tag);
+            }
+            $scope.ui.tag = '';
+            $scope.makeDirty();
+        // console.log('$scope.command: ', $scope.command);
+        }else {
+            $scope.tag_input_invalid = true;
         // $scope.validationError('Invalid Tag Input');
-      }
+        }
 
 
     };
 
 
     $scope.removeTag = function(idx) {
-      var tag = $scope.command.tags[idx];
-      if (confirm('Remove the tag "' + tag + '"?')) {
-        $scope.command.tags.splice(idx, 1);
-        $scope.makeDirty();
-      }
-      return;
+        var tag = $scope.command.tags[idx];
+        if (confirm('Remove the tag "' + tag + '"?')) {
+            $scope.command.tags.splice(idx, 1);
+            $scope.makeDirty();
+        }
+        return;
 
     };
 
@@ -1486,46 +1473,46 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     }
 
     $scope.getBotCommands = function(bot_id){
-      return new Promise(function(resolve, reject){
-        sdk.getCommandsByBot(bot_id).then(function(bot_commands){
-          resolve(bot_commands);
-        }).catch(function(err){
-          reject(err);
+        return new Promise(function(resolve, reject){
+            sdk.getCommandsByBot(bot_id).then(function(bot_commands){
+                resolve(bot_commands);
+            }).catch(function(err){
+                reject(err);
+            });
         });
-      });
     }
 
 
     $scope.execute_script_selected = function(opt){
-      // console.log('execute_script_selected opt: ', opt);
-      $scope.makeDirty();
-      // we need to update the list of threads here.
-      // find the selected script
+        // console.log('execute_script_selected opt: ', opt);
+        $scope.makeDirty();
+        // we need to update the list of threads here.
+        // find the selected script
         var selected_command = $scope.bot.commands.filter(function(c){
-          return c.command === opt.execute.script;
+            return c.command === opt.execute.script;
         })
-      opt.selected_scripts_threads = selected_command[0].script;
-      // pick the first one in the list
-      opt.execute.thread = opt.selected_scripts_threads[0].topic;
+        opt.selected_scripts_threads = selected_command[0].script;
+        // pick the first one in the list
+        opt.execute.thread = opt.selected_scripts_threads[0].topic;
     }
 
     $scope.conditional_execute_script_selected = function(opt){
-      // console.log('conditional_execute_script_selected opt.conditional: ', opt.conditional);
-      $scope.makeDirty();
-      // we need to update the list of threads here.
-      // find the selected script
-      var selected_command = $scope.bot.commands.filter(function(c){
-        return c.command === opt.conditional.execute.script;
-      })
-      opt.conditional.selected_scripts_threads = selected_command[0].script;
-      // pick the first one in the list
-      opt.conditional.execute.thread = opt.conditional.selected_scripts_threads[0].topic;
-      $scope.updateConditionalText(opt);
+        // console.log('conditional_execute_script_selected opt.conditional: ', opt.conditional);
+        $scope.makeDirty();
+        // we need to update the list of threads here.
+        // find the selected script
+        var selected_command = $scope.bot.commands.filter(function(c){
+            return c.command === opt.conditional.execute.script;
+        })
+        opt.conditional.selected_scripts_threads = selected_command[0].script;
+        // pick the first one in the list
+        opt.conditional.execute.thread = opt.conditional.selected_scripts_threads[0].topic;
+        $scope.updateConditionalText(opt);
     }
 
     $scope.conditional_tread_select = function(opt){
-      $scope.makeDirty();
-      $scope.updateConditionalText(opt);
+        $scope.makeDirty();
+        $scope.updateConditionalText(opt);
     }
 
 
@@ -1577,37 +1564,37 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
             // because it is the "last action", not a normal message.
             for (var m = 0; m < $scope.command.script.script[t].script.length - 1; m++) {
 
-              // stuff for validating conditionals
-              if($scope.command.script.script[t].script[m].conditional){
-                $scope.command.script.script[t].script[m].conditional.validators = {};
-                // remove this when you are done:
-                // console.log('validate $scope.command.script.script[t].script[m]: ', $scope.command.script.script[t].script[m]);
+                // stuff for validating conditionals
+                if($scope.command.script.script[t].script[m].conditional){
+                    $scope.command.script.script[t].script[m].conditional.validators = {};
+                    // remove this when you are done:
+                    // console.log('validate $scope.command.script.script[t].script[m]: ', $scope.command.script.script[t].script[m]);
 
-                var x = $scope.command.script.script[t].script[m].conditional;
-                // console.log('x: ', x);
-                var condition_invalid = false;
-                if($scope.command.script.script[t].script[m].conditional.left === '_new' && !$scope.command.script.script[t].script[m].conditional.left_val){
-                  $scope.command.script.script[t].script[m].conditional.validators.left_val_invalid = true;
-                  condition_invalid = true;
-                }
-                if($scope.command.script.script[t].script[m].conditional.test === 'equals' || $scope.command.script.script[t].script[m].conditional.test === '!equals'){
-                  if($scope.command.script.script[t].script[m].conditional.right === '_new' && !$scope.command.script.script[t].script[m].conditional.right_val){
-                    $scope.command.script.script[t].script[m].conditional.validators.right_val_invalid = true;
-                    condition_invalid = true;
-                  }
-                }
-                if($scope.command.script.script[t].script[m].conditional.action === '_new' && !$scope.newbranch){
-                  $scope.command.script.script[t].script[m].conditional.validators.action_new_invalid = true;
-                  condition_invalid = true;
-                }
+                    var x = $scope.command.script.script[t].script[m].conditional;
+                    // console.log('x: ', x);
+                    var condition_invalid = false;
+                    if($scope.command.script.script[t].script[m].conditional.left === '_new' && !$scope.command.script.script[t].script[m].conditional.left_val){
+                        $scope.command.script.script[t].script[m].conditional.validators.left_val_invalid = true;
+                        condition_invalid = true;
+                    }
+                    if($scope.command.script.script[t].script[m].conditional.test === 'equals' || $scope.command.script.script[t].script[m].conditional.test === '!equals'){
+                        if($scope.command.script.script[t].script[m].conditional.right === '_new' && !$scope.command.script.script[t].script[m].conditional.right_val){
+                            $scope.command.script.script[t].script[m].conditional.validators.right_val_invalid = true;
+                            condition_invalid = true;
+                        }
+                    }
+                    if($scope.command.script.script[t].script[m].conditional.action === '_new' && !$scope.newbranch){
+                        $scope.command.script.script[t].script[m].conditional.validators.action_new_invalid = true;
+                        condition_invalid = true;
+                    }
 
-                if(condition_invalid){
-                  // $scope.validationError('Invalid condition input!');
-                  return false;
+                    if(condition_invalid){
+                        // $scope.validationError('Invalid condition input!');
+                        return false;
+                    }
+
+
                 }
-
-
-              }
 
                 // new stuff for meta data
                 if ($scope.command.script.script[t].script[m].meta) {
@@ -1678,40 +1665,40 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
                 } else if ($scope.bot.platform == 'ciscospark') {
 
-                  if ($scope.command.script.script[t].script[m].platforms &&
+                    if ($scope.command.script.script[t].script[m].platforms &&
                     $scope.command.script.script[t].script[m].platforms.ciscospark &&
                     $scope.command.script.script[t].script[m].platforms.ciscospark.files &&
                     $scope.command.script.script[t].script[m].platforms.ciscospark.files.length
-                  ) {
-                    for (var f = 0; f < $scope.command.script.script[t].script[m].platforms.ciscospark.files.length; f++) {
-                      if (!$scope.command.script.script[t].script[m].platforms.ciscospark.files[f].url) {
-                        $scope.command.script.script[t].script[m].platforms.ciscospark.files[f].invalid =true;
-                        $scope.validationError('File URL cannot be blank');
-                        return false;
-                      } else {
-                        delete($scope.command.script.script[t].script[m].platforms.ciscospark.files.invalid);
-                      }
+                    ) {
+                        for (var f = 0; f < $scope.command.script.script[t].script[m].platforms.ciscospark.files.length; f++) {
+                            if (!$scope.command.script.script[t].script[m].platforms.ciscospark.files[f].url) {
+                                $scope.command.script.script[t].script[m].platforms.ciscospark.files[f].invalid =true;
+                                $scope.validationError('File URL cannot be blank');
+                                return false;
+                            } else {
+                                delete($scope.command.script.script[t].script[m].platforms.ciscospark.files.invalid);
+                            }
+                        }
                     }
-                  }
 
                 } else if ($scope.bot.platform == 'web') {
 
-                  // TODO: add validation for files!!
-                  if ($scope.command.script.script[t].script[m].platforms &&
+                    // TODO: add validation for files!!
+                    if ($scope.command.script.script[t].script[m].platforms &&
                     $scope.command.script.script[t].script[m].platforms.web &&
                     $scope.command.script.script[t].script[m].platforms.web.files &&
                     $scope.command.script.script[t].script[m].platforms.web.files.length
-                  ) {
-                    for (var f = 0; f < $scope.command.script.script[t].script[m].platforms.web.files.length; f++) {
-                      if (!$scope.command.script.script[t].script[m].platforms.web.files[f].url) {
-                        $scope.command.script.script[t].script[m].platforms.web.files[f].invalid =true;
-                        $scope.validationError('File URL cannot be blank');
-                        return false;
-                      } else {
-                        delete($scope.command.script.script[t].script[m].platforms.web.files.invalid);
-                      }
+                    ) {
+                        for (var f = 0; f < $scope.command.script.script[t].script[m].platforms.web.files.length; f++) {
+                            if (!$scope.command.script.script[t].script[m].platforms.web.files[f].url) {
+                                $scope.command.script.script[t].script[m].platforms.web.files[f].invalid =true;
+                                $scope.validationError('File URL cannot be blank');
+                                return false;
+                            } else {
+                                delete($scope.command.script.script[t].script[m].platforms.web.files.invalid);
+                            }
+                        }
                     }
-                  }
                 } else if ($scope.bot.platform == 'teams') {
 
                     // blank text is ok if there is at least one attachment
@@ -1806,10 +1793,10 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
                                     !($scope.command.script.script[t].script[m].attachments[r].actions[a].name &&
                                         $scope.command.script.script[t].script[m].attachments[r].actions[a].text &&
                                         (
-                                          $scope.command.script.script[t].script[m].attachments[r].actions[a].value ||
+                                            $scope.command.script.script[t].script[m].attachments[r].actions[a].value ||
                                           $scope.command.script.script[t].script[m].attachments[r].actions[a].url
                                         )
-                                      )
+                                    )
                                 ) {
                                     $scope.command.script.script[t].script[m].attachments[r].actions[a].invalid = true;
                                     $scope.validationError('Button is missing a required field');
@@ -2138,15 +2125,15 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
     $scope.generateCallbackID = function(attachment) {
 
-      if (!attachment.callback_id || attachment.callback_id === '') {
-        var id = null;
-        if (attachment.title) {
-          id = attachment.title.toLowerCase().replace(/\W/g,'_');
-        } else {
-          id = 'callback_id';
+        if (!attachment.callback_id || attachment.callback_id === '') {
+            var id = null;
+            if (attachment.title) {
+                id = attachment.title.toLowerCase().replace(/\W/g,'_');
+            } else {
+                id = 'callback_id';
+            }
+            attachment.callback_id = id;
         }
-        attachment.callback_id = id;
-      }
 
     }
 
@@ -2296,10 +2283,10 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     }
 
     $scope.deleteAttachment = function(message, index) {
-      if (confirm('Are you sure you want to permanently delete this attachment?')) {
-        message.attachments.splice(index, 1);
-        $scope.makeDirty();
-      }
+        if (confirm('Are you sure you want to permanently delete this attachment?')) {
+            message.attachments.splice(index, 1);
+            $scope.makeDirty();
+        }
     }
 
     $scope.duplicateAttachment = function(message, index) {
@@ -2578,76 +2565,76 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
     $scope.generateBackLinks = function() {
 
-      var backlinks = [];
+        var backlinks = [];
 
-      $scope.bot.commands.map(function(command) {
+        $scope.bot.commands.map(function(command) {
         // do not look for local links
-        if (command.command != $scope.command.command) {
-           command.script.map(function(thread) {
-             thread.script.map(function(message) {
-               var paths = [];
-               if (message.collect && message.collect.options) {
-                 paths = message.collect.options.filter(function(option) {
-                   return (option.action=='execute_script' && option.execute.script == $scope.command.command && option.execute.thread == $scope.thread.topic);
-                 });
-               }
+            if (command.command != $scope.command.command) {
+                command.script.map(function(thread) {
+                    thread.script.map(function(message) {
+                        var paths = [];
+                        if (message.collect && message.collect.options) {
+                            paths = message.collect.options.filter(function(option) {
+                                return (option.action=='execute_script' && option.execute.script == $scope.command.command && option.execute.thread == $scope.thread.topic);
+                            });
+                        }
 
-               if (paths.length || (message.action == 'execute_script' &&  message.execute.script == $scope.command.command && message.execute.thread == $scope.thread.topic)) {
-                backlinks.push({
-                  action: 'execute_script',
-                  execute: {
-                    script: command.command,
-                    thread: thread.topic,
-                  }
-                })
-               }
-             });
-          });
-        }
-      });
-
-      // look for references to the current thread in other parts of this script.
-      for (var t = 0; t < $scope.command.script.script.length; t++) {
-          // messages in this thread are in the .script field, WEIRD
-          for (var m = 0; m < $scope.command.script.script[t].script.length; m++) {
-              if ($scope.command.script.script[t].topic != $scope.thread.topic) {
-                if ($scope.command.script.script[t].script[m].collect) {
-                    for (var o = 0; o < $scope.command.script.script[t].script[m].collect.options.length; o++) {
-                        if ($scope.command.script.script[t].script[m].collect.options[o].action == $scope.thread.topic) {
+                        if (paths.length || (message.action == 'execute_script' &&  message.execute.script == $scope.command.command && message.execute.thread == $scope.thread.topic)) {
                             backlinks.push({
-                              action: $scope.command.script.script[t].topic,
+                                action: 'execute_script',
+                                execute: {
+                                    script: command.command,
+                                    thread: thread.topic,
+                                }
                             })
                         }
+                    });
+                });
+            }
+        });
+
+        // look for references to the current thread in other parts of this script.
+        for (var t = 0; t < $scope.command.script.script.length; t++) {
+            // messages in this thread are in the .script field, WEIRD
+            for (var m = 0; m < $scope.command.script.script[t].script.length; m++) {
+                if ($scope.command.script.script[t].topic != $scope.thread.topic) {
+                    if ($scope.command.script.script[t].script[m].collect) {
+                        for (var o = 0; o < $scope.command.script.script[t].script[m].collect.options.length; o++) {
+                            if ($scope.command.script.script[t].script[m].collect.options[o].action == $scope.thread.topic) {
+                                backlinks.push({
+                                    action: $scope.command.script.script[t].topic,
+                                })
+                            }
+                        }
+                    }
+                    if ($scope.command.script.script[t].script[m].action == $scope.thread.topic) {
+                        backlinks.push({
+                            action: $scope.command.script.script[t].topic,
+                        });
                     }
                 }
-                if ($scope.command.script.script[t].script[m].action == $scope.thread.topic) {
-                  backlinks.push({
-                    action: $scope.command.script.script[t].topic,
-                  });
-                }
-              }
-          }
-      }
-
-      // remove dupes
-      var distinct = [];
-      for (var b = 0; b < backlinks.length; b++) {
-
-        var found = distinct.filter(function(a) {
-          if (a.action == backlinks[b].action) {
-            if (a.action != 'execute_script' || (a.execute.script == backlinks[b].execute.script && a.execute.thread == backlinks[b].execute.thread)) {
-              return true;
             }
-          }
-        })
-
-        if (!found.length) {
-          distinct.push(backlinks[b]);
         }
 
-      }
+        // remove dupes
+        var distinct = [];
+        for (var b = 0; b < backlinks.length; b++) {
 
-      $scope.ui.backlinks = distinct;
+            var found = distinct.filter(function(a) {
+                if (a.action == backlinks[b].action) {
+                    if (a.action != 'execute_script' || (a.execute.script == backlinks[b].execute.script && a.execute.thread == backlinks[b].execute.thread)) {
+                        return true;
+                    }
+                }
+            })
+
+            if (!found.length) {
+                distinct.push(backlinks[b]);
+            }
+
+        }
+
+        $scope.ui.backlinks = distinct;
 
     }
 
@@ -2819,20 +2806,20 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     }
 
 
-      $scope.addConditionLine = function() {
+    $scope.addConditionLine = function() {
         var new_line = $scope.ui.new_line;
         $scope.ui.new_line = '';
         if (!new_line) {
-          new_line = 'Conditional Behavior'
+            new_line = 'Conditional Behavior'
         }
         // add the line of dialog
         var msg = {
             text: [new_line],
             conditional: {
-              left: null,
-              test: null,
-              right: null,
-              action: null
+                left: null,
+                test: null,
+                right: null,
+                action: null
             }
         };
 
@@ -2906,56 +2893,56 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
     $scope.renderConditional = function(line) {
 
-      var text;
-      if(line.conditional.left === '_new'){
-        text = '<span class="condition"><span class="label">IF: </span><span class="clause"><span class="variable">' + line.conditional.left_val + '</span> <span class="test">' + line.conditional.test + '</span>';
-      }else {
-        text = '<span class="condition"><span class="label">IF: </span><span class="clause"><span class="variable">' + line.conditional.left + '</span> <span class="test">' + line.conditional.test + '</span>';
-      }
-      switch (line.conditional.test) {
-        case 'equals':
-        case '!equals':
-          if(line.conditional.right === '_new'){
-            text = text + ' <span class="variable">' + line.conditional.right_val + '</span>';
-          }else {
-            text = text + ' <span class="variable">' + line.conditional.right + '</span>';
-          }
+        var text;
+        if(line.conditional.left === '_new'){
+            text = '<span class="condition"><span class="label">IF: </span><span class="clause"><span class="variable">' + line.conditional.left_val + '</span> <span class="test">' + line.conditional.test + '</span>';
+        }else {
+            text = '<span class="condition"><span class="label">IF: </span><span class="clause"><span class="variable">' + line.conditional.left + '</span> <span class="test">' + line.conditional.test + '</span>';
+        }
+        switch (line.conditional.test) {
+            case 'equals':
+            case '!equals':
+                if(line.conditional.right === '_new'){
+                    text = text + ' <span class="variable">' + line.conditional.right_val + '</span>';
+                }else {
+                    text = text + ' <span class="variable">' + line.conditional.right + '</span>';
+                }
 
-          break;
-      }
+                break;
+        }
 
-      text = text + '</span></span>';
+        text = text + '</span></span>';
 
-      desc = '';
-      switch (line.conditional.action) {
-          case 'next':
-              desc = 'continue with the thread';
-              break;
-          case 'repeat':
-              desc = 'repeat this message until a conditional is matched';
-              break;
-          case 'wait':
-              desc = 'wait for more input until a conditional is matched';
-              break;
-          case 'complete':
-              desc = 'complete the conversation successfully';
-              break;
-          case 'stop':
-              desc = 'end the conversation immediately and mark it as unsuccessful';
-              break;
-          case 'timeout':
-              desc = 'end the conversation immediately and mark it as a timeout';
-              break;
-          case 'execute_script':
-              desc = 'execute a different script: ' + line.conditional.execute.script + ', thread: ' + line.conditional.execute.thread;
-              break;
-          default:
-              desc = 'jump to a different thread: ' + line.conditional.action;
-      }
+        desc = '';
+        switch (line.conditional.action) {
+            case 'next':
+                desc = 'continue with the thread';
+                break;
+            case 'repeat':
+                desc = 'repeat this message until a conditional is matched';
+                break;
+            case 'wait':
+                desc = 'wait for more input until a conditional is matched';
+                break;
+            case 'complete':
+                desc = 'complete the conversation successfully';
+                break;
+            case 'stop':
+                desc = 'end the conversation immediately and mark it as unsuccessful';
+                break;
+            case 'timeout':
+                desc = 'end the conversation immediately and mark it as a timeout';
+                break;
+            case 'execute_script':
+                desc = 'execute a different script: ' + line.conditional.execute.script + ', thread: ' + line.conditional.execute.thread;
+                break;
+            default:
+                desc = 'jump to a different thread: ' + line.conditional.action;
+        }
 
-      text = text + '<span class="then"><span class="label">THEN: </span><span class="action">' + desc + '</span></span>';
+        text = text + '<span class="then"><span class="label">THEN: </span><span class="action">' + desc + '</span></span>';
 
-      return $sce.trustAsHtml(text);
+        return $sce.trustAsHtml(text);
 
     }
 
@@ -3054,7 +3041,7 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
     $scope.followOption = function(option, $event) {
 
-      console.log('following option...');
+        console.log('following option...');
 
         $event.stopPropagation();
 
@@ -3065,7 +3052,7 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
             case 'repeat':
             case 'wait':
             case 'complete':
-            break;
+                break;
             case 'execute_script':
                 // find id of script
                 var destination = $scope.bot.commands.filter(function(c) {
@@ -3074,15 +3061,15 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
                 if (destination.length) {
                     if ($scope.ui.dirty) {
-                      if (confirm('Navigate to ' + destination[0].command + '?')) {
-                          $scope.goto('/app/bots/'+bot_id +'/commands/' + destination[0]._id + '?thread=' + option.execute.thread);
-                      }
+                        if (confirm('Navigate to ' + destination[0].command + '?')) {
+                            $scope.goto('/app/bots/'+bot_id +'/commands/' + destination[0]._id + '?thread=' + option.execute.thread);
+                        }
                     } else {
-                      $scope.goto('/app/bots/'+bot_id +'/commands/' + destination[0]._id + '?thread=' + option.execute.thread);
+                        $scope.goto('/app/bots/'+bot_id +'/commands/' + destination[0]._id + '?thread=' + option.execute.thread);
                     }
                 }
 
-            break;
+                break;
             default:
                 $scope.setThread(option.action);
         }
@@ -3106,18 +3093,18 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
     $scope.generateActionClass = function(action) {
 
-      switch (action) {
-        case 'next':
-        case 'stop':
-        case 'timeout':
-        case 'repeat':
-        case 'wait':
-        case 'complete':
-        case 'execute_script':
-          return action;
-        default:
-          return '';
-      }
+        switch (action) {
+            case 'next':
+            case 'stop':
+            case 'timeout':
+            case 'repeat':
+            case 'wait':
+            case 'complete':
+            case 'execute_script':
+                return action;
+            default:
+                return '';
+        }
 
     }
 
@@ -3269,11 +3256,11 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
             $scope.command.script.script.push({
                 topic: newbranch,
                 script: [{
-                        text: ['This is ' + newbranch],
-                    },
-                    {
-                        action: 'complete',
-                    }
+                    text: ['This is ' + newbranch],
+                },
+                {
+                    action: 'complete',
+                }
                 ]
             });
 
@@ -3308,7 +3295,7 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     }
 
     $scope.propertiesIsEmpty = function() {
-      return (!$scope.ui.outgoing_message && !$scope.ui.conditional && !$scope.ui.incoming_message);
+        return (!$scope.ui.outgoing_message && !$scope.ui.conditional && !$scope.ui.incoming_message);
     }
 
     $scope.properties = function() {
@@ -3334,46 +3321,46 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     }
 
     $scope.focusConditional = function(line, force) {
-      // console.log('line: ', line);
-      var possible_opts = $scope.command.variables.map(function(o){
-        var z = '{{responses.' + o.name + '}}';
-        return z;
-      });
-      possible_opts.push("_new");
-      // console.log('possible_opts: ', possible_opts);
-
-      // console.log('left_exist: ', left_exist);
-
-      if(line.conditional.left){
-        var left_exist = possible_opts.filter(function(o){
-          return o == line.conditional.left;
+        // console.log('line: ', line);
+        var possible_opts = $scope.command.variables.map(function(o){
+            var z = '{{responses.' + o.name + '}}';
+            return z;
         });
-        if(left_exist.length == 0){
-          line.conditional.left_val = line.conditional.left;
-          line.conditional.left = '_new'
+        possible_opts.push("_new");
+        // console.log('possible_opts: ', possible_opts);
+
+        // console.log('left_exist: ', left_exist);
+
+        if(line.conditional.left){
+            var left_exist = possible_opts.filter(function(o){
+                return o == line.conditional.left;
+            });
+            if(left_exist.length == 0){
+                line.conditional.left_val = line.conditional.left;
+                line.conditional.left = '_new'
+            }
+        }else {
+            line.conditional.left = possible_opts[0];
         }
-      }else {
-        line.conditional.left = possible_opts[0];
-      }
 
 
-      var right_exist = possible_opts.filter(function(o){
-        return o == line.conditional.right;
-      });
-      if(right_exist.length == 0){
-        line.conditional.right_val = line.conditional.right;
-        line.conditional.right = '_new'
-      }
+        var right_exist = possible_opts.filter(function(o){
+            return o == line.conditional.right;
+        });
+        if(right_exist.length == 0){
+            line.conditional.right_val = line.conditional.right;
+            line.conditional.right = '_new'
+        }
 
-      if(!line.conditional.test){
-        line.conditional.test = 'exists';
-      }
-      if(!line.conditional.action){
-        line.conditional.action = 'next';
-      }
-      // console.log('conditional focus::::::::::::::::::::::::::::::::::::: ');
-      // console.log('line: ', line);
-      $scope.updateConditionalText(line);
+        if(!line.conditional.test){
+            line.conditional.test = 'exists';
+        }
+        if(!line.conditional.action){
+            line.conditional.action = 'next';
+        }
+        // console.log('conditional focus::::::::::::::::::::::::::::::::::::: ');
+        // console.log('line: ', line);
+        $scope.updateConditionalText(line);
         if (!line.focused) {
             if ($scope.unfocus()) {
                 line.focused = true;
@@ -3388,14 +3375,14 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
 
     $scope.focus = function(line, force) {
-      // console.log('focus line: ', line);
+        // console.log('focus line: ', line);
         if (!line.focused) {
             if ($scope.unfocus()) {
-              line.focused = true;
-              $scope.ui.conditional = false;
-              $scope.ui.outgoing_message = line;
-              $scope.ui.properties = true;
-              $scope.ui.carousel_position = 0;
+                line.focused = true;
+                $scope.ui.conditional = false;
+                $scope.ui.outgoing_message = line;
+                $scope.ui.properties = true;
+                $scope.ui.carousel_position = 0;
             }
         }
     };
@@ -3460,77 +3447,77 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     }
 
 
-        $scope.bot = {
-          _id: 'static',
-          platform: platform,
-        };
+    $scope.bot = {
+        _id: 'static',
+        platform: platform,
+    };
 
-        $scope.getCommandById(command_id).then(function(command) {
+    $scope.getCommandById(command_id).then(function(command) {
 
-            $scope.command = command; // store for later possible use
-            $scope.command.script.script = command.script
-            if (command.variables) {
-                $scope.command.script.variables = command.variables.map(function(i) {
-                    return i.name;
+        $scope.command = command; // store for later possible use
+        $scope.command.script.script = command.script
+        if (command.variables) {
+            $scope.command.script.variables = command.variables.map(function(i) {
+                return i.name;
+            });
+        } else {
+            $scope.command.script.variables = [];
+        }
+        // $scope.setThread('default');
+        // $scope.$apply();
+
+
+
+        $scope.getBotCommands(bot_id).then(function(bot_commands){
+            $scope.bot.commands = bot_commands;
+            $scope.ui.scripts = true;
+
+            // Now that I have a list of all the commands,
+            // I can look for messages with conditionals that are set to the execute_script action
+            // and add the necessary lookup info
+            $scope.command.script.map(function(first_layer){
+                first_layer.script = first_layer.script.map(function(second_layer){
+                    // console.log('second_layer: ', second_layer);
+                    if(second_layer.action === 'execute_script'){
+                        var selected_script = $scope.bot.commands.filter(function(c){
+                            return c.command === second_layer.execute.script;
+                        });
+                        second_layer.selected_scripts_threads = selected_script[0].script;
+                    }
+                    if(second_layer.collect){
+                        second_layer.collect.options = second_layer.collect.options.map(function(collects_input){
+                            // console.log('collects_input: ', collects_input);
+                            if(collects_input.action === 'execute_script'){
+                                var selected_script = $scope.bot.commands.filter(function(c){
+                                    return c.command === collects_input.execute.script;
+                                });
+                                collects_input.selected_scripts_threads = selected_script[0].script;
+                            }
+                            return collects_input;
+                        });
+                    }
+                    return second_layer;
                 });
-            } else {
-                $scope.command.script.variables = [];
-            }
-            // $scope.setThread('default');
-            // $scope.$apply();
-
-
-
-            $scope.getBotCommands(bot_id).then(function(bot_commands){
-              $scope.bot.commands = bot_commands;
-              $scope.ui.scripts = true;
-
-              // Now that I have a list of all the commands,
-              // I can look for messages with conditionals that are set to the execute_script action
-              // and add the necessary lookup info
-              $scope.command.script.map(function(first_layer){
-                 first_layer.script = first_layer.script.map(function(second_layer){
-                   // console.log('second_layer: ', second_layer);
-                   if(second_layer.action === 'execute_script'){
-                     var selected_script = $scope.bot.commands.filter(function(c){
-                       return c.command === second_layer.execute.script;
-                     });
-                     second_layer.selected_scripts_threads = selected_script[0].script;
-                   }
-                   if(second_layer.collect){
-                     second_layer.collect.options = second_layer.collect.options.map(function(collects_input){
-                       // console.log('collects_input: ', collects_input);
-                       if(collects_input.action === 'execute_script'){
-                         var selected_script = $scope.bot.commands.filter(function(c){
-                           return c.command === collects_input.execute.script;
-                         });
-                         collects_input.selected_scripts_threads = selected_script[0].script;
-                       }
-                       return collects_input;
-                     });
-                   }
-                   return second_layer;
-                 });
-                 return first_layer;
-               });
-
-
-              var start_thread = getParameterByName('thread') || 'default';
-              $scope.setThread(start_thread);
-              $scope.$apply();
-
-
-            }).catch(function(err) {
-                $scope.handleAjaxError(err);
+                return first_layer;
             });
 
 
-
+            var start_thread = getParameterByName('thread') || 'default';
+            $scope.setThread(start_thread);
+            $scope.$apply();
 
 
         }).catch(function(err) {
             $scope.handleAjaxError(err);
         });
+
+
+
+
+
+    }).catch(function(err) {
+        $scope.handleAjaxError(err);
+    });
 
 
     $scope.lastError = null;
@@ -3708,8 +3695,8 @@ angular.module('howdyPro').factory('sdk', ['$http', '$q', function($http, $q) {
 
         sdk.removeCommand = function(bot_id, command) {
           command.deleted = true;
-          var uri = '/admin/api/scripts/' + command._id;
-          return sdk.v2(uri, 'put',{deleted:true}, true);
+          var uri = '/admin/api/scripts/' + command.id;
+          return sdk.v2(uri, 'delete',{deleted:true}, true);
         };
 
         sdk.saveCommand = function(command) {
