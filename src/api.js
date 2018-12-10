@@ -109,7 +109,7 @@ module.exports = function() {
                                     query.entities.push(e);
                                 });
 
-                                resolve(pbody);
+                                resolve(query);
                             }
                         }
                 });
