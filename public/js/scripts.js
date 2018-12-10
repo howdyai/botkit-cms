@@ -639,7 +639,7 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
 
     $scope.setAsFallback = function(command) {
         command.is_fallback = true;
-        $scope.saveCommand(command).then(function() {
+        sdk.saveCommand(command).then(function() {
             // update UI
             $scope.commands.forEach(function(c) {
                 if (c.id !== command.id) {
