@@ -7,7 +7,6 @@
     "start": "node index.js",
     "gulp": "./node_modules/gulp/bin/gulp.js",
     "eslint": "./node_modules/eslint/bin/eslint.js js/ src/ components/",
-
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "benbrown@gmail.com",
@@ -19,7 +18,8 @@
     "express": "^4.15.3",
     "express-basic-auth": "^1.1.5",
     "express-hbs": "^1.0.4",
-    "querystring": "^0.2.0"
+    "querystring": "^0.2.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "eslint": "^5.7.0",

@@ -142,7 +142,7 @@ module.exports = function() {
 
         return new Promise(function(resolve, reject) {
             for (var s = 0; s < scripts.length; s++) {
-                if (id == scripts[s]._id) { // TODO: why use mongo style id?
+                if (id == scripts[s]._id || id == scripts[s].id) {
                     return resolve(scripts[s]);
                 }
             }

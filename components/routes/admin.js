@@ -1,3 +1,6 @@
+
+const uuidv4 = require('uuid/v4');
+
 module.exports = function(webserver, api) {
 
     webserver.get('/admin', function(req, res) {
@@ -16,8 +19,6 @@ module.exports = function(webserver, api) {
 
     webserver.post('/admin/save', function(req, res) {
         var update = req.body;
-        // TODO: ensure modified is not in past
-        // update.modified = new Date();
 
         api.getScripts().then(function(scripts) {
             var found = false;
@@ -27,13 +28,15 @@ module.exports = function(webserver, api) {
                     console.log('found timestamp', scripts[s].modified, 'incoming timestamp:', update.modified);
                 }
             }
-
-
+            
             if (found === false) {
-
+                if (!update.id && update._id) {
+                    update.id = update._id;
+                } else if (!update.id) {
+                    update.id = uuidv4();
+                }
                 update.modified = new Date();
                 scripts.push(update);
-
                 api.writeScriptsToFile(scripts).then(function() {
                     res.json({
                         success: true,
