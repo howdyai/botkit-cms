@@ -124,4 +124,6 @@ TODO:
   -> pass message through luis when triggering
   -> match triggers
 
+* deal with renamed scripts/threads in GOTOs
+
 ?? deal with id/command/uniqueness

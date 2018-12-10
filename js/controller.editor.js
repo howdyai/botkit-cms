@@ -15,9 +15,6 @@ app.directive('keypressEvents', ['$rootScope', '$document', function($rootScope,
 
 app.controller('carousel', ['$scope', function($scope) {
 
-    console.log('INITIALIZING CAROUSEL');
-    console.log('total', $scope.total);
-
 }]);
 
 app.controller('teamsMode', ['$scope', function($scope) {
@@ -154,7 +151,7 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
             value: 'value'
         });
     }
-    //
+
     $scope.deleteMeta = function(meta, idx) {
         $scope.ui.outgoing_message.meta.splice(idx, 1);
         $scope.makeDirty();
@@ -254,13 +251,11 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
 
     $scope.updateConditionlessOption = function(opt){
-        console.log('updateConditionlessOption: ', opt);
         $scope.makeDirty()
     }
 
 
     $scope.updateConditionalText = function(opt){
-        // console.log('updateConditionalText opt: ', opt);
         // this needs a bunch of work
         $scope.ui.conditional_needRight = false;
 
@@ -283,7 +278,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
 
     $scope.condition_action_then_select = function(opt){
-        // console.log('condition_action_then_select opt: ', opt);
         $scope.makeDirty();
         if(opt.conditional.action !== "execute_script"){
         //  cleaning off these options because the user is NOT executing a script at this point.
@@ -301,10 +295,8 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
                 // now we need a reference to the list of threads for this command
                 opt.conditional.selected_scripts_threads = $scope.bot.commands[0].script;
 
-                // console.log('HERE IS THE LIST OF THREADS I HAVE TO DEAL WITH', opt.selected_scripts_threads);
                 // and we need to select the first one
                 opt.conditional.execute.thread = opt.conditional.selected_scripts_threads[0].topic;
-                // console.log('new opt.conditional: ', opt.conditional);
                 $scope.updateConditionalText(opt);
             }
         }
@@ -312,7 +304,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
 
     $scope.action_then_select = function(opt){
-        console.log('action_then_select opt: ', opt);
         $scope.makeDirty();
         if(opt.action !== "execute_script"){
         //  cleaning off these options because the user is NOT executing a script at this point.
@@ -330,10 +321,8 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
                 // now we need a reference to the list of threads for this command
                 opt.selected_scripts_threads = $scope.bot.commands[0].script;
 
-                // console.log('HERE IS THE LIST OF THREADS I HAVE TO DEAL WITH', opt.selected_scripts_threads);
                 // and we need to select the first one
                 opt.execute.thread = opt.selected_scripts_threads[0].topic;
-                console.log('new opt: ', opt);
             }
         }
     }
@@ -352,24 +341,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
     $scope.clipError = function(e) {
         $scope.handleAjaxError(e);
-    };
-
-    // if ($cookies.get('sidebar_properties') == 'false') {
-    //   $scope.ui.properties = false;
-    // }
-    // if ($cookies.get('sidebar_help') == 'false') {
-    //   $scope.ui.help = false;
-    // }
-    // if ($cookies.get('sidebar_variables') == 'false') {
-    //   $scope.ui.variables = false;
-    // }
-    // if ($cookies.get('sidebar_inspector') == 'false') {
-    //   $scope.ui.inspector = false;
-    // }
-
-    $scope.toggleSidebar = function(type) {
-        $scope.ui[type] = !$scope.ui[type];
-        $scope.setCookie('sidebar_' + type, $scope.ui[type] ? 'true' : 'false')
     };
 
     $scope.command = {
@@ -632,9 +603,7 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     $scope.tag_input_invalid = false;
     $scope.addTag = function(event){
         event.preventDefault();
-        // console.log('$scope.command: ', $scope.command);
-        // console.log('tag to add: ', $scope.ui.tag);
-        // console.log('tags: ', $scope.command.tags);
+
         if(!$scope.command.tags){
             $scope.command.tags = [];
         }
@@ -650,10 +619,8 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
             }
             $scope.ui.tag = '';
             $scope.makeDirty();
-        // console.log('$scope.command: ', $scope.command);
         }else {
             $scope.tag_input_invalid = true;
-        // $scope.validationError('Invalid Tag Input');
         }
 
 
@@ -754,7 +721,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
 
     $scope.execute_script_selected = function(opt){
-        // console.log('execute_script_selected opt: ', opt);
         $scope.makeDirty();
         // we need to update the list of threads here.
         // find the selected script
@@ -767,7 +733,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     }
 
     $scope.conditional_execute_script_selected = function(opt){
-        // console.log('conditional_execute_script_selected opt.conditional: ', opt.conditional);
         $scope.makeDirty();
         // we need to update the list of threads here.
         // find the selected script
@@ -838,10 +803,8 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
                 if($scope.command.script.script[t].script[m].conditional){
                     $scope.command.script.script[t].script[m].conditional.validators = {};
                     // remove this when you are done:
-                    // console.log('validate $scope.command.script.script[t].script[m]: ', $scope.command.script.script[t].script[m]);
 
                     var x = $scope.command.script.script[t].script[m].conditional;
-                    // console.log('x: ', x);
                     var condition_invalid = false;
                     if($scope.command.script.script[t].script[m].conditional.left === '_new' && !$scope.command.script.script[t].script[m].conditional.left_val){
                         $scope.command.script.script[t].script[m].conditional.validators.left_val_invalid = true;
@@ -869,9 +832,7 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
                 // new stuff for meta data
                 if ($scope.command.script.script[t].script[m].meta) {
                     for (var r = 0; r < $scope.command.script.script[t].script[m].meta.length; r++) {
-                        console.log('testing', $scope.command.script.script[t].script[m].meta[r]);
                         if ($scope.command.script.script[t].script[m].meta[r].key == '') {
-                            console.log('Meta data must have a key name');
                             $scope.command.script.script[t].script[m].meta[r].invalid = true;
                             $scope.validationError('Meta data must have a key name');
                             return false;
@@ -2311,8 +2272,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
     $scope.followOption = function(option, $event) {
 
-        console.log('following option...');
-
         $event.stopPropagation();
 
         switch (option.action) {
@@ -2581,8 +2540,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     }
     $scope.focusOnly = function(line) {
 
-        console.log('FOCUS ONLY!');
-
         if (!line.focused) {
             if ($scope.unfocus()) {
                 line.focused = true;
@@ -2591,15 +2548,11 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
     }
 
     $scope.focusConditional = function(line, force) {
-        // console.log('line: ', line);
         var possible_opts = $scope.command.variables.map(function(o){
             var z = '{{responses.' + o.name + '}}';
             return z;
         });
         possible_opts.push("_new");
-        // console.log('possible_opts: ', possible_opts);
-
-        // console.log('left_exist: ', left_exist);
 
         if(line.conditional.left){
             var left_exist = possible_opts.filter(function(o){
@@ -2628,8 +2581,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
         if(!line.conditional.action){
             line.conditional.action = 'next';
         }
-        // console.log('conditional focus::::::::::::::::::::::::::::::::::::: ');
-        // console.log('line: ', line);
         $scope.updateConditionalText(line);
         if (!line.focused) {
             if ($scope.unfocus()) {
@@ -2645,7 +2596,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
 
     $scope.focus = function(line, force) {
-        // console.log('focus line: ', line);
         if (!line.focused) {
             if ($scope.unfocus()) {
                 line.focused = true;
@@ -2716,6 +2666,13 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
         return '/js/partials/facebook_' + $scope.ui.outgoing_message.fb_attachment.template_type + '_attachment.html';
     }
 
+    $scope.getLUISIntents = function() {
+        sdk.getLuisIntents().then(function(intents) {
+            $scope.ui.intents = intents;
+            $scope.$apply();
+        });
+    }
+
 
     $scope.bot = {
         _id: 'static',
@@ -2733,10 +2690,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
         } else {
             $scope.command.script.variables = [];
         }
-        // $scope.setThread('default');
-        // $scope.$apply();
-
-
 
         $scope.getBotCommands(bot_id).then(function(bot_commands){
             $scope.bot.commands = bot_commands;
@@ -2747,7 +2700,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
             // and add the necessary lookup info
             $scope.command.script.map(function(first_layer){
                 first_layer.script = first_layer.script.map(function(second_layer){
-                    // console.log('second_layer: ', second_layer);
                     if(second_layer.action === 'execute_script'){
                         var selected_script = $scope.bot.commands.filter(function(c){
                             return c.command === second_layer.execute.script;
@@ -2756,7 +2708,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
                     }
                     if(second_layer.collect){
                         second_layer.collect.options = second_layer.collect.options.map(function(collects_input){
-                            // console.log('collects_input: ', collects_input);
                             if(collects_input.action === 'execute_script'){
                                 var selected_script = $scope.bot.commands.filter(function(c){
                                     return c.command === collects_input.execute.script;
@@ -2771,7 +2722,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
                 return first_layer;
             });
 
-
             var start_thread = getParameterByName('thread') || 'default';
             $scope.setThread(start_thread);
             $scope.$apply();
@@ -2781,10 +2731,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
             $scope.handleAjaxError(err);
         });
 
-
-
-
-
     }).catch(function(err) {
         $scope.handleAjaxError(err);
     });
@@ -2792,5 +2738,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
 
     $scope.lastError = null;
     $scope.ui.editor_mode = $scope.decideMode(platform);
+    $scope.getLUISIntents();
 
 }]);

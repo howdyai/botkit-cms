@@ -112,6 +112,17 @@ module.exports = function(webserver, api) {
         })
     });
 
+    webserver.get('/admin/api/luisIntents', function(req, res) {
+        if (process.env.LUIS_ENDPOINT) {
+            res.json({success: true, data: [{
+                intent: 'foo',
+            }]});
+        } else {
+            res.json({success: true, data: []});
+        }
+    });
+
+
 
     webserver.delete('/admin/api/scripts/:id', function(req, res) {
         api.getScripts().then(function(scripts) {

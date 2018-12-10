@@ -1,4 +1,3 @@
-
 var request = require('request');
 
 const INTENT_CONFIDENCE_THRESHOLD = process.env.INTENT_CONFIDENCE_THRESHOLD || 0.7;
@@ -128,18 +127,18 @@ module.exports = function() {
 
             api.enrichMessage(message_text).then(function(query) {
 
-                console.log('Query to evaluate: ', query);
-
                 // if any intents were detected, check if they match a trigger...
                 if (query.intents && query.intents.length) {
                     // check intents first
                     for (var t = 0; t < triggers.length; t++) {
-                        for (var i = 0; i < query.intents.length; i++) {
-                            var intent = query.intents[i];
-                            var trigger = triggers[t];
-                            if (Number(intent.score) >= INTENT_CONFIDENCE_THRESHOLD) {
-                                if (intent.intent === trigger.pattern) {
-                                    res.push(triggers[t].script);
+                        var trigger = triggers[t];
+                        if (trigger.type == 'intent') {
+                            for (var i = 0; i < query.intents.length; i++) {
+                                var intent = query.intents[i];
+                                if (Number(intent.score) >= INTENT_CONFIDENCE_THRESHOLD) {
+                                    if (intent.intent === trigger.pattern) {
+                                        res.push(triggers[t].script);
+                                    }
                                 }
                             }
                         }
@@ -156,7 +155,7 @@ module.exports = function() {
                             var test = new RegExp(trigger.pattern,'i');
                             found = query.text.match(test);
                         } catch(err) {
-                            console.log('ERROR IN REGEX', err);
+                            console.error('ERROR IN TRIGGER REGEX', err);
                         }
 
                         if (found !== false && found !== null) {
@@ -176,7 +175,7 @@ module.exports = function() {
                             var test = new RegExp('^' + trigger.pattern + '\\b','i');
                             found = query.text.match(test);
                         } catch(err) {
-                            console.log('ERROR IN REGEX', err);
+                            console.error('ERROR IN TRIGGER REGEX', err);
                         }
 
                         if (found !== false && found !== null) {

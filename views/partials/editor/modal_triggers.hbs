@@ -9,14 +9,13 @@
               <select ng-model="trigger.type">
                 <option value="string">Exact String Match</option>
                 <option value="regexp">Regular Expression</option>
-                <option value="intent" ng-if="bot.settings.luis">Intent from LUIS.ai</option>
-                <option value="intent" ng-if="bot.settings.watson">Intent from IBM Watson Assistant</option>
+                <option value="intent" ng-if="ui.intents && ui.intents.length">Intent from LUIS.ai</option>
             </select>
         </p>
 
         <p ng-if="trigger.type=='intent'">
             <label>Intent</label>
-            <select ng-model="trigger.pattern" ng-options="intent.name as intent.name for intent in intents track by intent.name">
+            <select ng-model="trigger.pattern" ng-options="intent.name as intent.name for intent in ui.intents track by intent.name">
             </select>
         </p>
 
