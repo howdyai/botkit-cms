@@ -115,6 +115,16 @@ module.exports = function() {
                 }
             }
 
+            // check for no results...
+            if (!res.length) {
+                // find a script set with is_fallback true
+                for (var s = 0; s < scripts.length; s++) {
+                    if (scripts[s].is_fallback === true) {
+                        res.push(s);
+                    }
+                }
+            }
+
             if (res.length) {
                 resolve(scripts[res[0]]);
             } else {

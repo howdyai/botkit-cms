@@ -394,28 +394,19 @@ app.controller('botCommands', ['$scope',  'sdk', function($scope, sdk) {
 
     $scope.deleteCommand = function(command) {
 
-        var is_fallback = false;
-
         // WAIT! Is this the fallback script?
-        if ($scope.bot.settings.fallback_action=='run' && (command.id == $scope.bot.settings.fallback_script)) {
+        if (command.is_fallback) {
             if (!confirm('Deleting this script will disable your bot\'s fallback behavior. Are you sure you want to continue?')) {
                 return false;
             }
-            is_fallback = true;
         } else {
             if (!confirm('Delete this command?')) {
                 return false;
             }
         }
+
         sdk.removeCommand($scope.bot_id, command).then(function() {
-
             $scope.getCommands();
-            if (is_fallback) {
-                $scope.bot.settings.fallback_action = 'nothing';
-                delete($scope.bot.settings.fallback_script);
-                $scope.submitEdit();
-            }
-
         }).catch(function(err) {
             $scope.handleAjaxError(err);
         });
