@@ -51,7 +51,23 @@ TOKENS=youwillneverguessmysecretbottoken
 # Admin users for UI
 # USERS=username:password username2:password2 username3:password3
 USERS=admin:123secret
+
+# LUIS Endpoint
+# URL to published LUIS Endpoint in the form of https://<REGION>.api.cognitive.microsoft.com/luis/v2.0/apps/<APPID>?subscription-key=<SUBID>&verbose=true&timezoneOffset=-360&q=
+# Get this from LUIS.ai Keys and Endpoint settings
+# LUIS_ENDPOINT=
+
+# LUIS App Version
+# Defaults to 0.1, update if you manage multiple LUIS app versions
+# LUIS_VERSION=0.1
 ```
+
+### Using LUIS.ai
+
+This project includes support for using LUIS.ai to determine the intent represented by an incoming message.
+To enable LUIS, add the `LUIS_ENDPOINT` variable to your environment.
+
+After enabling LUIS, new options will appear in the Trigger dialog that will allow you to assign intents from LUIS as triggers.
 
 ### Editor Configuration
 
@@ -119,11 +135,6 @@ CONS: script content now has to live in bot repo, requires a restart for content
 TODO:
 
 * optional mongo support for scripts
-
-* support for LUIS
-  -> list of intents in UI
-  -> pass message through luis when triggering
-  -> match triggers
 
 * deal with renamed scripts/threads in GOTOs
 

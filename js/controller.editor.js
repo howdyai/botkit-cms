@@ -2673,7 +2673,6 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
         });
     }
 
-
     $scope.bot = {
         _id: 'static',
         platform: platform,
