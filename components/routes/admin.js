@@ -144,21 +144,21 @@ module.exports = function(webserver, api) {
                 method: 'GET',
                 url: url,
                 headers: {
-                    'Ocp-Apim-Subscription-Key': subscription_key
+                    'Ocp-Apim-Subscription-Key': luisConfig.key
                 }
             };
             request(options, function(err, resp, body) {
                 if (err) {
-                console.error('Error commnicating with LUIS:', err);
-                res.json({success: true, data: []});
+                    console.error('Error commnicating with LUIS:', err);
+                    res.json({success: true, data: []});
                 } else {
                     var intents = [];
                     try {
-                    intents = JSON.parse(body);
+                        intents = JSON.parse(body);
                     } catch(err) {
-                    console.error('Error parsing LUIS intents:', err);
+                        console.error('Error parsing LUIS intents:', err);
                     }
-                res.json({success: true, data: intents});
+                    res.json({success: true, data: intents});
                 }                  
             });
           
