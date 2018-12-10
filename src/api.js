@@ -87,30 +87,41 @@ module.exports = function() {
 
                 var luis_uri = process.env.LUIS_ENDPOINT + query.text;
                 request(luis_uri, function(error, response, body) {
-
-                    var luis_results = JSON.parse(body);
-                    if (!luis_results.intents) {
-                        console.warn('No intents returned from LUIS.ai.  Key may be invalid');
+                    if (error) {
                         resolve(query);
                     } else {
-                        if (String(luis_results.Message) === 'The request is invalid.') {
+                        var luis_results = {};
+                        
+                        try { 
+                            JSON.parse(body);
+                        } catch(err) {
+                            console.error('Error parsing LUIS response', err);
+                            return resolve(query);
+                        }
+                        
+                        if (!luis_results.intents) {
                             console.warn('No intents returned from LUIS.ai.  Key may be invalid');
                             resolve(query);
                         } else {
+                            if (String(luis_results.Message) === 'The request is invalid.') {
+                                console.warn('No intents returned from LUIS.ai.  Key may be invalid');
+                                resolve(query);
+                            } else {
 
-                            query.luis = luis_results;
+                                query.luis = luis_results;
 
-                            query.intents = [];
+                                query.intents = [];
 
-                            luis_results.intents.forEach(function(i) {
-                                query.intents.push(i);
-                            });
+                                luis_results.intents.forEach(function(i) {
+                                    query.intents.push(i);
+                                });
 
-                            luis_results.entities.forEach(function(e) {
-                                query.entities.push(e);
-                            });
+                                luis_results.entities.forEach(function(e) {
+                                    query.entities.push(e);
+                                });
 
-                            resolve(query);
+                                resolve(query);
+                            }
                         }
                     }
                 });
