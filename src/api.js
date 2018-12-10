@@ -88,6 +88,7 @@ module.exports = function() {
                 var luis_uri = process.env.LUIS_ENDPOINT + query.text;
                 request(luis_uri, function(error, response, body) {
                     if (error) {
+                        console.error('Error communicating with LUIS', error);
                         resolve(query);
                     } else {
                         var luis_results = {};
