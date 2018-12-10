@@ -1,5 +1,6 @@
 [
   {
+    "id": "0-0-0-0-0",
     "command": "hello",
     "description": "Respond when a human says hello!",
     "script": [
