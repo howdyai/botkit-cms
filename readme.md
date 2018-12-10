@@ -1,15 +1,15 @@
+# Botkit CMS
+
 This project will serve as a drop-in replacement for users of Botkit Studio.
 
-## Get Script Content
+## Migrate from Botkit Studio
 
-This project is designed to be used in conjunction with data exported from a Botkit Studio account.  To acquire this data file, follow the instructions below:
+If you have existing script content in Botkit Studio, you can migrate to a Botkit CMS instance by using the data export tool.
 
 * Login to your Botkit Studio account.  
-* Navigate to a specific bot, then navigate to that bot's "Scripts" tab.
-* Click the "Export" button located in the upper right hand corner of the script list.
-* De-select any scripts you do not want to include
-* Click the "Export ##" button at the bottom of the screen.
+* Navigate to a specific bot and find the "Migrate Now" button on the dashboard.
 * Click "Download" to download the file, or copy paste the content of the window into a local file named `scripts.json`
+* Use the "Import" tool within Botkit CMS to import the scripts.
 
 ## Create a replacement API microservice
 
@@ -115,10 +115,6 @@ studio.loadScriptsFromFile(__dirname + '/scripts.json').catch(function(err) {
 PROS: no external api calls
 
 CONS: script content now has to live in bot repo, requires a restart for content changes
-
-
-
-
 
 TODO:
 
