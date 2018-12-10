@@ -1,6 +1,8 @@
 
 var request = require('request');
 
+const INTENT_CONFIDENCE_THRESHOLD = process.env.INTENT_CONFIDENCE_THRESHOLD || 0.7;
+
 module.exports = function() {
 
     var api = {}
@@ -87,31 +89,31 @@ module.exports = function() {
                 var luis_uri = process.env.LUIS_ENDPOINT + query.text;
                 request(luis_uri, function(error, response, body) {
 
-                        var luis_results = JSON.parse(body);
-                        if (!luis_results.intents) {
+                    var luis_results = JSON.parse(body);
+                    if (!luis_results.intents) {
+                        console.warn('No intents returned from LUIS.ai.  Key may be invalid');
+                        resolve(query);
+                    } else {
+                        if (String(luis_results.Message) === 'The request is invalid.') {
                             console.warn('No intents returned from LUIS.ai.  Key may be invalid');
                             resolve(query);
                         } else {
-                            if (String(luis_results.Message) === 'The request is invalid.') {
-                                console.warn('No intents returned from LUIS.ai.  Key may be invalid');
-                                resolve(query);
-                            } else {
 
-                                query.luis = luis_results;
+                            query.luis = luis_results;
 
-                                query.intents = [];
+                            query.intents = [];
 
-                                luis_results.intents.forEach(function(i) {
-                                    query.intents.push(i);
-                                });
+                            luis_results.intents.forEach(function(i) {
+                                query.intents.push(i);
+                            });
 
-                                luis_results.entities.forEach(function(e) {
-                                    query.entities.push(e);
-                                });
+                            luis_results.entities.forEach(function(e) {
+                                query.entities.push(e);
+                            });
 
-                                resolve(query);
-                            }
+                            resolve(query);
                         }
+                    }
                 });
             } else {
                 resolve(query);
@@ -128,10 +130,25 @@ module.exports = function() {
 
                 console.log('Query to evaluate: ', query);
 
-                // check regular expressions first
+                // if any intents were detected, check if they match a trigger...
+                if (query.intents && query.intents.length) {
+                    // check intents first
+                    for (var t = 0; t < triggers.length; t++) {
+                        for (var i = 0; i < query.intents.length; i++) {
+                            var intent = query.intents[i];
+                            var trigger = triggers[t];
+                            if (Number(intent.score) >= INTENT_CONFIDENCE_THRESHOLD) {
+                                if (intent.intent === trigger.pattern) {
+                                    res.push(triggers[t].script);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // check regular expressions
                 for (var t = 0; t < triggers.length; t++) {
                     var trigger = triggers[t].trigger;
-
                     if (trigger.type == 'regexp') {
 
                         var found = false;
@@ -148,6 +165,7 @@ module.exports = function() {
                     }
                 }
 
+                // check keywords
                 for (var t = 0; t < triggers.length; t++) {
                     var trigger = triggers[t].trigger;
 
