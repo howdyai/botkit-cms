@@ -1,3 +1,6 @@
+
+var request = require('request');
+
 module.exports = function() {
 
     var api = {}
@@ -71,65 +74,115 @@ module.exports = function() {
         });
     }
 
-    api.evaluateTriggers = function(query) {
+    api.enrichMessage = function(message_text) {
+        return new Promise(function(resolve, reject) {
+            var query = {
+                text: message_text
+            };
+
+            // endpoint in the form of 
+            // https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/<APPID>subscription-key=<SUBID>&verbose=true&timezoneOffset=-360&q=
+            if (process.env.LUIS_ENDPOINT) {
+
+                var luis_uri = process.env.LUIS_ENDPOINT + query.text;
+                request(luis_uri, function(error, response, body) {
+
+                        var luis_results = JSON.parse(body);
+                        if (!luis_results.intents) {
+                            console.warn('No intents returned from LUIS.ai.  Key may be invalid');
+                            resolve(query);
+                        } else {
+                            if (String(luis_results.Message) === 'The request is invalid.') {
+                                console.warn('No intents returned from LUIS.ai.  Key may be invalid');
+                                resolve(query);
+                            } else {
+
+                                query.luis = luis_results;
+
+                                query.intents = [];
+
+                                luis_results.intents.forEach(function(i) {
+                                    query.intents.push(i);
+                                });
+
+                                luis_results.entities.forEach(function(e) {
+                                    query.entities.push(e);
+                                });
+
+                                resolve(pbody);
+                            }
+                        }
+                });
+            } else {
+                resolve(query);
+            }
+        })
+    }
+
+    api.evaluateTriggers = function(message_text) {
 
         return new Promise(function(resolve, reject) {
             var res = [];
 
-            // check regular expressions first
-            for (var t = 0; t < triggers.length; t++) {
-                var trigger = triggers[t].trigger;
+            api.enrichMessage(message_text).then(function(query) {
 
-                if (trigger.type == 'regexp') {
+                console.log('Query to evaluate: ', query);
 
-                    var found = false;
-                    try {
-                        var test = new RegExp(trigger.pattern,'i');
-                        found = query.match(test);
-                    } catch(err) {
-                        console.log('ERROR IN REGEX', err);
-                    }
+                // check regular expressions first
+                for (var t = 0; t < triggers.length; t++) {
+                    var trigger = triggers[t].trigger;
 
-                    if (found !== false && found !== null) {
-                        res.push(triggers[t].script);
-                    }
-                }
-            }
+                    if (trigger.type == 'regexp') {
 
-            for (var t = 0; t < triggers.length; t++) {
-                var trigger = triggers[t].trigger;
+                        var found = false;
+                        try {
+                            var test = new RegExp(trigger.pattern,'i');
+                            found = query.text.match(test);
+                        } catch(err) {
+                            console.log('ERROR IN REGEX', err);
+                        }
 
-                if (trigger.type == 'string') {
-
-                    var found = false;
-                    try {
-                        var test = new RegExp('^' + trigger.pattern + '\\b','i');
-                        found = query.match(test);
-                    } catch(err) {
-                        console.log('ERROR IN REGEX', err);
-                    }
-
-                    if (found !== false && found !== null) {
-                        res.push(triggers[t].script);
+                        if (found !== false && found !== null) {
+                            res.push(triggers[t].script);
+                        }
                     }
                 }
-            }
 
-            // check for no results...
-            if (!res.length) {
-                // find a script set with is_fallback true
-                for (var s = 0; s < scripts.length; s++) {
-                    if (scripts[s].is_fallback === true) {
-                        res.push(s);
+                for (var t = 0; t < triggers.length; t++) {
+                    var trigger = triggers[t].trigger;
+
+                    if (trigger.type == 'string') {
+
+                        var found = false;
+                        try {
+                            var test = new RegExp('^' + trigger.pattern + '\\b','i');
+                            found = query.text.match(test);
+                        } catch(err) {
+                            console.log('ERROR IN REGEX', err);
+                        }
+
+                        if (found !== false && found !== null) {
+                            res.push(triggers[t].script);
+                        }
                     }
                 }
-            }
 
-            if (res.length) {
-                resolve(scripts[res[0]]);
-            } else {
-                reject();
-            }
+                // check for no results...
+                if (!res.length) {
+                    // find a script set with is_fallback true
+                    for (var s = 0; s < scripts.length; s++) {
+                        if (scripts[s].is_fallback === true) {
+                            res.push(s);
+                        }
+                    }
+                }
+
+                if (res.length) {
+                    resolve(scripts[res[0]]);
+                } else {
+                    reject();
+                }
+            }).catch(reject);
         });
 
     }

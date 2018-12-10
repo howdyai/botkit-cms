@@ -120,5 +120,8 @@ TODO:
 
 * optional mongo support for scripts
 * support for LUIS
+  -> list of intents in UI
+  -> pass message through luis when triggering
+  -> match triggers
 
 ?? deal with id/command/uniqueness
