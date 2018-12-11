@@ -38,7 +38,7 @@ $path-color: #CCC;
 
 .fullscreen {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     height: 100%;
 
     .remainder {
@@ -1148,7 +1148,8 @@ $path-color: #CCC;
         }
 
         button.edit:before {
-            font-family: FontAwesome;
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
             content: '\f040';
             color: #CCC;
         }
@@ -1549,7 +1550,8 @@ button.delete {
 }
 
 button.delete:before {
-    font-family: FontAwesome;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
     content: '\f00d';
     color: #CCC;
 }

@@ -1,7 +1,6 @@
-<div ng-controller="editBot" class="wrapper">
-    <div class="workspace">
-        <div class="workspace_body" ng-controller="botCommands">
-
+<div ng-controller="editBot" class="fullscreen">
+    {{> nav}}
+    <div class="workspace_wrapper"" ng-controller="botCommands">
             <div class="toolbar">
                 <div ng-if="!ui.export_mode" class="righthand_tool">
                     <button class="lockable" ng-click="toggleExportMode()">Export</button>
@@ -22,6 +21,10 @@
                 </div>
 
             </div>
+
+    <div class="workspace">
+        <div class="workspace_body">
+
             <table>
                 <tr>
                     <th class="sortable" ng-click="toggleSort('command')">Script Name<span class="sortorder" ng-if="ui.sortField=='command'">▲</span><span class="sortorder" ng-if="ui.sortField=='-command'">▼</span></th>
@@ -78,6 +81,7 @@
         <div class="ng-class:{active:ui.import_mode}; editor_modal">
           {{> importexport/modal_import}}
         </div>
+    </div>
     </div>
 </div>
 </div>

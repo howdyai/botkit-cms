@@ -670,7 +670,8 @@ td.trend_down {
 
     .stat-data:after {
         content: '\f062';
-        font-family: 'FontAwesome';
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
         color: $green;
         text-align: center;
         display: block;
@@ -690,7 +691,8 @@ td.trend_down {
     // }
     .stat-data:after {
         content: '\f063';
-        font-family: 'FontAwesome';
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
         text-align: center;
         display: block;
         font-size: 28px;
@@ -1422,7 +1424,8 @@ button.locked {
             content: "\f023";
             /* this is your text. You can also use UTF-8 character codes as I do here */
             padding-right: 0.5rem;
-            font-family: FontAwesome;
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
             display: inline-block;
         }
     }
@@ -1857,4 +1860,31 @@ div.tags {
       flex: 0 0 225px;
     }
   }
+}
+
+
+#nav {
+    background-color: #666;
+    a { 
+        display: block;
+        text-decoration: none;
+
+        i {
+            display: block;
+            margin: 1rem auto 1.5rem;
+            text-align: center;
+            &:before { 
+                display: block;
+                font-size:25px;
+                margin: 0px auto;
+            }
+        }
+        color: #CCC;
+
+        &:hover { 
+            color: #FFF;
+        }
+    }
+    width: 60px;
+
 }

@@ -11,8 +11,8 @@
                 <button ng-disabled="ui.carousel_position==0 || ui.outgoing_message.text[ui.carousel_position].trim()==''" ng-click="prev(ui.outgoing_message.text.length)"><i class="fa fa-caret-left" aria-hidden="true"></i></button>
                 {% (ui.carousel_position + 1) %} of {% ui.outgoing_message.text.length %}
                 <button ng-disabled="ui.outgoing_message.text[ui.carousel_position].trim()==''" ng-click="next(ui.outgoing_message)">
-                    <i ng-if="ui.carousel_position!=(ui.outgoing_message.text.length-1)" class="fa fa-caret-right" aria-hidden="true"></i>
-                    <i ng-if="ui.carousel_position==(ui.outgoing_message.text.length-1)" class="fa fa-plus" aria-hidden="true"></i>
+                    <i ng-if="ui.carousel_position!=(ui.outgoing_message.text.length-1)" class="fas fa-caret-right" aria-hidden="true"></i>
+                    <i ng-if="ui.carousel_position==(ui.outgoing_message.text.length-1)" class="fas fa-plus" aria-hidden="true"></i>
                 </button>
                 <button ng-disabled="ui.outgoing_message.text.length <= 1" class="delete" ng-click="deleteAlternate(ui.outgoing_message, ui.carousel_position);"></button>
             </div>

@@ -134,8 +134,4 @@ CONS: script content now has to live in bot repo, requires a restart for content
 
 TODO:
 
-* optional mongo support for scripts
-
-* deal with renamed scripts/threads in GOTOs
-
-?? deal with id/command/uniqueness
+* Add optional MongoDB support for script storage

@@ -49,8 +49,8 @@ $selected-bot-background-color: #fff;
         margin-left: $unit;
         margin-top: 4px;
         &::before {
-            font-family: FontAwesome;
-            font-weight: 400;
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
             content: '\f040';
             color: $white;
         }

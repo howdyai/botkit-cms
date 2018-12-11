@@ -243,7 +243,12 @@ module.exports = function(webserver, api) {
         })
     });
 
-
+    webserver.get('/admin/config', function(req, res) {
+        res.render('config',{
+            layout: 'layouts/layout',
+            url: req.protocol + "://" + req.headers.host
+        });
+    })
 
 
 }

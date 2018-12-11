@@ -164,7 +164,8 @@ a.howdy-text-button {
     height: 21px;
     font-size: 14px;
     display: block;
-    font-family: FontAwesome;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
     &:hover {
         background-color: saturate($circle-button-color, 30%);
     }
@@ -257,7 +258,8 @@ a.howdy-text-button {
     margin-left: $unit;
     margin-top: 4px;
     &::before {
-        font-family: FontAwesome;
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
         content: '\f00d';
         color: $white;
     }
