@@ -12,6 +12,7 @@
   "author": "benbrown@gmail.com",
   "license": "MIT",
   "dependencies": {
+    "async": "^2.6.1",
     "body-parser": "^1.17.2",
     "debug": "^2.6.8",
     "dotenv": "^6.0.0",
