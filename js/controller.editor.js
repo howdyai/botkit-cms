@@ -2291,10 +2291,10 @@ app.controller('scriptEditor', ['$scope', '$cookies', '$sce', 'sdk', '$location'
                 if (destination.length) {
                     if ($scope.ui.dirty) {
                         if (confirm('Navigate to ' + destination[0].command + '?')) {
-                            $scope.goto('/app/bots/'+bot_id +'/commands/' + destination[0]._id + '?thread=' + option.execute.thread);
+                            $scope.goto('/admin/edit/' + destination[0].command + '?thread=' + option.execute.thread);
                         }
                     } else {
-                        $scope.goto('/app/bots/'+bot_id +'/commands/' + destination[0]._id + '?thread=' + option.execute.thread);
+                        $scope.goto('/admin/edit/' + destination[0].command + '?thread=' + option.execute.thread);
                     }
                 }
 
