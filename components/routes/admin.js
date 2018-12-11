@@ -27,7 +27,6 @@ module.exports = function(webserver, api) {
             for (var s = 0; s < scripts.length; s++) {
                 if (scripts[s].id === update.id) {
                     found = s;
-                    console.log('found timestamp', scripts[s].modified, 'incoming timestamp:', update.modified);
                 }
             }
             
@@ -62,12 +61,10 @@ module.exports = function(webserver, api) {
 
             } else {
 
-
                 var original_name = scripts[found].command;
 
                 scripts[found] = update;
                 scripts[found].modified = new Date();
-                console.log('Updating modified date to', scripts[found].modified);
 
                 if (update.command != original_name) {
                     handleRenamed(scripts, original_name, update.command).then(function() {
@@ -195,8 +192,6 @@ module.exports = function(webserver, api) {
 
             const luisConfig = parseLUISEndpoint(process.env.LUIS_ENDPOINT);
             var url = `https://${ luisConfig.region }.api.cognitive.microsoft.com/luis/api/v2.0/apps/${ luisConfig.app }/versions/${ luisConfig.version }/intents?skip=0&take=500`;
-
-            console.log('GET INTENTS ', url);
 
             var options = {
                 method: 'GET',
