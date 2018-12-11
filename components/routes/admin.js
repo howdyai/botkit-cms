@@ -61,20 +61,76 @@ module.exports = function(webserver, api) {
 
             } else {
 
+
+                var original_name = scripts[found].command;
+
                 scripts[found] = update;
                 scripts[found].modified = new Date();
                 console.log('Updating modified date to', scripts[found].modified);
 
-                api.writeScriptsToFile(scripts).then(function() {
-                    res.json({
-                        success: true,
-                        data: update,
+                if (update.command != original_name) {
+                    handleRenamed(original_name, update.command).then(function() {
+                        api.writeScriptsToFile(scripts).then(function() {
+                            res.json({
+                                success: true,
+                                data: update,
+                            });
+                        });
                     });
-                });
+                } else {
+                    api.writeScriptsToFile(scripts).then(function() {
+                        res.json({
+                            success: true,
+                            data: update,
+                        });
+                    });
+                }
             }
         });
 
     });
+
+
+    function handleRenamed(original_name, new_name) {
+        return new Promise(function(resolve, reject) {
+            async.each(scripts, function(command, next) {
+                updateExecScript(command, original_name, new_name, next);
+            }, function() {
+                resolve();
+            })
+        });
+    }
+
+    function updateExecScript(command, original_name, new_name, next) {
+        // need to look at command.script[*].script[*].action
+        // need to look at command.script[*].script[*].collect.options[*].action
+        var dirty = false;
+        for (var t = 0; t < command.script.length; t++) {
+            for (var m = 0; m < command.script[t].script.length; m++) {
+                if (command.script[t].script[m].action == 'execute_script' && command.script[t].script[m].execute && command.script[t].script[m].execute.script == original_name) {
+                    command.script[t].script[m].execute.script = new_name;
+                    dirty = true;
+                }
+
+                if (command.script[t].script[m].collect && command.script[t].script[m].collect.options) {
+                    for (var o = 0; o < command.script[t].script[m].collect.options.length; o++) {
+                        if (command.script[t].script[m].collect.options[o].action=='execute_script' && command.script[t].script[m].collect.options[o].execute && command.script[t].script[m].collect.options[o].execute.script == original_name) {
+                            command.script[t].script[m].collect.options[o].execute.script = new_name;
+                            dirty = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (dirty) {
+            command.modified = new Date();
+            next();
+        } else {
+            next();
+        }
+    }
+
 
 
     // receives: command, user
