@@ -1,6 +1,7 @@
 
 const uuidv4 = require('uuid/v4');
 const request = require('request');
+const async = require('async');
 
 module.exports = function(webserver, api) {
 
