@@ -70,7 +70,7 @@ module.exports = function(webserver, api) {
                 console.log('Updating modified date to', scripts[found].modified);
 
                 if (update.command != original_name) {
-                    handleRenamed(original_name, update.command).then(function() {
+                    handleRenamed(scripts, original_name, update.command).then(function() {
                         api.writeScriptsToFile(scripts).then(function() {
                             res.json({
                                 success: true,
@@ -92,7 +92,7 @@ module.exports = function(webserver, api) {
     });
 
 
-    function handleRenamed(original_name, new_name) {
+    function handleRenamed(scripts, original_name, new_name) {
         return new Promise(function(resolve, reject) {
             async.each(scripts, function(command, next) {
                 updateExecScript(command, original_name, new_name, next);
