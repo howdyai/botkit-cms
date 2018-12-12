@@ -4,7 +4,7 @@
 
 This project can serve as a drop-in replacement for users of Botkit Studio.
 
-![Dialog Editor](/docs/screenshots/dialog.png)
+![Dialog Editor](https://raw.githubusercontent.com/howdyai/botkit-cms/master/docs/screenshots/dialog.png)
 
 ## Create Botkit Dialog Editor & API Service
 
