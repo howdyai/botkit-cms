@@ -4,7 +4,7 @@
   "description": "an open tool for designing, building and managing interactive dialog systems",
   "license": "MIT",
   "keywords": ["bots","dialog editor","content management","botkit","chatbots","bot"],
-  "homepage": "https://github.com/howdyai/botkit-cms".
+  "homepage": "https://github.com/howdyai/botkit-cms",
   "main": "src/api.js",
   "author":"ben@howdy.ai",
   "repository": {

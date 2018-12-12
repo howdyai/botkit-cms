@@ -1,17 +1,10 @@
 # Botkit CMS
 
-This project will serve as a drop-in replacement for users of Botkit Studio.
+## An open tool for designing, building and managing interactive dialog systems
+
+This project can serve as a drop-in replacement for users of Botkit Studio.
 
 ![Dialog Editor](/docs/screenshots/dialog.png)
-
-## Migrate from Botkit Studio
-
-If you have existing script content in Botkit Studio, you can migrate to a Botkit CMS instance by using the data export tool.
-
-* Login to your Botkit Studio account.  
-* Navigate to a specific bot and find the "Migrate Now" button on the dashboard.
-* Click "Download" to download the file, or copy paste the content of the window into a local file named `scripts.json`
-* Use the "Import" tool within Botkit CMS to import the scripts.
 
 ## Create Botkit Dialog Editor & API Service
 
@@ -33,9 +26,15 @@ var controller = Botkit.platform({
 
 [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/remix/botkit-cms)
 
-PROS: content edits that happen here don't require restart or redeploy of the bot app itself
+## Migrate from Botkit Studio
 
-CONS: a new microservice has to be hosted and operated
+If you have existing script content in Botkit Studio, you can migrate to a Botkit CMS instance by using the data export tool.
+
+* Login to your Botkit Studio account.  
+* Navigate to a specific bot and find the "Migrate Now" button on the dashboard.
+* Deploy the service to Glitch - this will preconfigure the service with your current `studio_token` and other settings.
+* Click "Download" to download the file, or copy paste the content of the window into a local file named `scripts.json`
+* Use the "Import" tool within Botkit CMS to import the scripts.
 
 ### Configuration
 
@@ -131,10 +130,6 @@ cms.loadScriptsFromFile(__dirname + '/scripts.json').catch(function(err) {
   console.error('Error loading scripts', err);
 });
 ```
-
-PROS: no external api calls
-
-CONS: script content now has to live in bot repo, requires a restart for content changes
 
 # TO-DO:
 
