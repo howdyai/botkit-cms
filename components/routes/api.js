@@ -2,6 +2,10 @@ module.exports = function(webserver, api) {
 
     var allowed_tokens = process.env.TOKENS ? process.env.TOKENS.split(/\s+/) : [];
 
+    if (!allowed_tokens.length) {
+        throw new Error('Define at least one API access token in the TOKENS environment variable');
+    }
+
     if (allowed_tokens && allowed_tokens.length) {
         // require an access token
         webserver.use(function(req, res, next) {

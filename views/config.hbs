@@ -1,6 +1,25 @@
-<div ng-controller="editBot" class="fullscreen">
+<div class="fullscreen">
     {{> nav}}
-    <div class="workspace_wrapper" ng-controller="botCommands">
-        my url: {{url}}
-    </div>
+    <div class="workspace_wrapper">
+
+        <div class="box instructions">
+            <h3>Configure Existing Botkit application</h3>
+            <p>To use Botkit CMS with your Botkit application, add the `studio_command_uri` parameter to
+                your code, as demonstrated below:
+            </p>
+
+            <textarea rows="3" readonly>var controller = Botkit.slackbot({
+    studio_command_uri: process.env.studio_command_uri,
+});</textarea>
+            <p>
+                Then, add to your .env file (or other environment management tool) the following value:
+            </p>
+
+            <textarea rows="1" readonly>studio_command_uri={{url}}</textarea>
+
+            <p>Make sure your `studio_token` parameter matches one of these values:</p>
+
+            <textarea rows="{{token_count}}" readonly>{{tokens}}</textarea>
+
+        </div>
 </div>

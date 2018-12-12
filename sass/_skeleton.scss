@@ -1868,11 +1868,12 @@ div.tags {
     a { 
         display: block;
         text-decoration: none;
+        font-size: 11px;
+        text-align: center;
+        margin: 1rem auto 1.5rem;
 
         i {
             display: block;
-            margin: 1rem auto 1.5rem;
-            text-align: center;
             &:before { 
                 display: block;
                 font-size:25px;
@@ -1887,4 +1888,10 @@ div.tags {
     }
     width: 60px;
 
+}
+
+.instructions {
+    textarea {
+        margin-bottom: 1rem;
+    }
 }

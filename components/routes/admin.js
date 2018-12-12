@@ -244,8 +244,13 @@ module.exports = function(webserver, api) {
     });
 
     webserver.get('/admin/config', function(req, res) {
+
+        var allowed_tokens = process.env.TOKENS ? process.env.TOKENS.split(/\s+/) : [];
+
         res.render('config',{
             layout: 'layouts/layout',
+            tokens: allowed_tokens.join("\n"),
+            token_count: allowed_tokens.length,
             url: req.protocol + "://" + req.headers.host
         });
     })
