@@ -1,4 +1,5 @@
 var request = require('request');
+var fs = require('fs');
 
 const INTENT_CONFIDENCE_THRESHOLD = process.env.INTENT_CONFIDENCE_THRESHOLD || 0.7;
 
@@ -10,6 +11,9 @@ module.exports = function() {
     var PATH_TO_SCRIPTS;
 
     api.parseAdminUsers = function(string) {
+        if (!string) {
+            string = '';
+        }
 
         var creds = string.split(/\s+/);
 
@@ -23,18 +27,27 @@ module.exports = function() {
 
     }
 
-    api.loadScriptsFromFile = function(src) {
+    api.loadScriptsFromFile = function(src, alt_path) {
         return new Promise(function(resolve, reject) {
-            try {
-                scripts = require(src);
-            } catch(err) {
-                return reject(err);
+
+            if (fs.existsSync(src)) {
+                try {
+                    scripts = require(src);
+                } catch(err) {
+                    return reject(err);
+                }
+            } else {
+                console.warn('Loading sample scripts...');
+                try {
+                    scripts = require(alt_path);
+                } catch(err) {
+                    return reject(err);
+                }
             }
 
             PATH_TO_SCRIPTS = src;
             api.mapTriggers();
             resolve(scripts);
-
         });
     }
 

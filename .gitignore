@@ -1,4 +1,4 @@
-data/scripts.json
+.data/scripts.json
 node_modules/
 public/js/bower_components/
 .env

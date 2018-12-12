@@ -2,17 +2,15 @@ require('dotenv').config()
 var api = require(__dirname + '/src/api.js')()
 
 if (!process.env.USERS) {
-  console.log('Please specify at least one username:password combo in the USERS environment variable')
+  throw new Error('Specify at least one username:password combo in the USERS environment variable')
 }
 
 var admin_creds = api.parseAdminUsers(process.env.USERS);
 
 // load scripts from file
-api.loadScriptsFromFile(__dirname + '/.data/scripts.json').catch(function(err) {
+api.loadScriptsFromFile(__dirname + '/.data/scripts.json', __dirname + '/.data/sample_scripts.json').catch(function(err) {
   console.log('Could not load scripts from file:', err);
-  api.loadScriptsFromFile(__dirname + '/.data/sample_scripts.json').catch(function(err) {
-    process.exit(1);
-  });
+  process.exit(1);
 });
 
 // Set up an Express-powered webserver to expose oauth and webhook endpoints

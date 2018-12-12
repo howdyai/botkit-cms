@@ -45,11 +45,11 @@ Here is an example `.env` file:
 PLATFORM=slack
 
 # authentication tokens for Bot users
-# TOKENS=123 456
+# TOKENS="123 456"
 TOKENS=youwillneverguessmysecretbottoken
 
 # Admin users for UI
-# USERS=username:password username2:password2 username3:password3
+# USERS="username:password username2:password2 username3:password3"
 USERS=admin:123secret
 
 # LUIS Endpoint

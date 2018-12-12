@@ -247,10 +247,13 @@ module.exports = function(webserver, api) {
 
         var allowed_tokens = process.env.TOKENS ? process.env.TOKENS.split(/\s+/) : [];
 
+        var package_version = require('../../package.json').version;
+
         res.render('config',{
             layout: 'layouts/layout',
             tokens: allowed_tokens.join("\n"),
             token_count: allowed_tokens.length,
+            version: package_version,
             url: req.protocol + "://" + req.headers.host
         });
     })
