@@ -1,16 +1,8 @@
 module.exports = function(api, controller) {
 
+    // evaluate incoming data
     controller.studio.evaluateTrigger = function(bot, text, user) {
         return api.evaluateTriggers(text);
-    };
-
-    // get Botkit Studio identity
-    controller.studio.identify = function(bot) {
-        return new Promise(function(resolve, reject) {
-            // TODO: Wtf does this do?
-            // noop
-            resolve();
-        });
     };
 
     // get command list
@@ -38,6 +30,7 @@ module.exports = function(api, controller) {
         return api.getScript(text);
     };
 
+    // get Botkit Studio identity
     controller.studio.identify = function() {
         return new Promise(function(resolve, reject) {
             resolve({

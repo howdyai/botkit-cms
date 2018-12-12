@@ -1,8 +1,19 @@
 {
-  "name": "ministudio",
-  "version": "1.0.0",
-  "description": "",
+  "name": "botkit-cms",
+  "version": "0.0.1",
+  "description": "an open tool for designing, building and managing interactive dialog systems",
+  "license": "MIT",
+  "keywords": ["bots","dialog editor","content management","botkit","chatbots","bot"],
+  "homepage": "https://github.com/howdyai/botkit-cms".
   "main": "src/api.js",
+  "author":"ben@howdy.ai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/howdyai/botkit-cms.git"
+  },
+  "bugs": {
+    "url": "https://github.com/howdyai/botkit-cms/issues"
+  },
   "scripts": {
     "start": "node index.js",
     "gulp": "./node_modules/gulp/bin/gulp.js",

@@ -11,11 +11,13 @@ If you have existing script content in Botkit Studio, you can migrate to a Botki
 * Click "Download" to download the file, or copy paste the content of the window into a local file named `scripts.json`
 * Use the "Import" tool within Botkit CMS to import the scripts.
 
-## Create a replacement API microservice
+## Create CMS API Sservice
 
 Clone this repo and set it up on a public host somewhere. Clicking the Glitch link below will do this for you.
 
 [Get your existing scripts](#get-script-content), and put the resulting `scripts.json` file in the `data/` folder.
+
+[Configure the .env file.](#configuration)
 
 Launch the app, then load it in your web browser. You should see a link to the editor screen.
 
@@ -112,18 +114,18 @@ The CSS is controlled by SASS files in the `sass/` folder. These are compiled in
 First, npm install this:
 
 ```bash
-npm install --save howdylabs/ministudio
+npm install --save botkit-cms
 ```
 
 [Get your existing scripts](#get-script-content), and put the resulting `scripts.json` in the main folder of your bot project.
 
-Then, add to your's main file, just after defining your controller object
+Then, add to your bot's main file, just after defining your controller object:
 
 ```js
-var studio = require('ministudio')();
-studio.useLocalStudio(controller);
+var cms = require('botkit-cms')();
+cms.useLocalStudio(controller);
 
-studio.loadScriptsFromFile(__dirname + '/scripts.json').catch(function(err) {
+cms.loadScriptsFromFile(__dirname + '/scripts.json').catch(function(err) {
   console.error('Error loading scripts', err);
 });
 ```
@@ -132,6 +134,6 @@ PROS: no external api calls
 
 CONS: script content now has to live in bot repo, requires a restart for content changes
 
-TODO:
+# TO-DO:
 
 * Add optional MongoDB support for script storage
