@@ -10,7 +10,9 @@ var admin_creds = api.parseAdminUsers(process.env.USERS);
 // load scripts from file
 api.loadScriptsFromFile(__dirname + '/.data/scripts.json').catch(function(err) {
   console.log('Could not load scripts from file:', err);
-  process.exit(1);
+  api.loadScriptsFromFile(__dirname + '/.data/sample_scripts.json').catch(function(err) {
+    process.exit(1);
+  });
 });
 
 // Set up an Express-powered webserver to expose oauth and webhook endpoints
