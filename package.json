@@ -1,6 +1,6 @@
 {
   "name": "botkit-cms",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "an open tool for designing, building and managing interactive dialog systems",
   "license": "MIT",
   "keywords": ["bots","dialog editor","content management","botkit","chatbots","bot"],
