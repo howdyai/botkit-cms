@@ -2,6 +2,8 @@
 
 This project will serve as a drop-in replacement for users of Botkit Studio.
 
+![Dialog Editor](/docs/screenshots/dialog.png)
+
 ## Migrate from Botkit Studio
 
 If you have existing script content in Botkit Studio, you can migrate to a Botkit CMS instance by using the data export tool.
@@ -11,13 +13,13 @@ If you have existing script content in Botkit Studio, you can migrate to a Botki
 * Click "Download" to download the file, or copy paste the content of the window into a local file named `scripts.json`
 * Use the "Import" tool within Botkit CMS to import the scripts.
 
-## Create CMS API Sservice
+## Create Botkit Dialog Editor & API Service
 
 Clone this repo and set it up on a public host somewhere. Clicking the Glitch link below will do this for you.
 
-[Get your existing scripts](#get-script-content), and put the resulting `scripts.json` file in the `data/` folder.
-
 [Configure the .env file.](#configuration)
+
+If migrating from Botkit Studio, [get your existing scripts](#migrate-from-botkit-studio), and put the resulting `scripts.json` file in the `data/` folder or import it through the UI.
 
 Launch the app, then load it in your web browser. You should see a link to the editor screen.
 
