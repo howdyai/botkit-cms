@@ -107,7 +107,7 @@ module.exports = function() {
                         var luis_results = {};
                         
                         try { 
-                            JSON.parse(body);
+                            luis_results = JSON.parse(body);
                         } catch(err) {
                             console.error('Error parsing LUIS response', err);
                             return resolve(query);
