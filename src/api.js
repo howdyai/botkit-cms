@@ -125,6 +125,7 @@ module.exports = function() {
                                 query.luis = luis_results;
 
                                 query.intents = [];
+                                query.entities = [];
 
                                 luis_results.intents.forEach(function(i) {
                                     query.intents.push(i);
