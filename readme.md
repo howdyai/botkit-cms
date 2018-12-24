@@ -24,6 +24,19 @@ var controller = Botkit.platform({
 })
 ```
 
+Also add a studio_token in the parameters above which will equal the token set up in the cms. To add the skills of your cms to your bot create a new file under skills folder in botkit and the contents of the file should be as below(where zolo_flow is the script defined on the cms)  - 
+
+```
+module.exports = function(controller) {
+    controller.hears('zolo','message_received', function(bot, message) {
+        controller.studio.run(bot, 'zolo_flow', message.user, message.channel).catch(function(err){
+            debug("error encountered in cms addition", err);
+        });
+
+    });
+}
+```
+
 [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/howdyai/botkit-cms)
 
 ## Migrate from Botkit Studio
