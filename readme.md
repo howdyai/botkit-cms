@@ -24,7 +24,7 @@ var controller = Botkit.platform({
 })
 ```
 
-Also add a studio_token in the parameters above. To add the skills of your cms to your bot create a new file under skills folder in botkit and the contents of the file should be as below(where zolo_flow is the script defined on the cms)  - 
+Also add a studio_token in the parameters above which will equal the token set up in the cms. To add the skills of your cms to your bot create a new file under skills folder in botkit and the contents of the file should be as below(where zolo_flow is the script defined on the cms)  - 
 
 ```
 module.exports = function(controller) {
