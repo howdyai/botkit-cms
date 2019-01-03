@@ -1,5 +1,6 @@
 var request = require('request');
 var fs = require('fs');
+var mongodb = require('mongodb');
 
 const INTENT_CONFIDENCE_THRESHOLD = process.env.INTENT_CONFIDENCE_THRESHOLD || 0.7;
 
@@ -94,13 +95,13 @@ module.exports = function(db) {
         });
     }
 
-    api.deleteScript = function(command) {
+    api.deleteScript = function(id) {
         return new Promise(function(resolve, reject) {
             if (db === null) {
                 api.getScripts().then(function(scripts) {
 
                     // delete script out of list.
-                    scripts = scripts.filter((script) => { return (script.id !== command) });
+                    scripts = scripts.filter((script) => { return (script.id !== id) });
         
                     // write scripts back to file.
                     api.writeScriptsToFile(scripts).then(function() {
@@ -117,7 +118,7 @@ module.exports = function(db) {
                     res.json({});
                 })
             } else {
-                db.collection('scripts').deleteOne({'command': command}, function(err, resp) {
+                db.collection('scripts').deleteOne({'_id': new mongodb.ObjectID(id)}, function(err, resp) {
                     api.getScripts().then(function(response) {
                         resolve(response);
                     })
