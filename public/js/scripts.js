@@ -3643,7 +3643,10 @@ angular.module('howdyPro').factory('sdk', ['$http', '$q', function($http, $q) {
 
         sdk.removeCommand = function(bot_id, command) {
           command.deleted = true;
-          var uri = '/admin/api/scripts/' + command.id;
+          console.log(command)
+          var uri = '/admin/api/scripts/' + (command.id || command._id);
+          console.log(uri)
+
           return sdk.v2(uri, 'delete',{deleted:true}, true);
         };
 

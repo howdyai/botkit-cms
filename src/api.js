@@ -1,13 +1,15 @@
 var request = require('request');
 var fs = require('fs');
+var mongodb = require('mongodb');
 
 const INTENT_CONFIDENCE_THRESHOLD = process.env.INTENT_CONFIDENCE_THRESHOLD || 0.7;
 
-module.exports = function() {
+module.exports = function(db) {
 
     var api = {}
     var scripts = [];
     var triggers = [];
+    var db = db;
     var PATH_TO_SCRIPTS;
 
     api.parseAdminUsers = function(string) {
@@ -46,7 +48,6 @@ module.exports = function() {
             }
 
             PATH_TO_SCRIPTS = src;
-            api.mapTriggers();
             resolve(scripts);
         });
     }
@@ -66,6 +67,146 @@ module.exports = function() {
         });
 
     }
+
+    api.writeScriptsToDb = function(new_scripts) {
+        return new Promise(function(resolve, reject) {
+            db.collection('scripts').insertMany(scripts, function(err, result) {
+                console.log(err);
+
+                resolve(result.toArray());
+            });
+        });
+    }
+
+    api.writeScripts = function(new_scripts, alt_path) {
+        return new Promise(function(resolve, reject) {
+            try {
+                if (db === null) {
+                    scripts = api.writeScriptsToFile(new_scripts, alt_path);
+                    api.mapTriggers();
+                } else {
+                    scripts = api.writeScriptsToDb(new_scripts);
+                }
+            } catch(err) {
+                return reject(err);
+            }
+
+            resolve(scripts);
+        });
+    }
+
+    api.deleteScript = function(id) {
+        return new Promise(function(resolve, reject) {
+            if (db === null) {
+                api.getScripts().then(function(scripts) {
+
+                    // delete script out of list.
+                    scripts = scripts.filter((script) => { return (script.id !== id) });
+        
+                    // write scripts back to file.
+                    api.writeScriptsToFile(scripts).then(function() {
+                        res.json({
+                            success: true,
+                            data: scripts,
+                        });
+                    });
+        
+                }).catch(function(err) {
+                    if (err) {
+                        console.error('Error in getScripts',err);
+                    }
+                    res.json({});
+                })
+            } else {
+                db.collection('scripts').deleteOne({'_id': new mongodb.ObjectID(id)}, function(err, resp) {
+                    api.getScripts().then(function(response) {
+                        resolve(response);
+                    })
+                })
+            }
+        });
+    }
+
+    api.saveScripts = function(update) {
+        return new Promise(function(resolve, reject) {
+            if (db === null) {
+                api.getScripts().then(function(scripts) {
+                    var found = false;
+                    for (var s = 0; s < scripts.length; s++) {
+                        if (scripts[s].id === update.id) {
+                            found = s;
+                        }
+                    }
+
+                    if (update.is_fallback) {
+                        scripts.forEach(function(script) {
+                            script.is_fallback = false;
+                        });
+                    }
+        
+                    if (found === false) {
+        
+                        if (!update.id && update._id) {
+                            update.id = update._id;
+                        } else if (!update.id) {
+                            update.id = uuidv4();
+                        }
+                        update.modified = new Date();
+                        scripts.push(update);
+                        api.writeScriptsToFile(scripts).then(function() {
+                            res.json({
+                                success: true,
+                                data: update,
+                            });
+                        });
+        
+                    } else if (new Date(scripts[found].modified) > new Date(update.modified)) {
+        
+                        // if the version in the database was more recently modified, reject this update!
+                        resolve({
+                            success: false,
+                            message: 'Script was modified more recently, please refresh your browser to load the latest',
+                        });
+        
+                    } else {
+        
+                        var original_name = scripts[found].command;
+
+                        scripts[found] = update;
+                        scripts[found].modified = new Date();
+        
+                        if (update.command != original_name) {
+                            handleRenamed(scripts, original_name, update.command).then(function() {
+                                api.writeScriptsToFile(scripts).then(function() {
+                                    res.json({
+                                        success: true,
+                                        data: update,
+                                    });
+                                });
+                            });
+                        } else {
+                            api.writeScriptsToFile(scripts).then(function() {
+                                res.json({
+                                    success: true,
+                                    data: update,
+                                });
+                            });
+                        }
+                    }
+                });
+            } else {
+                update.modified = new Date();
+                delete update._id;
+                db.collection('scripts').updateOne({'command': update.command}, { $set: update }, {upsert: true}, function(err, res) {
+                    resolve({
+                        success: true,
+                        data: update,
+                    });
+                });
+            }
+        });
+    }
+
 
     api.mapTriggers = function() {
         for (var s = 0; s < scripts.length; s++) {
@@ -149,6 +290,12 @@ module.exports = function() {
     api.evaluateTriggers = function(message_text) {
 
         return new Promise(function(resolve, reject) {
+            if (db) {
+                api.getScripts().then(function(results) {
+                    scripts = results;
+                    api.mapTriggers();
+                });
+            }
             var res = [];
 
             api.enrichMessage(message_text).then(function(query) {
@@ -259,22 +406,34 @@ module.exports = function() {
     api.getScript = function(name) {
 
         return new Promise(function(resolve, reject) {
-            for (var s = 0; s < scripts.length; s++) {
-                if (name.toLowerCase() == scripts[s].command.toLowerCase()) {
-                    return resolve(scripts[s]);
+            if (db === null) {
+                for (var s = 0; s < scripts.length; s++) {
+                    if (name.toLowerCase() == scripts[s].command.toLowerCase()) {
+                        return resolve(scripts[s]);
+                    }
                 }
+            } else {
+                db.collection('scripts').findOne({ 'command': name.toLowerCase() }, function(err, response) {
+                    return resolve(response);
+                })
             }
-            reject();
+            
         });
     }
 
     api.getScriptById = function(id) {
 
         return new Promise(function(resolve, reject) {
-            for (var s = 0; s < scripts.length; s++) {
-                if (id == scripts[s]._id || id == scripts[s].id) {
-                    return resolve(scripts[s]);
+            if (db === null) {
+                for (var s = 0; s < scripts.length; s++) {
+                    if (id == scripts[s]._id || id == scripts[s].id) {
+                        return resolve(scripts[s]);
+                    }
                 }
+            } else {
+                db.collection('scripts').findOne({ 'command': id }, function(err, response) {
+                    return resolve(response);
+                })
             }
             reject();
         });
@@ -283,12 +442,32 @@ module.exports = function() {
     api.getScripts = function(tag) {
 
         return new Promise(function(resolve, reject) {
-            if (tag) {
-                resolve(scripts.filter(function(s) {
-                    return s.tags ? (s.tags.indexOf(tag) >= 0) : false;
-                }))
+            
+            if (db === null) {
+                if (tag) {
+                    resolve(scripts.filter(function(s) {
+                        return s.tags ? (s.tags.indexOf(tag) >= 0) : false;
+                    }))
+                } else {
+                    resolve(scripts);
+                }
+            } else {
+                if (tag) {
+                    query = {'tag': tag}
+                } else {
+                    query = {}
+                }
+                db.collection('scripts').find(query, function(err, result) {
+                    result.toArray().then(function(results) {
+                        results.map(function(r) {
+                            r.id = r._id;
+                            return r;
+                        })
+                        resolve(results);
+                    })
+                });
             }
-            resolve(scripts);
+            
         });
 
     }
@@ -298,6 +477,46 @@ module.exports = function() {
 
         var mutagen = require(__dirname + '/botkit_mutagen.js');
         return mutagen(api, botkit);
+    }
+
+    function handleRenamed(scripts, original_name, new_name) {
+        return new Promise(function(resolve, reject) {
+            async.each(scripts, function(command, next) {
+                updateExecScript(command, original_name, new_name, next);
+            }, function() {
+                resolve();
+            })
+        });
+    }
+
+    function updateExecScript(command, original_name, new_name, next) {
+        // need to look at command.script[*].script[*].action
+        // need to look at command.script[*].script[*].collect.options[*].action
+        var dirty = false;
+        for (var t = 0; t < command.script.length; t++) {
+            for (var m = 0; m < command.script[t].script.length; m++) {
+                if (command.script[t].script[m].action == 'execute_script' && command.script[t].script[m].execute && command.script[t].script[m].execute.script == original_name) {
+                    command.script[t].script[m].execute.script = new_name;
+                    dirty = true;
+                }
+
+                if (command.script[t].script[m].collect && command.script[t].script[m].collect.options) {
+                    for (var o = 0; o < command.script[t].script[m].collect.options.length; o++) {
+                        if (command.script[t].script[m].collect.options[o].action=='execute_script' && command.script[t].script[m].collect.options[o].execute && command.script[t].script[m].collect.options[o].execute.script == original_name) {
+                            command.script[t].script[m].collect.options[o].execute.script = new_name;
+                            dirty = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (dirty) {
+            command.modified = new Date();
+            next();
+        } else {
+            next();
+        }
     }
 
     return api;

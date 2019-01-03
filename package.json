@@ -3,10 +3,17 @@
   "version": "0.0.2",
   "description": "an open tool for designing, building and managing interactive dialog systems",
   "license": "MIT",
-  "keywords": ["bots","dialog editor","content management","botkit","chatbots","bot"],
+  "keywords": [
+    "bots",
+    "dialog editor",
+    "content management",
+    "botkit",
+    "chatbots",
+    "bot"
+  ],
   "homepage": "https://github.com/howdyai/botkit-cms",
   "main": "src/api.js",
-  "author":"ben@howdy.ai",
+  "author": "benbrown@gmail.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/howdyai/botkit-cms.git"
@@ -20,8 +27,6 @@
     "eslint": "./node_modules/eslint/bin/eslint.js js/ src/ components/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "benbrown@gmail.com",
-  "license": "MIT",
   "dependencies": {
     "async": "^2.6.1",
     "body-parser": "^1.17.2",
@@ -30,6 +35,7 @@
     "express": "^4.15.3",
     "express-basic-auth": "^1.1.5",
     "express-hbs": "^1.0.4",
+    "mongodb": "^3.1.10",
     "querystring": "^0.2.0",
     "uuid": "^3.3.2"
   },

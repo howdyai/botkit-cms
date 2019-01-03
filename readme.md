@@ -85,6 +85,15 @@ The Botkit dialog editor can be used in one of several different flavors, contro
 | facebook | Facebook mode
 
 
+### Using a MongoDB database
+
+By default, Ministudio saves your bot configuration in a flat JSON file in `.data`, but if you'd prefer to use a database (for example if you're hosting on Heroku), you can add the following config to your `.env` file:
+
+```
+MONGODB_URL=url://to-your-mongo-database:port
+MONGODB_DB_NAME=your_db_name
+```
+
 ### Securing Admin / Editor Access
 
 Access can be limited and users can be controlled using the `USERS` environment variable.

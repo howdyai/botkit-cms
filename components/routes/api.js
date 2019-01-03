@@ -47,6 +47,7 @@ module.exports = function(webserver, api) {
     // receives: command, user
     webserver.post('/api/v1/commands/name', function(req, res) {
         api.getScript(req.body.command).then(function(script) {
+            script.id = script._id;
             res.json(script);
         }).catch(function(err) {
             if (err) {
