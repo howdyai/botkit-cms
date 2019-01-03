@@ -3,11 +3,12 @@ var fs = require('fs');
 
 const INTENT_CONFIDENCE_THRESHOLD = process.env.INTENT_CONFIDENCE_THRESHOLD || 0.7;
 
-module.exports = function() {
+module.exports = function(db) {
 
     var api = {}
     var scripts = [];
     var triggers = [];
+    var db = db;
     var PATH_TO_SCRIPTS;
 
     api.parseAdminUsers = function(string) {
