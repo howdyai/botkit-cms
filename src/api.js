@@ -458,7 +458,13 @@ module.exports = function(db) {
                     query = {}
                 }
                 db.collection('scripts').find(query, function(err, result) {
-                    resolve(result.toArray());
+                    result.toArray().then(function(results) {
+                        results.map(function(r) {
+                            r.id = r._id;
+                            return r;
+                        })
+                        resolve(results);
+                    })
                 });
             }
             
