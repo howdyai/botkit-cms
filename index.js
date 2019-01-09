@@ -8,7 +8,7 @@ if (!process.env.USERS) {
 var admin_creds = api.parseAdminUsers(process.env.USERS);
 
 // load scripts from file
-api.loadScriptsFromFile(__dirname + '/.data/scripts.json', __dirname + '/.data/sample_scripts.json').catch(function(err) {
+api.loadScriptsFromFile(__dirname + '/.data/scripts.json', __dirname + '/sample_scripts.json').catch(function(err) {
   console.log('Could not load scripts from file:', err);
   process.exit(1);
 });
