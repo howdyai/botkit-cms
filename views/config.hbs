@@ -4,22 +4,27 @@
 
         <div class="box instructions">
             <h3>Configure Existing Botkit application</h3>
-            <p>To use Botkit CMS with your Botkit application, add the `studio_command_uri` parameter to
-                your code, as demonstrated below:
+            <p>To use Botkit CMS with your Botkit application, 
+                modify your <em>bot application code</em> (not the CMS code!) to include the `studio_command_uri` parameter as demonstrated below. 
+                Note that depending on the platform you are connecting to, your code may look slightly different!
             </p>
 
-            <textarea rows="3" readonly>var controller = Botkit.slackbot({
+            <textarea rows="4" readonly>var controller = Botkit.slackbot({
     studio_command_uri: process.env.studio_command_uri,
+    studio_token: process.env.studio_token,
 });</textarea>
+
             <p>
-                Then, add to your .env file (or other environment management tool) the following value:
+                Then, set the values in your bot application's .env file (or other environment management tool) as shown below:
             </p>
 
-            <textarea rows="1" readonly>studio_command_uri={{url}}</textarea>
-
+            <textarea rows="2" readonly>studio_command_uri={{url}}
+studio_token={{token}}</textarea>
+{{#if multiple_tokens}}
             <p>Make sure your `studio_token` parameter matches one of these values:</p>
 
             <textarea rows="{{token_count}}" readonly>{{tokens}}</textarea>
+{{/if}}
 
         </div>
         <div class="box">

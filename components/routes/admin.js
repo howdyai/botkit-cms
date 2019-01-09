@@ -251,8 +251,10 @@ module.exports = function(webserver, api) {
 
         res.render('config',{
             layout: 'layouts/layout',
+            token: allowed_tokens[0],
             tokens: allowed_tokens.join("\n"),
             token_count: allowed_tokens.length,
+            multiple_tokens: (allowed_tokens.length > 1),
             version: package_version,
             url: req.protocol + "://" + req.headers.host
         });

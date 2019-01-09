@@ -12,7 +12,7 @@ Clone this repo and set it up on a public host somewhere. Clicking the Glitch li
 
 [Configure the .env file.](#configuration)
 
-If migrating from Botkit Studio, [get your existing scripts](#migrate-from-botkit-studio), and put the resulting `scripts.json` file in the `data/` folder or import it through the UI.
+If migrating from Botkit Studio, [get your existing scripts](#migrate-from-botkit-studio), and put the resulting `scripts.json` file in the `.data/` folder or import it through the UI.
 
 Launch the app, then load it in your web browser. You should see a link to the editor screen.
 
@@ -20,7 +20,8 @@ Make sure your new service is available at a public address on the web. Then, mo
 
 ```
 var controller = Botkit.platform({
-  studio_command_uri: 'https://my.new.service'
+  studio_command_uri: 'https://my.new.service',
+  studio_token: 'a shared secret'
 })
 ```
 
@@ -102,7 +103,7 @@ If any tokens are specified, access to the API requies a valid value in the `acc
 Modifications to the front end application or css should be done to their original source files, then compiled by the build process. To build the Javascript and CSS files from their source locations, run the following command:
 
 ```bash
-gulp build
+npm run build
 ```
 
 The front end editor application included in this project is built with Angular. The source code of the this application is broken up into several component files in the `js/` folder. These are compiled into a single source file and moved to a final home at `public/js/scripts.js`  by the build process.
@@ -130,7 +131,3 @@ cms.loadScriptsFromFile(__dirname + '/scripts.json').catch(function(err) {
   console.error('Error loading scripts', err);
 });
 ```
-
-# TO-DO:
-
-* Add optional MongoDB support for script storage
