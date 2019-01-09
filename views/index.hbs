@@ -58,15 +58,17 @@
                         </ul>
                     </nav>
                 </td>
-            </tr>
-        </table>
+                </tr>
 
-        <div ng-if="ui.export_mode" class="box">
-            <button ng-disabled="ui.export_count==0" ng-click="createExport()">
-                <span ng-if="ui.export_count > 0">Export {% ui.export_count %}</span>
-                <span ng-if="ui.export_count <= 0">Select scripts to export</span>
-            </button>
-        </div>
+                <tr ng-if="ui.export_mode" class="box">
+                    <td colspan="4">
+                    <button ng-disabled="ui.export_count==0" ng-click="createExport()">
+                        <span ng-if="ui.export_count > 0">Export {% ui.export_count %}</span>
+                        <span ng-if="ui.export_count <= 0">Select scripts to export</span>
+                    </button>
+                    </td>
+                </tr>
+             </table>
 
 
         <div class="ng-class:{active:ui.modal_create}; editor_modal">
