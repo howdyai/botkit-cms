@@ -35,7 +35,7 @@
                 </tr>
                 <tr ng-repeat="command in commands | orderBy: ui.sortField | filter:filterRow" class="ng-class: {selected: ui.export_mode && !command.exclude_from_export, is_fallback: (command.is_fallback)};">
                     <td>
-                        <a ng-href="/admin/edit/{% command.command %}">{% command.command %}</a>
+                        <a ng-href="/admin/edit/{% command.command | encodeURIComponent %}">{% command.command %}</a>
                         <div class="fallback_flag">(Fallback)</div>
                     </td>
                     <td>

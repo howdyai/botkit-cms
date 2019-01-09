@@ -58,6 +58,11 @@ app.filter('truncateString', function () {
     }
 });
 
+// copied from https://stackoverflow.com/questions/16630471/how-can-i-invoke-encodeuricomponent-from-angularjs-template
+app.filter('encodeURIComponent', function() {
+    return window.encodeURIComponent;
+});
+
 app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location', function($scope, $http, $sce, $cookies, sdk, $location) {
 
 
