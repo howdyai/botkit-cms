@@ -9,6 +9,7 @@ module.exports = function() {
     var scripts = [];
     var triggers = [];
     var PATH_TO_SCRIPTS;
+    var LOAD_FROM_OBJECT;
 
     api.parseAdminUsers = function(string) {
         if (!string) {
@@ -25,6 +26,16 @@ module.exports = function() {
 
         return users;
 
+    }
+
+    api.loadScriptsFromObject = function (object) {
+        return new Promise(function (resolve, reject) {
+            scripts = object;
+            PATH_TO_SCRIPTS = null;
+            LOAD_FROM_OBJECT = true;
+            api.mapTriggers();
+            resolve(scripts);
+        });
     }
 
     api.loadScriptsFromFile = function(src, alt_path) {
@@ -54,6 +65,10 @@ module.exports = function() {
     api.writeScriptsToFile = function(new_scripts, alt_path) {
 
         return new Promise(function(resolve, reject) {
+            if (!PATH_TO_SCRIPTS && LOAD_FROM_OBJECT) {
+                return reject('Cannot save to file when using loadScriptsFromObject')
+            }
+
             try {
                 require('fs').writeFileSync(alt_path || PATH_TO_SCRIPTS, JSON.stringify(new_scripts,null,2));
             } catch(err) {
