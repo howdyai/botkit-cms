@@ -18,8 +18,8 @@ api.loadScriptsFromFile(__dirname + '/.data/scripts.json', __dirname + '/sample_
         process.exit(1);
     });
 }).catch(function(err) {
-  console.error(err);
-  process.exit(1);
+    console.error(err);
+    process.exit(1);
 });
 
 // Set up an Express-powered webserver to expose oauth and webhook endpoints
