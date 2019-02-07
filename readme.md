@@ -45,7 +45,8 @@ Here is an example `.env` file:
 
 ```
 # Chat platform
-# PLATFORM=[slack,teams,ciscospark,web,facebook]
+# PLATFORM=<platform>
+# valid options are slack, teams, ciscospark, web, facebook
 PLATFORM=slack
 
 # authentication tokens for Bot users
