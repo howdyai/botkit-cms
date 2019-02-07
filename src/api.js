@@ -34,7 +34,7 @@ module.exports = function() {
                 try {
                     scripts = require(src);
                 } catch(err) {
-                    return reject(err);
+                    return reject('Cannot load scripts from file: ' + err.message);
                 }
             } else {
                 console.warn('Loading sample scripts...');
@@ -57,7 +57,7 @@ module.exports = function() {
             try {
                 require('fs').writeFileSync(alt_path || PATH_TO_SCRIPTS, JSON.stringify(new_scripts,null,2));
             } catch(err) {
-                return reject(err);
+                return reject('Cannot write scripts to file: ' + err.message);
             }
 
             scripts = new_scripts;
