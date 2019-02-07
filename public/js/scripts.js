@@ -157,12 +157,7 @@ app.controller('app', ['$scope', '$http', '$sce', '$cookies','sdk', '$location',
         if (error.message) {
             error_text = error.message;
         } else if (error.error) {
-            if (error.error == 'account_inactive') {
-                $scope.showUpgrade(error);
-                return;
-            } else {
-                error_text = error.error;
-            }
+            error_text = error.error;
         } else if (error.data && error.data.error && error.data.error) {
             // details, name, message, stack, status, statusCode
             // details contains a bunch of info, down to the field
