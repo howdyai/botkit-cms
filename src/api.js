@@ -283,12 +283,19 @@ module.exports = function() {
     api.getScripts = function(tag) {
 
         return new Promise(function(resolve, reject) {
+            
+            var response = scripts;
             if (tag) {
-                resolve(scripts.filter(function(s) {
+                response = scripts.filter(function(s) {
                     return s.tags ? (s.tags.indexOf(tag) >= 0) : false;
                 }))
             }
-            resolve(scripts);
+            
+            // for backwards compatibility with Botkit Studio, map the command field to name
+            response = response.map(function(s) {
+                s.name = s.command;
+            });
+            resolve(response);
         });
 
     }
