@@ -294,6 +294,7 @@ module.exports = function() {
             // for backwards compatibility with Botkit Studio, map the command field to name
             response = response.map(function(s) {
                 s.name = s.command;
+                return s;
             });
             resolve(response);
         });
