@@ -94,7 +94,7 @@ module.exports = function() {
                 text: message_text
             };
 
-            // endpoint in the form of 
+            // endpoint in the form of
             // https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/<APPID>?subscription-key=<SUBID>&verbose=true&timezoneOffset=-360&q=
             if (process.env.LUIS_ENDPOINT) {
 
@@ -105,14 +105,14 @@ module.exports = function() {
                         resolve(query);
                     } else {
                         var luis_results = {};
-                        
-                        try { 
+
+                        try {
                             luis_results = JSON.parse(body);
                         } catch(err) {
                             console.error('Error parsing LUIS response', err);
                             return resolve(query);
                         }
-                        
+
                         if (!luis_results.intents) {
                             console.warn('No intents returned from LUIS.ai.  Key may be invalid');
                             resolve(query);
@@ -283,14 +283,14 @@ module.exports = function() {
     api.getScripts = function(tag) {
 
         return new Promise(function(resolve, reject) {
-            
+
             var response = scripts;
             if (tag) {
                 response = scripts.filter(function(s) {
                     return s.tags ? (s.tags.indexOf(tag) >= 0) : false;
-                }))
+                });
             }
-            
+
             // for backwards compatibility with Botkit Studio, map the command field to name
             response = response.map(function(s) {
                 s.name = s.command;
