@@ -6,6 +6,36 @@ This project can serve as a drop-in replacement for users of Botkit Studio.
 
 ![Dialog Editor](https://raw.githubusercontent.com/howdyai/botkit-cms/master/docs/screenshots/dialog.png)
 
+## Install and run it locally
+
+Clone and install botkit-cms
+```
+git clone https://github.com/howdyai/botkit-cms.git
+cd botkit-cms
+npm install
+```
+Create an .env file from .env_sample and change the variables
+```
+cp .env_sample .env
+```
+```
+PLATFORM=web
+TOKENS=youwillneverguessmysecretbottoken
+USERS=admin:123secret
+```
+
+Create .data folder, create a scripts.json inside. Copy the content from sample-scripts.json
+```
+mkdir .data
+cp sample_scripts.json .data/scripts.json
+```
+
+Run cms and open localhost:3000/admin and enter the credentials from the USERS env variable.
+```
+npm run build
+npm start
+```
+
 ## Create Botkit Dialog Editor & API Service
 
 Clone this repo and set it up on a public host somewhere. Clicking the Glitch link below will do this for you.
