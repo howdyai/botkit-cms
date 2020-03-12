@@ -1,0 +1,9 @@
+version: "3"
+
+services: 
+    botkit-cms:
+        container_name: bkc-container
+        build: .
+        ports: 
+            - "3000:3000"
+        restart: always

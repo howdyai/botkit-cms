@@ -150,3 +150,22 @@ cms.loadScriptsFromFile(__dirname + '/scripts.json').catch(function(err) {
 ```
 
 Note that you might need to modify the call to `cms.loadScriptsFromFile` depending on where you put the scripts.json file.
+
+## Build/Deploy using docker
+
+Create .env file from .env_sample <br />
+Create ./.data/scripts.json from ./sample_scripts.json <br />
+Configure the .env file <br />
+
+```bash
+PLATFORM=web
+TOKENS=youwillneverguessmysecretbottoken
+USERS=admin:123secret
+```
+
+- Run the app
+
+```bash
+docker-compose up -d
+```
+The app serves on port 3000
